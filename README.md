@@ -10,7 +10,7 @@ Also run "npm install react-router-dom" so you can use the navbar part.
 
 When coding your page, make a new file called "*pagename*.js" and code the page into there, then to add it to the navbar, go into navbar.js and with the previous links add your page link
 syntax as follows: 
-<li><Link to="/*pagename*" style={linkStyle}>*pagename*</Link></li>
+"<li><Link to="/*pagename*" style={linkStyle}>*pagename*</Link></li>"
 
 then in app.js add to the previous routes
 syntax as follows:
