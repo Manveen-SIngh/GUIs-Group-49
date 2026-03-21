@@ -10,9 +10,9 @@ Also run "npm install react-router-dom" so you can use the navbar part.
 
 When coding your page, make a new file called "*pagename*.js" and code the page into there, then to add it to the navbar, go into navbar.js and with the previous links add your page link
 syntax as follows: 
-<code>
+
 <li><Link to="/*pagename*" style={linkStyle}>*pagename*</Link></li>
-</code>
+
 
 then in app.js add to the previous routes
 syntax as follows:
@@ -21,6 +21,9 @@ syntax as follows:
 and import your page in app.js
 syntax as follows:
 import *pagename* from './*pagename*';
+
+italicised pagenames are the same as pagenames with asterisks around them
+view file raw to see proper syntax, markdown ruins it
 
 "npm start" in terminal to run react app, app will update when changes are made on browser page so no need to npm start constantly
 make sure you are in the weather-app folder in the command line, or just run it in vs-code to make life easier
