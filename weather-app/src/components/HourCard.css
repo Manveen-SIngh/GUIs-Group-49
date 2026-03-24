@@ -1,0 +1,45 @@
+.hour-card
+{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  text-align: center;
+  font-family: "Rubik", sans-serif;
+}
+
+.hour-card__time
+{
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+
+.hour-card__icon
+{
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  margin-bottom: 6px;
+}
+
+.hour-card__temp
+{
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+
+.hour-card__rain
+{
+  font-size: 10px;
+  opacity: 0.7;
+  margin-bottom: 6px;
+}
+
+.hour-card__wind
+{
+  font-size: 10px;
+  opacity: 0.7;
+}
+
