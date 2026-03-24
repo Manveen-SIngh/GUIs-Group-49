@@ -187,7 +187,7 @@ export default function WeatherBox() {
             textAlign: "center",
             color: "black",
             fontSize: 13,
-            fontFamily: "Rubik, sans-serif",
+            fontFamily: "Rubik",
             fontWeight: 500,
             lineHeight: 1.2,
             marginBottom: 14,

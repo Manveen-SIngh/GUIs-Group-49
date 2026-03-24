@@ -4,6 +4,8 @@ import "./WeatherPage.css";
 import TodayCard from "./components/TodayCard";
 import SearchBar from "./components/SearchBar";
 import HourlyForecast from "./components/HourlyForecast";
+import Clock from "./components/Clock";
+import menuIcon from "./assets/menu.svg";
 
 function WeatherPage()
 {
@@ -23,7 +25,11 @@ function WeatherPage()
         <div className="weather-top-bar">
           <div className="top-left">
             <div className="top-button-box">
-              Menu
+              <img
+                src={menuIcon}
+                alt="menuIcon"
+                className="weather-page-menu-button"
+              />
             </div>
           </div>
 
@@ -37,7 +43,7 @@ function WeatherPage()
 
           <div className="top-right">
             <div className="top-time-box">
-              11:34
+              <Clock/>
             </div>
           </div>
         </div>

@@ -19,7 +19,7 @@ function InfoButton({ message }) {
         justifyContent: "center",
         fontSize: 18,
         fontWeight: 700,
-        fontFamily: "Rubik, sans-serif",
+        fontFamily: "Rubik",
         cursor: "pointer",
         color: "black",
         zIndex: 20,
@@ -44,7 +44,7 @@ export default function WindBox() {
         borderRadius: 28,
         boxShadow: "0px 3px 6px rgba(0,0,0,0.18)",
         overflow: "hidden",
-        fontFamily: "Rubik, sans-serif",
+        fontFamily: "Rubik",
       }}
     >
       {/* Icon */}
