@@ -7,39 +7,41 @@
   justify-content: space-between;
 
   text-align: center;
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik";
 }
 
 .hour-card__time
 {
-  font-size: 11px;
-  margin-bottom: 6px;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 4px;
 }
 
 .hour-card__icon
 {
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .hour-card__temp
 {
-  font-size: 11px;
-  margin-bottom: 6px;
+  font-size: 17px;
+  margin-bottom: 4px;
 }
 
 .hour-card__rain
 {
-  font-size: 10px;
+  font-size: 17px;
   opacity: 0.7;
-  margin-bottom: 6px;
+  margin-bottom: 10px;
 }
 
 .hour-card__wind
 {
-  font-size: 10px;
+  font-size: 17px;
   opacity: 0.7;
+  margin-bottom: 10px;
 }
 
