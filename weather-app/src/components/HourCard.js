@@ -1,5 +1,6 @@
 import React from "react";
 import "./HourCard.css";
+import precipitation from "../assets/precipitation.svg";
 
 function HourCard({ time, icon, temp, rain, wind })
 {
@@ -14,7 +15,14 @@ function HourCard({ time, icon, temp, rain, wind })
       />
 
       <div className="hour-card__temp">{temp}°C</div>
-      <div className="hour-card__rain">{rain}</div>
+      <div className="hour-card__rain">
+        <img
+          src={precipitation}
+          alt="precipitation"
+          className="hour-card__rain-icon"
+        />
+        <span>{rain}</span>
+      </div>
       <div className="hour-card__wind">{wind}mph</div>
     </div>
   );

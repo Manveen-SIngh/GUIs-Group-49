@@ -1,13 +1,23 @@
 .hour-card
 {
   width: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
 
-  text-align: center;
   font-family: "Rubik";
+
+  padding-right: 1px;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  
+  
+}
+
+.hour-card:last-child
+{
+  border-right:none;
 }
 
 .hour-card__time
@@ -19,23 +29,35 @@
 
 .hour-card__icon
 {
+  opacity: 0.7;
+  margin-top:-40px;
   width: 40px;
   height: 40px;
   object-fit: contain;
-  margin-bottom: 4px;
 }
 
 .hour-card__temp
 {
+  opacity: 0.7;
+
+  margin-top:-40px;
   font-size: 17px;
   margin-bottom: 4px;
 }
 
 .hour-card__rain
 {
-  font-size: 17px;
-  opacity: 0.7;
-  margin-bottom: 10px;
+  margin-top:-40px;
+    opacity: 0.7;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.hour-card__rain-icon
+{
+  width: 15px;
+  height: 15px;
 }
 
 .hour-card__wind
@@ -43,5 +65,6 @@
   font-size: 17px;
   opacity: 0.7;
   margin-bottom: 10px;
+  margin-right:2px;
 }
 
