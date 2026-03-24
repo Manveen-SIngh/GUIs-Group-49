@@ -15,15 +15,15 @@
 
   position: relative;
 
-  font-family: "Rubik", sans-serif;
+  font-family: "Rubik";
 }
 
 .today-card__title
 {
   position: absolute;
-  top: 30px;
+  top: 24px;
 
-  font-size: 20px;
+  font-size: 34px;
   font-weight: 500;
   color: #000;
 }
@@ -41,7 +41,7 @@
 .today-card__feels
 {
   position: absolute;
-  bottom: 35px;
+  bottom: 50px;
 
   font-size: 23px;
   font-weight: 400;

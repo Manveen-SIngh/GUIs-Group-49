@@ -16,7 +16,7 @@ function InfoButton() {
         justifyContent: "center",
         fontSize: 18,
         fontWeight: 700,
-        fontFamily: "Rubik, sans-serif",
+        fontFamily: "Rubik",
         cursor: "pointer",
       }}
     >

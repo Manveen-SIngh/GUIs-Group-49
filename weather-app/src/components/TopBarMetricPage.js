@@ -11,7 +11,7 @@ export default function TopBarMetricPage() {
         height: 100,
         position: "relative",
         marginBottom: 10,
-        fontFamily: "Rubik, sans-serif",
+        fontFamily: "Rubik",
       }}
     >
       <img
