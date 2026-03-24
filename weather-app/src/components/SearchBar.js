@@ -1,5 +1,6 @@
 import React from "react";
 import "./SearchBar.css";
+import search from "../assets/search.svg"
 
 function SearchBar({
   query = "",
@@ -49,7 +50,10 @@ function SearchBar({
         onClick={handleSearchClick}
         aria-label="Search"
       >
-        🔍
+      <img
+        src={search}
+        alt="search"
+      />
       </button>
     </div>
   );
