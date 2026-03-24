@@ -1,0 +1,52 @@
+
+.today-card
+{
+  width: 399.88px;
+  height: 298.52px;
+
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 43px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+
+  font-family: "Rubik", sans-serif;
+}
+
+.today-card__title
+{
+  position: absolute;
+  top: 30px;
+
+  font-size: 20px;
+  font-weight: 500;
+  color: #000;
+}
+
+.today-card__temp
+{
+  font-size: 110px;
+  font-weight: 400;
+  color: #000;
+
+  line-height: 1;
+  text-align: center;
+}
+
+.today-card__feels
+{
+  position: absolute;
+  bottom: 35px;
+
+  font-size: 23px;
+  font-weight: 400;
+  color: #000;
+  opacity: 0.6;
+
+  text-align: center;
+}
