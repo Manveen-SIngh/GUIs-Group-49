@@ -30,11 +30,44 @@ function TodayWeather() {
 
       
     >
+        <h2 style={{ 
+          fontSize: "2.5rem", 
+          margin: "0 0 20px 0", 
+          fontWeight: "500", 
+          textShadow: "2px 2px 4px rgba(0,0,0,0.4)"
+        }}>
+          location_current
+        </h2>
 
+        <h2 style={{ 
+          fontSize: "2.5rem", 
+          margin: "0 0 20px 0", 
+          fontWeight: "500", 
+          textShadow: "2px 2px 4px rgba(0,0,0,0.4)"
+        }}>
+          rain_current
+        </h2>
+
+        <h2 style={{ 
+          fontSize: "2.5rem", 
+          margin: "0 0 20px 0", 
+          fontWeight: "500", 
+          textShadow: "2px 2px 4px rgba(0,0,0,0.4)"
+        }}>
+          weather_current
+        </h2>
+
+        <h2 style={{ 
+          fontSize: "2.5rem", 
+          margin: "0 0 20px 0", 
+          fontWeight: "500", 
+          textShadow: "2px 2px 4px rgba(0,0,0,0.4)"
+        }}>
+          temp_feels
+        </h2>
+        
                 
-      <div style={{ width: "100%", padding: "0 10px", marginTop: "250px", boxSizing: "border-box" }}>
-        <HourlyV2 />
-      </div>
+    
 
       {/*Header with back button, search and c/f and mi/km */}
       <header 
@@ -95,11 +128,14 @@ function TodayWeather() {
         }}
       >
         <div style={{width: '100%', height: '100%', background: 'rgba(255, 255, 255, 0.70)', boxShadow: '240px 244px 244px rgba(0, 0, 0, 0.25)', borderRadius: 43}} />
-        <img src={cloudyIcon} alt="Cloudy" style={{ width: "120px", height: "120px", marginBottom: "10px" }} />
+        <img src={cloudyIcon} alt="Cloudy" style={{ width: "200px", height: "200px", marginBottom: "10px" }} />
         <h1 style={{ fontSize: "5rem", margin: "0", fontWeight: "300" }}>temp_current</h1>
         <h2 style={{ fontSize: "1.5rem", margin: "0 0 10px 0", fontWeight: "400" }}>weather_current</h2>
       </main>
 
+        <div style={{ width: "100%", marginTop: "auto", boxSizing: "border-box" }}>
+        <HourlyV2 />
+      </div>
 
     </div>
   );
