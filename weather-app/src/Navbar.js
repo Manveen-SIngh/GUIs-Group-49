@@ -24,6 +24,8 @@ function Navbar() {
         <li><Link to="/OdA" style={linkStyle}>OdA</Link></li>
         <li><Link to="/Metrics" style={linkStyle}>Metrics</Link></li>
         <li><Link to="/WeatherPage" style={linkStyle}>WeatherPage</Link></li>
+        <li><Link to="/TodayWeather" style={linkStyle}>TodayWeather</Link></li>
+        
       </ul>
       
     </nav>
