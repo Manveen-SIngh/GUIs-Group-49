@@ -21,9 +21,9 @@
 .today-card__title
 {
   position: absolute;
-  top: 24px;
+  top: 30px;
 
-  font-size: 34px;
+  font-size: 30px;
   font-weight: 500;
   color: #000;
 }
