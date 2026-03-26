@@ -4,7 +4,7 @@ import precipitation from "../assets/precipitation.svg";
 
 function HourCard({ time, icon, temp, rain, wind })
 {
-  // Convert hour to number properly
+
   const hour = parseInt(time);
 
   let newtime;
