@@ -11,8 +11,6 @@
 
   padding-right: 1px;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
-  
-  
 }
 
 .hour-card:last-child
@@ -51,13 +49,13 @@
     opacity: 0.7;
   display: flex;
   align-items: center;
-  gap: 1px;
 }
 
 .hour-card__rain-icon
 {
   width: 15px;
   height: 15px;
+
 }
 
 .hour-card__wind
