@@ -17,7 +17,6 @@ const getIcon = (condition) =>
   return partlyCloudy;
 };
 
-// 🔹 dt_txt → "12:00"
 const formatTime = (dt_txt) =>
 {
   return dt_txt.slice(11, 16);
@@ -31,7 +30,7 @@ function HourlyForecast({ hourlyData })
         <HourCard
           key={index}
           time={formatTime(hour.dt_txt)}
-          icon={getIcon(hour.weather[0].main)}
+          icon={getIcon(hour.weather[0].main,hour.time)}
           temp={Math.round(hour.main.temp)}
           rain={`${Math.round(hour.pop * 100)}%`}
           wind={Math.round(hour.wind.speed)}
