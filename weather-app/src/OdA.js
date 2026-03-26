@@ -1,6 +1,12 @@
 import bg from "./assets/PartlyCloudy.png";
 import menuIcon from "./assets/menu.svg";
 
+import hikingIcon from "./assets/Activity-icons/hiking.svg";
+import runningIcon from "./assets/Activity-icons/running.svg";
+import cyclingIcon from "./assets/Activity-icons/cycling.svg";
+import campingIcon from "./assets/Activity-icons/camping.svg";
+
+
 
 function OdA() {
   return (
@@ -60,34 +66,77 @@ function OdA() {
     
     <div style={{width: '100%', height: '100%', position: 'absolute', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}}>
       <div style={{width: 349, height: 311, left: 299, top: 600, position: 'absolute', background: 'rgba(255, 255, 255, 0.70)', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)', borderRadius: 43}} />
+      <div style={{position: 'absolute',top: 730, left: 440,textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 35, fontFamily: 'Rubik', fontWeight: '400', letterSpacing: 0.50 }}>Map</div>
     </div>
 
-    <div style={{width: '100%', height: '100%', position: 'absolute', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}}>
-      <div style={{width: 349, height: 311, left: 299, top: 280, position: 'absolute', background: 'rgba(255, 255, 255, 0.70)', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)', borderRadius: 43}} />
+    <div style={{top: 280, left:299, width: '100%', height: '100%', position: 'relative', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}}>
+      <div style={{width: 347, height: 312, left: 0, top: 0, position: 'absolute', background: 'rgba(255, 255, 255, 0.70)', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)', borderRadius: 43}} />
+      <div style={{width: 380.12, height: 34.67, left: 17.93, top: 28.73, position: 'absolute'}}>
+        <div style={{left: 41.80, top: 0.91, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>Cycling</div>
+        <div style={{width: 32.08, height: 30.11, left: 0, top: 2.74, position: 'absolute', background: '#FFAB1C', borderRadius: 10}} />
+      </div>
+      <div style={{width: 380.12, height: 34.67, left: 17.93, top: 189.21, position: 'absolute'}}>
+        <div style={{left: 41.80, top: 0.91, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>Hiking</div>
+        <div style={{width: 32.08, height: 30.11, left: 0, top: 2.74, position: 'absolute', background: '#3BC50F', borderRadius: 10}} />
+      </div>
+      <div style={{width: 380.12, height: 34.67, left: 17.93, top: 82.22, position: 'absolute'}}>
+        <div style={{left: 41.80, top: 0.91, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>Running</div>
+        <div style={{width: 32.08, height: 30.11, left: 0, top: 2.74, position: 'absolute', background: '#3BC50F', borderRadius: 10}} />
+      </div>
+      <div style={{width: 380.12, height: 34.67, left: 17.93, top: 132.75, position: 'absolute'}}>
+        <div style={{left: 41.80, top: 0.91, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>Camping</div>
+        <div style={{width: 32.08, height: 30.11, left: 0, top: 2.74, position: 'absolute', background: '#FFAB1C', borderRadius: 10}} />
+      </div>
+      <div style={{width: 67.02, height: 34.67, left: 257.73, top: 30.71, position: 'absolute', opacity: 0.60, color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>6/10</div>
+      <div style={{width: 68.06, height: 34.67, left: 257.73, top: 83.21, position: 'absolute', opacity: 0.60, color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>8/10</div>
+      <div style={{width: 68.06, height: 35.66, left: 256.68, top: 137.70, position: 'absolute', opacity: 0.60, color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>5/10</div>
+      <div style={{width: 65.97, height: 34.67, left: 256.68, top: 189.21, position: 'absolute', opacity: 0.60, color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>9/10</div>
+      <img style={{width: 36.16, height: 36.16, left: 197.50, top: 187.73, position: 'absolute'}} src ={hikingIcon} />
+     
+      <img style={{width: 36.16, height: 36.16, left: 197.50, top: 29.22, position: 'absolute'}} src={cyclingIcon} />
+      <img style={{width: 36.16, height: 36.16, left: 197.50, top: 82.72, position: 'absolute'}} src={campingIcon} />
+      <img style={{width: 36.16, height: 36.16, left: 197.50, top: 135.22, position: 'absolute'}} src={runningIcon} />
+      <div style={{width: 342.79, height: 0, left: 6.78, top: 180.53, position: 'absolute', outline: '1px rgba(0, 0, 0, 0.05) solid', outlineOffset: '-0.50px'}}></div>
+      <div style={{width: 342.79, height: 0, left: 2.88, top: 233.97, position: 'absolute', outline: '1px rgba(0, 0, 0, 0.05) solid', outlineOffset: '-0.50px'}}></div>
+      <div style={{width: 342.79, height: 0, left: 2.88, top: 71.83, position: 'absolute', outline: '1px rgba(0, 0, 0, 0.05) solid', outlineOffset: '-0.50px'}}></div>
+
     </div>
 
     <div style={{width: '100%', height: '100%', position: 'absolute', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}}>
       <div style={{width: 349, height: 311, left: 670, top: 600, position: 'absolute', background: 'rgba(255, 255, 255, 0.70)', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)', borderRadius: 43}} />
+      <div style={{width: 33, height: 33, left: 712, top: 620, position: 'absolute', background: '#FFAB1C', borderRadius: 10}} />
+      <div style={{position: 'absolute',top: 615, left: 747,textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 35, fontFamily: 'Rubik', fontWeight: '400', letterSpacing: 0.50 }}>Temperature</div>
     </div>
 
     <div style={{width: '100%', height: '100%', position: 'absolute', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}}>
       <div style={{width: 349, height: 311, left: 670, top: 280, position: 'absolute', background: 'rgba(255, 255, 255, 0.70)', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)', borderRadius: 43}} />
+      <div style={{width: 33, height: 33, left: 710, top: 300, position: 'absolute', background: '#FFAB1C', borderRadius: 10}} />
+      <div style={{position: 'absolute',top: 295, left: 745,textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 35, fontFamily: 'Rubik', fontWeight: '400', letterSpacing: 0.50 }}>Precipitation</div>
     </div>
 
     <div style={{width: '100%', height: '100%', position: 'absolute', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}}>
       <div style={{width: 349, height: 311, left: 1041, top: 280, position: 'absolute', background: 'rgba(255, 255, 255, 0.70)', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)', borderRadius: 43}} />
+      <div style={{width: 33, height: 33, left: 1125, top: 300, position: 'absolute', background: '#FFAB1C', borderRadius: 10}} />
+      <div style={{position: 'absolute',top: 295, left: 1160,textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 35, fontFamily: 'Rubik', fontWeight: '400', letterSpacing: 0.50 }}>Visibility</div>
     </div>
 
     <div style={{width: '100%', height: '100%', position: 'absolute', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}}>
       <div style={{width: 349, height: 311, left: 1041, top: 600, position: 'absolute', background: 'rgba(255, 255, 255, 0.70)', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)', borderRadius: 43}} />
+      <div style={{width: 33, height: 33, left: 1115, top: 620, position: 'absolute', background: '#3BC50F', borderRadius: 10}} />
+      <div style={{position: 'absolute',top: 615, left: 1150,textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 35, fontFamily: 'Rubik', fontWeight: '400', letterSpacing: 0.50 }}>Humidity</div>
     </div>
 
     <div style={{width: '100%', height: '100%', position: 'absolute', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}}>
       <div style={{width: 175, height: 311, left: 1416, top: 280, position: 'absolute', background: 'rgba(255, 255, 255, 0.70)', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)', borderRadius: 43}} />
+      <div style={{position: 'absolute',top: 295, left: 1463,textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 35, fontFamily: 'Rubik', fontWeight: '400', letterSpacing: 0.50 }}>.  Wind<br/>Speed</div>
+      <div style={{width: 33, height: 33, left: 1450, top: 300, position: 'absolute', background: '#FFAB1C', borderRadius: 10}} />
     </div>
 
     <div style={{width: '100%', height: '100%', position: 'absolute', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}}>
       <div style={{width: 175, height: 311, left: 1416, top: 600, position: 'absolute', background: 'rgba(255, 255, 255, 0.70)', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)', borderRadius: 43}} />
+      <div style={{width: 33, height: 33, left: 1460, top: 620, position: 'absolute', background: '#3BC50F', borderRadius: 10}} />
+      <div style={{position: 'absolute',top: 615, left: 1493,textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'black', fontSize: 35, fontFamily: 'Rubik', fontWeight: '400', letterSpacing: 0.50 }}>UV</div>
+
     </div>
     
   </div>
