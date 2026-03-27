@@ -1,139 +1,82 @@
 import React, { useState } from "react";
-import bg from "./assets/PartlyCloudy.png";
+import bg from "./assets/PartlyCloudy.png"; 
 import "./TodayWeather.css";
 import backBtn from './assets/BackBtn.png';
 import searchIcon from './assets/search.svg';
 import cloudyIcon from './assets/weather-icons/clouds.svg';
-import HourlyForecast from "./components/HourlyForecast";
 import HourlyV2 from "./components/HourlyV2";
 
 function TodayWeather() {
-    const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundImage: `url(${bg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "20px",
-        boxSizing: "border-box",
-        color: "white"
-        
-        
-      }}
-      className="weather-container"
-
+    <div className="dashboard-container" style={{ backgroundImage: `url(${bg})` }}>
       
-    >
-        <h2 style={{ 
-          fontSize: "2.5rem", 
-          margin: "0 0 20px 0", 
-          fontWeight: "500", 
-          textShadow: "2px 2px 4px rgba(0,0,0,0.4)"
-        }}>
-          location_current
-        </h2>
-
-        <h2 style={{ 
-          fontSize: "2.5rem", 
-          margin: "0 0 20px 0", 
-          fontWeight: "500", 
-          textShadow: "2px 2px 4px rgba(0,0,0,0.4)"
-        }}>
-          rain_current
-        </h2>
-
-        <h2 style={{ 
-          fontSize: "2.5rem", 
-          margin: "0 0 20px 0", 
-          fontWeight: "500", 
-          textShadow: "2px 2px 4px rgba(0,0,0,0.4)"
-        }}>
-          weather_current
-        </h2>
-
-        <h2 style={{ 
-          fontSize: "2.5rem", 
-          margin: "0 0 20px 0", 
-          fontWeight: "500", 
-          textShadow: "2px 2px 4px rgba(0,0,0,0.4)"
-        }}>
-          temp_feels
-        </h2>
-        
-                
-    
-
-      {/*Header with back button, search and c/f and mi/km */}
-      <header 
-        style={{ 
-          display: "flex", 
-          justifyContent: "space-between", 
-          alignItems: "center",
-          width: "100%", 
-          maxWidth: "500px", 
-          marginBottom: "40px" 
-        }}
-      >
-        <button style={{ background: "transparent", border: "none", cursor: "pointer" }}>
-          <img src={backBtn} alt="Go Back" style={{ width: "24px", height: "24px" }} />
+      {/* TOP*/}
+      <nav className="top-nav">
+        <button className="back-btn">
+          <img src={backBtn} alt="Back" />
         </button>
 
-        <div style={{ display: 'flex', background: 'rgba(255, 255, 255, 0.50)', borderRadius: '43px', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)', padding: "4px" }}>
-          {/* Active state - mi/km */}
-          <div style={{ padding: "8px 16px", background: 'rgba(203, 210, 208, 0.70)', borderRadius: '43px', color: 'black', fontSize: '18px', fontFamily: 'Rubik', fontWeight: '700', cursor: "pointer" }}>
-            mi
-          </div>
-          {/* Inactive state */}
-          <div style={{ padding: "8px 16px", color: 'black', fontSize: '18px', fontFamily: 'Rubik', fontWeight: '700', cursor: "pointer" }}>
-            km
-          </div>
+        <div className="toggle-pill toggle-shift">
+          <div className="toggle-opt active">°C</div>
+          <div className="toggle-opt">°F</div>
         </div>
 
-        <div style={{ display: 'flex', marginRight: "20px", background: 'rgba(255, 255, 255, 0.50)', borderRadius: '43px', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)', padding: "4px" }}>
-          {/* Active state - Celcius/Far */}
-          <div style={{ padding: "8px 16px", background: 'rgba(203, 210, 208, 0.70)', borderRadius: '43px', color: 'black', fontSize: '18px', fontFamily: 'Rubik', fontWeight: '700', cursor: "pointer" }}>
-            °C
-          </div>
-          {/* Inactive state */}
-          <div style={{ padding: "8px 16px", color: 'black', fontSize: '18px', fontFamily: 'Rubik', fontWeight: '700', cursor: "pointer" }}>
-            °F
-          </div>
+        <div className="toggle-pill">
+          <div className="toggle-opt active">mi</div>
+          <div className="toggle-opt">km</div>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", background: "rgba(0,0,0,0.2)", padding: "8px 16px", borderRadius: "20px" }}>
+        <div className="search-bar">
           <input 
             type="text" 
-            placeholder="Search location..." 
+            placeholder="Search Location..." 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ background: "none", border: "none", color: "white", outline: "none", marginRight: "10px" }}
           />
-          <img src={searchIcon} alt="Search" style={{ width: "20px", height: "20px", cursor: "pointer" }} />
+          <img src={searchIcon} alt="Search" />
         </div>
-      </header>
+      </nav>
 
-      {/*Main section*/}
-      <main 
-        style={{ 
-          display: "flex", 
-          flexDirection: "column", 
-          alignItems: "center", 
-          flexGrow: 1 
-        }}
-      >
-        <div style={{width: '100%', height: '100%', background: 'rgba(255, 255, 255, 0.70)', boxShadow: '240px 244px 244px rgba(0, 0, 0, 0.25)', borderRadius: 43}} />
-        <img src={cloudyIcon} alt="Cloudy" style={{ width: "200px", height: "200px", marginBottom: "10px" }} />
-        <h1 style={{ fontSize: "5rem", margin: "0", fontWeight: "300" }}>temp_current</h1>
-        <h2 style={{ fontSize: "1.5rem", margin: "0 0 10px 0", fontWeight: "400" }}>weather_current</h2>
+      {/*MIDDLE*/}
+      <main className="main-content-area">
+        
+        {/* Current Weather */}
+        <div className="current-weather-col">
+          <h2 className="location-header">location_current</h2>
+          
+          <div className="weather-primary-row">
+            <img src={cloudyIcon} alt="Cloudy" className="main-weather-icon" />
+            
+            <div className="temperature-stack">
+              <h1 className="huge-temp">temp_current</h1>
+              <div className="weather-desc">
+                <p>Feels like: feels_like_current</p>
+                <p>weather_current</p>
+                <p>rain_current</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/*Metrics*/}
+        <div className="metrics-card">
+          <div className="metrics-header">
+            <h2>Sport</h2>
+            <h2>score_current/10</h2>
+          </div>
+          <p>Temperature ... temp_high/temp_low</p>
+          <p>Wind speeds ... metric_wind</p>
+          <p>Humidity ... metric_humidity</p>
+          <p>Chance of rain ... metric_rain</p>
+          <p>Visibility ... metric_visibility</p>
+        </div>
+
       </main>
 
-        <div style={{ width: "100%", marginTop: "auto", boxSizing: "border-box" }}>
+      {/*bottom part */}
+      <div className="bottom-forecast-area">
         <HourlyV2 />
       </div>
 
