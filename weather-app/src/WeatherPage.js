@@ -10,6 +10,7 @@ import SearchBar from "./components/SearchBar";
 import HourlyForecast from "./components/HourlyForecast";
 import Clock from "./components/Clock";
 import menuIcon from "./assets/menu.svg";
+import MapCard from "./components/MapCard";
 
 function WeatherPage()
 {
@@ -226,11 +227,17 @@ function WeatherPage()
 
           <div className="right-section">
             <div className="right-top-section">Activities</div>
-            <div className="right-bottom-section">Map</div>
+          <div className="right-bottom-section">
+            <MapCard
+              lat={weatherData ? weatherData.coord.lat : 51.5072}
+              lon={weatherData ? weatherData.coord.lon : -0.1276}
+              locationName={weatherData ? weatherData.name : "London"}
+            />
           </div>
         </div>
       </div>
     </div>
+  </div>
   );
 }
 
