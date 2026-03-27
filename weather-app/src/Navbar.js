@@ -21,7 +21,10 @@ function Navbar() {
         padding: 0,
         alignItems: 'center'
       }}>
-        <li><Link to="/OdA" style={linkStyle}>OdA</Link></li>
+        <li><Link to="/OdACycling" style={linkStyle}>OdACycling</Link></li>
+        <li><Link to="/OdAHiking" style={linkStyle}>OdAHiking</Link></li>
+        <li><Link to="/OdARunning" style={linkStyle}>OdARunning</Link></li>
+        <li><Link to="/OdACamping" style={linkStyle}>OdACamping</Link></li>
         <li><Link to="/Metrics" style={linkStyle}>Metrics</Link></li>
         <li><Link to="/WeatherPage" style={linkStyle}>WeatherPage</Link></li>
         <li><Link to="/TodayWeather" style={linkStyle}>TodayWeather</Link></li>
