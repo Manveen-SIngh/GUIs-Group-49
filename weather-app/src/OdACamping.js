@@ -14,15 +14,19 @@ import windDirection from "./assets/Compass.png";
 function OdA() {
   //constants for changing values on page (including images) LONG LIST
 
+
+  // colours :'#3BC50F' '#FFAB1C' '#FF4A3A'
+
   //Measurement values
   //unit customisations change these values
+
   var unitTemp = "C";
   var distanceUnitSpeed = "m";
   var distanceUnit = "mi";
 
   //Acitivty based scores
   //for adding and removing activities somehow declare and remove values and shift values
-  var mainActivityScore = "6";
+  var mainActivityScore = "5";
   var mainActivityColor = '#FFAB1C';
   var score1 = "6";
   var score2 = "9";
@@ -42,17 +46,17 @@ function OdA() {
 
   //metric based scores
   var tempScoreColour = '#FFAB1C';
-  var precipScoreColour = '#FFAB1C';
+  var precipScoreColour = '#FF4A3A';
   var HumidityScoreColour = '#3BC50F';
-  var visibilityScoreColour = '#FFAB1C';
+  var visibilityScoreColour = '#3BC50F';
   var UVScoreColour = '#3BC50F';
-  var windspeedScoreColour = '#FFAB1C';
+  var windspeedScoreColour = '#FF4A3A';
 
   
 
   //page details
-  var pageActivity = "Cycling";
-  var mainActivityMessage = "It's an alright day to cycle";
+  var pageActivity = "Camping";
+  var mainActivityMessage = "Maybe wait for another day";
   var currentTime = "11:23";
 
   
@@ -65,7 +69,7 @@ function OdA() {
   //precip
   var precipToday = "<10";
   var prevPrecipStatus = "Heavy";
-  var precipMessage = "Bad road grip";
+  var precipMessage = "Wet Ground";
   var currentPrecipScoreColour = '#3BC50F';
   var prevPrecipScoreColour = '#FF4A3A';
   var precipIconToday = partlySunnyIcon;

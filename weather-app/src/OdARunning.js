@@ -22,8 +22,8 @@ function OdA() {
 
   //Acitivty based scores
   //for adding and removing activities somehow declare and remove values and shift values
-  var mainActivityScore = "6";
-  var mainActivityColor = '#FFAB1C';
+  var mainActivityScore = "8";
+  var mainActivityColor = '#3BC50F';
   var score1 = "6";
   var score2 = "9";
   var score3 = "5";
@@ -42,17 +42,17 @@ function OdA() {
 
   //metric based scores
   var tempScoreColour = '#FFAB1C';
-  var precipScoreColour = '#FFAB1C';
-  var HumidityScoreColour = '#3BC50F';
-  var visibilityScoreColour = '#FFAB1C';
+  var precipScoreColour = '#3BC50F';
+  var HumidityScoreColour = '#FFAB1C';
+  var visibilityScoreColour = '#3BC50F';
   var UVScoreColour = '#3BC50F';
-  var windspeedScoreColour = '#FFAB1C';
+  var windspeedScoreColour = '#3BC50F';
 
   
 
   //page details
-  var pageActivity = "Cycling";
-  var mainActivityMessage = "It's an alright day to cycle";
+  var pageActivity = "Running";
+  var mainActivityMessage = "Almost great for a marathon";
   var currentTime = "11:23";
 
   
@@ -65,7 +65,7 @@ function OdA() {
   //precip
   var precipToday = "<10";
   var prevPrecipStatus = "Heavy";
-  var precipMessage = "Bad road grip";
+  var precipMessage = "Paved Roads";
   var currentPrecipScoreColour = '#3BC50F';
   var prevPrecipScoreColour = '#FF4A3A';
   var precipIconToday = partlySunnyIcon;
