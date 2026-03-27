@@ -4,12 +4,15 @@ import "./TodayCard.css";
 function TodayCard({
   temperature = 13,
   unit = "°C",
-  feelsLike = 10
+  feelsLike = 10,
+  day = "25th"
 })
 {
   return (
     <div className="today-card">
-      <div className="today-card__title">TODAY</div>
+      <div className="today-card__title">
+        {day}
+        </div>
 
       <div className="today-card__temp">
         {temperature}{unit}

@@ -1,0 +1,162 @@
+.weekly-day-card
+{
+  width: 100%;
+  background: transparent;
+  cursor: pointer;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.weekly-day-card--expanded
+{
+  height: 169.03px;
+  padding: 14px 22px 12px 22px;
+}
+
+.weekly-day-card--collapsed
+{
+  height: 83.696px;
+  padding: 18px 22px;
+}
+
+.weekly-day-card__main
+{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.weekly-day-card__date-block
+{
+  min-width: 95px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.weekly-day-card__date-block--expanded
+{
+  min-width: 150px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.weekly-day-card__day
+{
+  font-size: 22px;
+  font-weight: 500;
+  color: #000;
+}
+
+.weekly-day-card__date
+{
+  font-size: 22px;
+  font-weight: 500;
+  color: #000;
+}
+
+.weekly-day-card__icon
+{
+  width: 45px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.weekly-day-card__icon--expanded
+{
+  width: 88px;
+  height: 56px;
+  object-fit: contain;
+  display: block;
+}
+
+.weekly-day-card__condition
+{
+  flex: 1;
+  margin-left: 16px;
+  font-size: 18px;
+  color: #000;
+}
+
+.weekly-day-card__condition--expanded
+{
+  margin-left: 0;
+  font-size: 18px;
+  color: #000;
+}
+
+.weekly-day-card__temps
+{
+  display: flex;
+  gap: 14px;
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+.weekly-day-card__low
+{
+  color: #000;
+}
+
+.weekly-day-card__high
+{
+  color: #000;
+}
+
+/* expanded layout */
+.weekly-day-card__expanded-top
+{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+
+.weekly-day-card__expanded-left
+{
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.weekly-day-card__expanded-right
+{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 2px;
+}
+
+.weekly-day-card__expanded-summary
+{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.weekly-day-card__details
+{
+  display: flex;
+  gap: 28px;
+  margin-left: 0;
+  margin-top: 0;
+}
+
+.weekly-day-card__labels,
+.weekly-day-card__values
+{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.55);
+}
