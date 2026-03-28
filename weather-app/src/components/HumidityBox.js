@@ -28,7 +28,7 @@ function InfoButton({ message }) {
   );
 }
 
-export default function HumidityBox() {
+export default function HumidityBox({ humidity = 0, humidityAvg = 0, nowTime = "" }) {
   return (
     <div
       style={{
@@ -54,7 +54,9 @@ export default function HumidityBox() {
         💧
       </div>
 
-      <InfoButton message="Current humidity is 48%, with today’s average around 65%." />
+      <InfoButton
+        message={`Current humidity is ${humidity}%, with today's average around ${humidityAvg}%.`}
+      />
 
       <div
         style={{
@@ -69,9 +71,9 @@ export default function HumidityBox() {
           zIndex: 2,
         }}
       >
-        Now,12:11
+        {nowTime ? `Now, ${nowTime}` : "Now"}
         <br />
-        The humidity is 48%, with today’s average around 65%
+        The humidity is {humidity}%, with today's average around {humidityAvg}%
       </div>
 
       <div

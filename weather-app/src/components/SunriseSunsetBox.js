@@ -25,12 +25,14 @@ function InfoButton() {
   );
 }
 
-export default function SunriseSunsetBox() {
-  const sunriseHour = 6 + 7 / 60;
-  const sunsetHour = 18 + 8 / 60;
-  const currentHour = 12 + 11 / 60;
-
-  const progress = (currentHour - sunriseHour) / (sunsetHour - sunriseHour);
+export default function SunriseSunsetBox({
+  sunrise = "06:07",
+  sunset = "18:08",
+  sunriseHour = 6 + 7 / 60,
+  sunsetHour = 18 + 8 / 60,
+  nowHour = 12,
+}) {
+  const progress = (nowHour - sunriseHour) / (sunsetHour - sunriseHour);
   const clamped = Math.max(0, Math.min(1, progress));
 
   const startX = 40;
@@ -90,7 +92,7 @@ export default function SunriseSunsetBox() {
           color: "black",
         }}
       >
-        Sunrise: 06:07
+        Sunrise: {sunrise}
       </div>
 
       <div
@@ -103,7 +105,7 @@ export default function SunriseSunsetBox() {
           color: "black",
         }}
       >
-        Sunset: 18:08
+        Sunset: {sunset}
       </div>
 
       <svg

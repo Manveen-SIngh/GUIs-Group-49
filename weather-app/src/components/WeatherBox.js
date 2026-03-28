@@ -1,18 +1,3 @@
-const hours = [
-  { time: "Now", temp: "13°C", rain: "<5%" },
-  { time: "1pm", temp: "13°C", rain: "<5%" },
-  { time: "2pm", temp: "14°C", rain: "<5%" },
-  { time: "3pm", temp: "14°C", rain: "10%" },
-  { time: "4pm", temp: "13°C", rain: "10%" },
-  { time: "5pm", temp: "12°C", rain: "10%" },
-  { time: "6pm", temp: "12°C", rain: "10%" },
-  { time: "7pm", temp: "11°C", rain: "10%" },
-  { time: "8pm", temp: "11°C", rain: "<5%" },
-  { time: "9pm", temp: "10°C", rain: "<5%" },
-  { time: "10pm", temp: "9°C", rain: "<5%" },
-  { time: "11pm", temp: "8°C", rain: "<5%" },
-];
-
 function InfoButton({ message }) {
   return (
     <button
@@ -157,7 +142,7 @@ function HourBlock({ hour }) {
   );
 }
 
-export default function WeatherBox() {
+export default function WeatherBox({ hourly = [], description = "", nowTime = "" }) {
   return (
     <div
       style={{
@@ -180,7 +165,7 @@ export default function WeatherBox() {
           boxSizing: "border-box",
         }}
       >
-        <InfoButton message="Hourly forecast: mostly cloudy with a low chance of rain through the afternoon and evening." />
+        <InfoButton message={description || "Hourly forecast for the next 12 hours."} />
 
         <div
           style={{
@@ -193,9 +178,9 @@ export default function WeatherBox() {
             marginBottom: 14,
           }}
         >
-          Now, 12:11
+          {nowTime ? `Now, ${nowTime}` : "Now"}
           <br />
-          Mostly cloudy with few brighter spells and a low chance of rain
+          {description || "Hourly forecast"}
         </div>
 
         <div
@@ -208,8 +193,8 @@ export default function WeatherBox() {
             marginTop: 2,
           }}
         >
-          {hours.map((hour) => (
-            <HourBlock key={hour.time} hour={hour} />
+          {hourly.map((hour, i) => (
+            <HourBlock key={hour.time || i} hour={hour} />
           ))}
         </div>
       </div>

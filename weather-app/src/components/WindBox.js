@@ -30,9 +30,15 @@ function InfoButton({ message }) {
   );
 }
 
-export default function WindBox() {
-  // Compass image points WEST by default
-  const windAngle = 108;
+export default function WindBox({
+  windSpeed = 0,
+  windGust = 0,
+  windDeg = 0,
+  windDir = "N",
+  nowTime = "",
+}) {
+  // Compass image points WEST by default; rotate by windDeg to show actual direction
+  const windAngle = windDeg;
 
   return (
     <div
@@ -60,7 +66,9 @@ export default function WindBox() {
         🍃
       </div>
 
-      <InfoButton message="Wind: 16 mph, gusts up to 23 mph, direction 018° NNE." />
+      <InfoButton
+        message={`Wind: ${windSpeed} mph, gusts up to ${windGust} mph, direction ${windDeg}° ${windDir}.`}
+      />
 
       {/* Title */}
       <div
@@ -74,9 +82,13 @@ export default function WindBox() {
           lineHeight: 1.15,
         }}
       >
-        <div style={{ fontWeight: 500, fontSize: 13 }}>Now,12:11</div>
+        <div style={{ fontWeight: 500, fontSize: 13 }}>
+          {nowTime ? `Now, ${nowTime}` : "Now"}
+        </div>
         <div style={{ fontWeight: 700, fontSize: 14 }}>
-          Light winds with gusts of 23mph
+          {windGust > windSpeed
+            ? `Light winds with gusts of ${windGust}mph`
+            : `Wind speed ${windSpeed}mph`}
         </div>
       </div>
 
@@ -95,13 +107,15 @@ export default function WindBox() {
         }}
       >
         <div style={{ fontWeight: 700, fontSize: 13 }}>Wind</div>
-        <div style={{ fontWeight: 500, fontSize: 13 }}>16</div>
+        <div style={{ fontWeight: 500, fontSize: 13 }}>{windSpeed}</div>
 
         <div style={{ fontWeight: 700, fontSize: 13 }}>Gusts</div>
-        <div style={{ fontWeight: 500, fontSize: 13 }}>23</div>
+        <div style={{ fontWeight: 500, fontSize: 13 }}>{windGust}</div>
 
         <div style={{ fontWeight: 700, fontSize: 13 }}>Direction</div>
-        <div style={{ fontWeight: 500, fontSize: 13 }}>018° NNE</div>
+        <div style={{ fontWeight: 500, fontSize: 13 }}>
+          {String(windDeg).padStart(3, "0")}° {windDir}
+        </div>
       </div>
 
       {/* Compass */}
@@ -128,7 +142,6 @@ export default function WindBox() {
           }}
         />
 
-        {/* ✅ Centered wind speed */}
         <div
           style={{
             position: "absolute",
@@ -137,7 +150,7 @@ export default function WindBox() {
             color: "black",
           }}
         >
-          16 mph
+          {windSpeed} mph
         </div>
       </div>
     </div>
