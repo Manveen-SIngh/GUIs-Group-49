@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { useSidebar } from "./Sidebar";
 
 import "./OdAPage.css";
@@ -7,10 +6,7 @@ import "./OdAPage.css";
 import bg from "./assets/PartlyCloudy.png";
 import menuIcon from "./assets/menu.svg";
 
-import hikingIcon  from "./assets/Activity-icons/hiking.svg";
-import runningIcon from "./assets/Activity-icons/running.svg";
-import cyclingIcon from "./assets/Activity-icons/cycling.svg";
-import campingIcon from "./assets/Activity-icons/camping.svg";
+import ActivityScoresBox, { ACTIVITIES } from "./components/ActivityScoresBox";
 import hiArrow        from "./assets/redArrowUp.svg";
 import loArrow        from "./assets/blueArrowDown.svg";
 import partlySunnyIcon from "./assets/weather-icons/sun-clouds.svg";
@@ -19,12 +15,6 @@ import windDirection   from "./assets/Compass.png";
 
 // ─── Shared data ────────────────────────────────────────────────────────────
 
-const ACTIVITIES = [
-  { key: "cycling", label: "Cycling", icon: cyclingIcon, score: 6,  colour: "#FFAB1C", route: "/OdACycling" },
-  { key: "hiking",  label: "Hiking",  icon: hikingIcon,  score: 9,  colour: "#3BC50F", route: "/OdAHiking"  },
-  { key: "camping", label: "Camping", icon: campingIcon, score: 5,  colour: "#FFAB1C", route: "/OdACamping" },
-  { key: "running", label: "Running", icon: runningIcon, score: 8,  colour: "#3BC50F", route: "/OdARunning" },
-];
 
 // Per-activity page details — extend this object for each activity key
 const PAGE_DATA = {
@@ -114,7 +104,6 @@ const WEATHER = {
  * @param {{ activityKey: "cycling"|"hiking"|"camping"|"running" }} props
  */
 function OdAPage({ activityKey }) {
-  const navigate = useNavigate();
   const { open } = useSidebar();
   const [time, setTime] = useState("");
 
@@ -182,45 +171,7 @@ function OdAPage({ activityKey }) {
       </div>
 
       {/* ── Scores box ──────────────────────────────────────────── */}
-      <div className="layer layer--shadow">
-        <div className="scores-box" />
-
-        {ACTIVITIES.map((activity, i) => {
-          const isActive  = activity.key === activityKey;
-          const rowKey    = activity.key;
-          const dividerTop = [340, 390, 440, 490][i];
-          const labelTop   = [300, 350, 400, 450][i];
-
-          return (
-            <React.Fragment key={rowKey}>
-              <div
-                className={`activity-label activity-label--${rowKey}${isActive ? " activity-label--active" : ""}`}
-                onClick={isActive ? undefined : () => navigate(activity.route)}
-              >
-                {activity.label}
-              </div>
-              <div
-                className={`activity-swatch activity-swatch--${rowKey}${isActive ? " activity-swatch--active" : ""}`}
-                style={{ background: activity.colour }}
-                onClick={isActive ? undefined : () => navigate(activity.route)}
-              />
-              <img
-                className={`activity-icon activity-icon--${rowKey}${isActive ? " activity-icon--active" : ""}`}
-                src={activity.icon}
-                alt={activity.label}
-                onClick={isActive ? undefined : () => navigate(activity.route)}
-              />
-              <div
-                className={`activity-score activity-score--${rowKey}${isActive ? " activity-score--active" : ""}`}
-                onClick={isActive ? undefined : () => navigate(activity.route)}
-              >
-                {activity.score}/10
-              </div>
-              <div className={`activity-divider activity-divider--${i + 1}`} />
-            </React.Fragment>
-          );
-        })}
-      </div>
+      <ActivityScoresBox activeKey={activityKey} />
 
       {/* ── Map box ─────────────────────────────────────────────── */}
       <div className="layer layer--shadow">
