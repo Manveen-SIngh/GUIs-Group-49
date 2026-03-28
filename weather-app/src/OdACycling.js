@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState, useEffect } from "react";
 import bg from "./assets/PartlyCloudy.png";
 import menuIcon from "./assets/menu.svg";
@@ -310,3 +311,7 @@ function OdACycling() {
 }
 
 export default OdACycling;
+=======
+import OdAPage from "./OdAPage";
+export default function OdACycling() { return <OdAPage activityKey="cycling" />; }
+>>>>>>> 089ffd45d4d6ce6b7bfa5421aa723453ca5b5b3b

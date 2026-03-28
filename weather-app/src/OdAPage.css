@@ -1,0 +1,1094 @@
+
+/* ---------- Root / page wrapper ---------- */
+.page-wrapper {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+}
+
+/* ---------- Shared layer shell ---------- */
+.layer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+.layer--shadow {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* ============================================================
+   Clock
+   ============================================================ */
+.clock-bg {
+  width: 165px;
+  height: 91px;
+  left: 1460px;
+  top: 42px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 28px;
+}
+
+.clock-display {
+  position: absolute;
+  left: 1460px;
+  top: 42px;
+  width: 165px;
+  height: 91px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Rubik, sans-serif;
+  font-size: 50px;
+  font-weight: 500;
+  color: black;
+}
+
+/* ============================================================
+   Unit toggles – Distance (mi / km)
+   ============================================================ */
+.unit-distance-bg {
+  width: 139px;
+  height: 53px;
+  left: 591px;
+  top: 55px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 43px;
+}
+
+.unit-distance-active {
+  width: 79.11px;
+  height: 53px;
+  left: 591px;
+  top: 55px;
+  position: absolute;
+  background: rgba(203, 210, 208, 0.4);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 43px;
+}
+
+.unit-distance-mi {
+  width: 64.41px;
+  left: 607px;
+  top: 64px;
+  position: absolute;
+  color: black;
+  font-size: 32px;
+  font-family: Rubik, sans-serif;
+  font-weight: 700;
+  word-wrap: break-word;
+}
+
+.unit-distance-km {
+  width: 48.59px;
+  left: 675px;
+  top: 64px;
+  position: absolute;
+  color: black;
+  font-size: 32px;
+  font-family: Rubik, sans-serif;
+  font-weight: 700;
+  word-wrap: break-word;
+}
+
+/* ---------- Unit toggles – Temperature (°C / °F) ---------- */
+.unit-temp-bg {
+  width: 123px;
+  height: 53px;
+  left: 418px;
+  top: 55px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 43px;
+}
+
+.unit-temp-active {
+  width: 70px;
+  height: 53px;
+  left: 418px;
+  top: 55px;
+  position: absolute;
+  background: rgba(203, 210, 208, 0.4);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 43px;
+}
+
+.unit-temp-c {
+  width: 43px;
+  left: 426px;
+  top: 64px;
+  position: absolute;
+  color: black;
+  font-size: 32px;
+  font-family: Rubik, sans-serif;
+  font-weight: 700;
+  word-wrap: break-word;
+}
+
+.unit-temp-f {
+  width: 43px;
+  left: 498px;
+  top: 64px;
+  position: absolute;
+  color: black;
+  font-size: 32px;
+  font-family: Rubik, sans-serif;
+  font-weight: 700;
+  word-wrap: break-word;
+}
+
+/* ============================================================
+   Menu button
+   ============================================================ */
+.menu-btn-bg {
+  width: 91px;
+  height: 91px;
+  left: 277px;
+  top: 36px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 28px;
+}
+
+.menu-btn-icon-wrap {
+  width: 60px;
+  height: 60px;
+  left: 277px;
+  top: 36px;
+  position: absolute;
+}
+
+.menu-btn-icon-inner {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 15px;
+  top: 15.5px;
+}
+
+/* ============================================================
+   Page title / header text
+   ============================================================ */
+.header-subtitle {
+  position: absolute;
+  left: 280px;
+  top: 110px;
+  align-items: left;
+  font-family: Rubik, sans-serif;
+  font-size: 52px;
+  font-weight: 400;
+  color: black;
+}
+
+.header-activity-title {
+  position: absolute;
+  left: 280px;
+  top: 153px;
+  align-items: left;
+  font-family: Rubik, sans-serif;
+  font-size: 92px;
+  font-weight: 500;
+  color: black;
+}
+
+/* ============================================================
+   Main activity score
+   ============================================================ */
+.main-score-swatch {
+  width: 92px;
+  height: 86px;
+  left: 1160px;
+  top: 142px;
+  position: absolute;
+  border-radius: 10px;
+}
+
+.main-score-value {
+  position: absolute;
+  top: 142px;
+  left: 1260px;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 92px;
+  font-family: Rubik, sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.main-score-message {
+  position: absolute;
+  top: 230px;
+  left: 1060px;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 38px;
+  font-family: Rubik, sans-serif;
+  font-weight: 450;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   Scores box
+   ============================================================ */
+.scores-box {
+  width: 349px;
+  height: 311px;
+  left: 299px;
+  top: 280px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 43px;
+}
+
+/* Generic activity row */
+.activity-label {
+  position: absolute;
+  color: black;
+  font-size: 26px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  word-wrap: break-word;
+  z-index: 9999;
+  cursor: pointer;
+}
+
+.activity-label--active {
+  font-weight: 450; /* current page – not clickable */
+  cursor: default;
+}
+
+.activity-swatch {
+  width: 32.08px;
+  height: 30.11px;
+  position: absolute;
+  border-radius: 10px;
+  z-index: 9999;
+  cursor: pointer;
+}
+
+.activity-swatch--active {
+  cursor: default;
+}
+
+.activity-icon {
+  position: absolute;
+  z-index: 9999;
+  cursor: pointer;
+}
+
+.activity-icon--active {
+  cursor: default;
+}
+
+.activity-score {
+  position: absolute;
+  color: black;
+  font-size: 26px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  word-wrap: break-word;
+  z-index: 9999;
+  cursor: pointer;
+}
+
+.activity-score--active {
+  font-weight: 450;
+  cursor: default;
+}
+
+.activity-divider {
+  width: 349px;
+  height: 1px;
+  left: 299px;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Row 1 – Cycling */
+.activity-label--cycling  { left: 360px; top: 300px; }
+.activity-swatch--cycling { left: 320px; top: 300px; }
+.activity-icon--cycling   { top: 295px;  left: 505px; }
+.activity-score--cycling  { left: 570px; top: 300px; }
+.activity-divider--1      { top: 340px; }
+
+/* Row 2 – Hiking */
+.activity-label--hiking   { left: 360px; top: 350px; }
+.activity-swatch--hiking  { left: 320px; top: 350px; }
+.activity-icon--hiking    { top: 345px;  left: 505px; }
+.activity-score--hiking   { left: 570px; top: 350px; }
+.activity-divider--2      { top: 390px; }
+
+/* Row 3 – Camping (active / current page) */
+.activity-label--camping  { left: 360px; top: 400px; }
+.activity-swatch--camping { left: 320px; top: 400px; }
+.activity-icon--camping   { top: 395px;  left: 505px; }
+.activity-score--camping  { left: 570px; top: 400px; }
+.activity-divider--3      { top: 440px; }
+
+/* Row 4 – Running */
+.activity-label--running  { left: 360px; top: 450px; }
+.activity-swatch--running { left: 320px; top: 450px; }
+.activity-icon--running   { top: 445px;  left: 505px; }
+.activity-score--running  { left: 570px; top: 450px; }
+.activity-divider--4      { top: 490px; }
+
+/* ============================================================
+   Map box
+   ============================================================ */
+.map-box {
+  width: 349px;
+  height: 311px;
+  left: 299px;
+  top: 600px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 43px;
+}
+
+.map-label {
+  position: absolute;
+  top: 730px;
+  left: 440px;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 35px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   Temperature box
+   ============================================================ */
+.temp-box {
+  width: 349px;
+  height: 311px;
+  left: 670px;
+  top: 600px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 43px;
+}
+
+.temp-score-swatch {
+  width: 33px;
+  height: 33px;
+  left: 712px;
+  top: 620px;
+  position: absolute;
+  border-radius: 10px;
+}
+
+.temp-title {
+  position: absolute;
+  top: 615px;
+  left: 747px;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 35px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.temp-today-label {
+  position: absolute;
+  top: 680px;
+  left: 790px;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 35px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.temp-hi-value {
+  color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  top: 724px;
+  left: 755px;
+  text-align: left;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.temp-hi-arrow {
+  position: absolute;
+  top: 719px;
+  left: 737px;
+}
+
+.temp-lo-value {
+  color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  top: 724px;
+  left: 865px;
+  text-align: left;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.temp-lo-arrow {
+  position: absolute;
+  top: 719px;
+  left: 847px;
+}
+
+.temp-now-label {
+  color: black;
+  position: absolute;
+  top: 800px;
+  left: 750px;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.temp-now-value {
+  color: black;
+  position: absolute;
+  top: 837px;
+  left: 800px;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   Precipitation box
+   ============================================================ */
+.precip-box {
+  width: 349px;
+  height: 311px;
+  left: 670px;
+  top: 280px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 43px;
+}
+
+.precip-score-swatch {
+  width: 33px;
+  height: 33px;
+  left: 710px;
+  top: 300px;
+  position: absolute;
+  border-radius: 10px;
+}
+
+.precip-title {
+  position: absolute;
+  top: 295px;
+  left: 745px;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 35px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.precip-icon-today {
+  position: absolute;
+  height: 86px;
+  width: 98px;
+  top: 345px;
+  left: 700px;
+}
+
+.precip-today-label {
+  position: absolute;
+  top: 430px;
+  left: 700px;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 34px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.precip-today-score-swatch {
+  width: 33px;
+  height: 33px;
+  left: 800px;
+  top: 435px;
+  position: absolute;
+  border-radius: 10px;
+}
+
+.precip-today-value {
+  position: absolute;
+  top: 470px;
+  left: 720px;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 26px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.precip-icon-prev {
+  position: absolute;
+  height: 86px;
+  width: 98px;
+  top: 350px;
+  left: 870px;
+}
+
+.precip-prev-label {
+  position: absolute;
+  top: 430px;
+  left: 880px;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 34px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.precip-prev-score-swatch {
+  width: 33px;
+  height: 33px;
+  left: 965px;
+  top: 435px;
+  position: absolute;
+  border-radius: 10px;
+}
+
+.precip-prev-value {
+  position: absolute;
+  top: 470px;
+  left: 890px;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 26px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.precip-message {
+  position: absolute;
+  top: 550px;
+  left: 745px;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 28px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   Humidity box
+   ============================================================ */
+.humidity-box {
+  width: 349px;
+  height: 311px;
+  left: 1041px;
+  top: 280px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 43px;
+}
+
+.humidity-score-swatch {
+  width: 33px;
+  height: 33px;
+  left: 1125px;
+  top: 300px;
+  position: absolute;
+  border-radius: 10px;
+}
+
+.humidity-title {
+  position: absolute;
+  top: 295px;
+  left: 1160px;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 35px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.humidity-today-label {
+  position: absolute;
+  top: 345px;
+  left: 1170px;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 35px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.humidity-hi-label  { color: #FF6B6B; }
+.humidity-lo-label  { color: #0048FF; }
+.humidity-value     { color: rgba(0, 0, 0, 0.7); }
+
+.humidity-today-hi-label {
+  position: absolute;
+  top: 390px;
+  left: 1097px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.humidity-today-hi-value {
+  position: absolute;
+  top: 390px;
+  left: 1140px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.humidity-today-lo-label {
+  position: absolute;
+  top: 390px;
+  left: 1242px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.humidity-today-lo-value {
+  position: absolute;
+  top: 390px;
+  left: 1290px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.humidity-prev-label {
+  position: absolute;
+  top: 465px;
+  left: 1135px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 35px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.humidity-prev-hi-label {
+  position: absolute;
+  top: 505px;
+  left: 1097px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.humidity-prev-hi-value {
+  position: absolute;
+  top: 505px;
+  left: 1140px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.humidity-prev-lo-label {
+  position: absolute;
+  top: 505px;
+  left: 1242px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.humidity-prev-lo-value {
+  position: absolute;
+  top: 505px;
+  left: 1290px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   Visibility box
+   ============================================================ */
+.visibility-box {
+  width: 349px;
+  height: 311px;
+  left: 1041px;
+  top: 600px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 43px;
+}
+
+.visibility-score-swatch {
+  width: 33px;
+  height: 33px;
+  left: 1115px;
+  top: 620px;
+  position: absolute;
+  border-radius: 10px;
+}
+
+.visibility-title {
+  position: absolute;
+  top: 615px;
+  left: 1150px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 35px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.visibility-today-label {
+  position: absolute;
+  top: 680px;
+  left: 1170px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 35px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.visibility-hi-label {
+  color: #FF6B6B;
+  position: absolute;
+  top: 717px;
+  left: 1097px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.visibility-hi-value {
+  color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  top: 717px;
+  left: 1137px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.visibility-lo-label {
+  color: #0048FF;
+  position: absolute;
+  top: 717px;
+  left: 1242px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.visibility-lo-value {
+  color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  top: 717px;
+  left: 1287px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.visibility-now-label {
+  color: black;
+  position: absolute;
+  top: 800px;
+  left: 1134px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.visibility-now-value {
+  color: black;
+  position: absolute;
+  top: 837px;
+  left: 1189px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   Wind speed box
+   ============================================================ */
+.wind-box {
+  width: 175px;
+  height: 311px;
+  left: 1416px;
+  top: 280px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 43px;
+}
+
+.wind-score-swatch {
+  width: 33px;
+  height: 33px;
+  left: 1440px;
+  top: 300px;
+  position: absolute;
+  border-radius: 10px;
+}
+
+.wind-title {
+  position: absolute;
+  top: 295px;
+  left: 1453px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 35px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.wind-compass {
+  position: absolute;
+  width: 168px;
+  height: 168px;
+  top: 372px;
+  left: 1425px;
+}
+
+.wind-speed-value {
+  color: black;
+  position: absolute;
+  top: 445px;
+  left: 1465px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 25px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.wind-avg-label {
+  color: black;
+  position: absolute;
+  top: 535px;
+  left: 1465px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 22px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   UV box
+   ============================================================ */
+.uv-box {
+  width: 175px;
+  height: 311px;
+  left: 1416px;
+  top: 600px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 43px;
+}
+
+.uv-score-swatch {
+  width: 33px;
+  height: 33px;
+  left: 1453px;
+  top: 620px;
+  position: absolute;
+  border-radius: 10px;
+}
+
+.uv-title {
+  position: absolute;
+  top: 615px;
+  left: 1490px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 35px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.uv-daily-label {
+  position: absolute;
+  top: 695px;
+  left: 1455px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 25px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.uv-daily-value {
+  position: absolute;
+  top: 835px;
+  left: 1470px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 38px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}

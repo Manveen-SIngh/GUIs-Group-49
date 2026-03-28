@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState, useEffect } from "react";
 import bg from "./assets/PartlyCloudy.png";
 import menuIcon from "./assets/menu.svg";
@@ -280,3 +281,7 @@ function OdAHiking() {
 }
 
 export default OdAHiking;
+=======
+import OdAPage from "./OdAPage";
+export default function OdAHiking() { return <OdAPage activityKey="hiking" />; }
+>>>>>>> 089ffd45d4d6ce6b7bfa5421aa723453ca5b5b3b

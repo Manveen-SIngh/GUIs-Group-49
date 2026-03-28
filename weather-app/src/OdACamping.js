@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -232,3 +233,7 @@ function OdACamping() {
 }
 
 export default OdACamping;
+=======
+import OdAPage from "./OdAPage";
+export default function OdACamping() { return <OdAPage activityKey="camping" />; }
+>>>>>>> 089ffd45d4d6ce6b7bfa5421aa723453ca5b5b3b

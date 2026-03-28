@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState, useEffect } from "react";
 import bg from "./assets/PartlyCloudy.png";
 import menuIcon from "./assets/menu.svg";
@@ -212,3 +213,7 @@ function OdARunning() {
 }
 
 export default OdARunning;
+=======
+import OdAPage from "./OdAPage";
+export default function OdARunning() { return <OdAPage activityKey="running" />; }
+>>>>>>> 089ffd45d4d6ce6b7bfa5421aa723453ca5b5b3b
