@@ -9,18 +9,18 @@ import rainyIcon      from './assets/weather-icons/rainy.svg';
 import stormyIcon     from './assets/weather-icons/stormy.svg';
 import windyIcon      from './assets/weather-icons/windy.svg';
 import partlyIcon     from './assets/weather-icons/sun-clouds.svg';
-
-const getConditionIcon = (condition) => {
-  if (condition === "Clear")                          return sunnyIcon;
-  if (condition === "Clouds")                         return cloudsIcon;
-  if (condition === "Rain" || condition === "Drizzle") return rainyIcon;
-  if (condition === "Thunderstorm")                   return stormyIcon;
-  if (condition === "Wind")                           return windyIcon;
-  return partlyIcon;
-};
 import HourlyV2 from "./components/HourlyV2";
 import { fetchWeatherByCity, fetchWeatherByCoords } from "./services/weatherApi";
 import SearchBar from "./components/SearchBar";
+
+const getConditionIcon = (condition) => {
+  if (condition === "Clear")                           return sunnyIcon;
+  if (condition === "Clouds")                          return cloudsIcon;
+  if (condition === "Rain" || condition === "Drizzle") return rainyIcon;
+  if (condition === "Thunderstorm")                    return stormyIcon;
+  if (condition === "Wind")                            return windyIcon;
+  return partlyIcon;
+};
 
 function TodayWeather() {
   const navigate = useNavigate();
