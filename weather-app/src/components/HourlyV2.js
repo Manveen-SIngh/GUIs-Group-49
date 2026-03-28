@@ -1,124 +1,33 @@
 import React from "react";
-import HourCard from "./HourCard";
 import "./HourlyV2.css";
-import sunny from "../assets/weather-icons/Sunny.svg";
-import clouds from "../assets/weather-icons/clouds.svg";
-import rainy from "../assets/weather-icons/rainy.svg";
-import stormy from "../assets/weather-icons/stormy.svg";
-import partlyCloudy from "../assets/weather-icons/sun-clouds.svg";
 
-function HourlyForecast() {
+function HourlyV2() {
+  const renderCard = (time, temp, rain, wind) => (
+    <div className="v2-hour-card">
+      <span style={{ fontWeight: "bold", fontSize: "1.1rem" }}>{time}</span>
+      <div className="icon-placeholder">icon</div>
+      <span style={{ fontSize: "1.3rem" }}>{temp}</span>
+      <span style={{ color: "#005bb5", fontWeight: "500" }}>{rain}</span>
+      <span>{wind}</span>
+    </div>
+  );
+
   return (
-    <div className="hourly-forecast">
-      {/* current Hour */}
-      <HourCard 
-        time="time_current" 
-        icon="icon_current" 
-        temp="temp_current" 
-        rain="rain_current" 
-        wind="wind_current" 
-      />
-
-      {/* Hour + 1 */}
-      <HourCard 
-        time="time_+1" 
-        icon="icon_+1" 
-        temp="temp_+1" 
-        rain="rain_+1" 
-        wind="wind_+1" 
-      />
-
-      {/* Hour + 2 */}
-      <HourCard 
-        time="time_+2" 
-        icon="icon_+2" 
-        temp="temp_+2" 
-        rain="rain_+2" 
-        wind="wind_+2" 
-      />
-
-      {/* Hour + 3 */}
-      <HourCard 
-        time="time_+3" 
-        icon="icon_+3" 
-        temp="temp_+3" 
-        rain="rain_+3" 
-        wind="wind_+3" 
-      />
-
-      {/* Hour + 4 */}
-      <HourCard 
-        time="time_+4" 
-        icon="icon_+4" 
-        temp="temp_+4" 
-        rain="rain_+4" 
-        wind="wind_+4" 
-      />
-
-      {/* Hour + 5 */}
-      <HourCard 
-        time="time_+5" 
-        icon="icon_+5" 
-        temp="temp_+5" 
-        rain="rain_+5" 
-        wind="wind_+5" 
-      />
-
-      {/* Hour + 6 */}
-      <HourCard 
-        time="time_+6" 
-        icon="icon_+6" 
-        temp="temp_+6" 
-        rain="rain_+6" 
-        wind="wind_+6" 
-      />
-
-      {/* Hour + 7 */}
-      <HourCard 
-        time="time_+7" 
-        icon="icon_+7" 
-        temp="temp_+7" 
-        rain="rain_+7" 
-        wind="wind_+7" 
-      />
-
-      {/* Hour + 8 */}
-      <HourCard 
-        time="time_+8" 
-        icon="icon_+8" 
-        temp="temp_+8" 
-        rain="rain_+8" 
-        wind="wind_+8" 
-      />
-
-      {/* Hour + 9 */}
-      <HourCard 
-        time="time_+9" 
-        icon="icon_+9" 
-        temp="temp_+9" 
-        rain="rain_+9" 
-        wind="wind_+9" 
-      />
-
-      {/* Hour + 10 */}
-      <HourCard 
-        time="time_+10" 
-        icon="icon_+10" 
-        temp="temp_+10" 
-        rain="rain_+10" 
-        wind="wind_+10" 
-      />
-
-      {/* Hour + 11 */}
-      <HourCard 
-        time="time_+11" 
-        icon="icon_+11" 
-        temp="temp_+11" 
-        rain="rain_+11" 
-        wind="wind_+11" 
-      />
+    <div className="hourly-forecast-v2">
+      {renderCard("time_current", "temp_current", "rain_current", "wind_current")}
+      {renderCard("time_+1", "temp_+1", "rain_+1", "wind_+1")}
+      {renderCard("time_+2", "temp_+2", "rain_+2", "wind_+2")}
+      {renderCard("time_+3", "temp_+3", "rain_+3", "wind_+3")}
+      {renderCard("time_+4", "temp_+4", "rain_+4", "wind_+4")}
+      {renderCard("time_+5", "temp_+5", "rain_+5", "wind_+5")}
+      {renderCard("time_+6", "temp_+6", "rain_+6", "wind_+6")}
+      {renderCard("time_+7", "temp_+7", "rain_+7", "wind_+7")}
+      {renderCard("time_+8", "temp_+8", "rain_+8", "wind_+8")}
+      {renderCard("time_+9", "temp_+9", "rain_+9", "wind_+9")}
+      {renderCard("time_+10", "temp_+10", "rain_+10", "wind_+10")}
+      {renderCard("time_+11", "temp_+11", "rain_+11", "wind_+11")}
     </div>
   );
 }
 
-export default HourlyForecast;
+export default HourlyV2;
