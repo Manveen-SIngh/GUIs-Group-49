@@ -25,6 +25,8 @@ function Navbar() {
         <li><Link to="/Metrics" style={linkStyle}>Metrics</Link></li>
         <li><Link to="/WeatherPage" style={linkStyle}>WeatherPage</Link></li>
         <li><Link to="/TodayWeather" style={linkStyle}>TodayWeather</Link></li>
+        <li><Link to="/Settings" style={linkStyle}>Settings</Link></li>
+
         
       </ul>
       
