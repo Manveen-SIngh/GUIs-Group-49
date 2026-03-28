@@ -306,7 +306,7 @@ function WeatherPage()
 
           <div className="right-section">
             <div className="right-top-section">
-              
+
             </div>
           <div className="right-bottom-section">
             <MapCard
