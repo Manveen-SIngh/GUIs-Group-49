@@ -3,9 +3,23 @@ import { useNavigate } from "react-router-dom";
 import bg from "./assets/PartlyCloudy.png";
 import "./TodayWeather.css";
 import backBtn from './assets/BackBtn.png';
-import cloudyIcon from './assets/weather-icons/clouds.svg';
+import sunnyIcon      from './assets/weather-icons/Sunny.svg';
+import cloudsIcon     from './assets/weather-icons/clouds.svg';
+import rainyIcon      from './assets/weather-icons/rainy.svg';
+import stormyIcon     from './assets/weather-icons/stormy.svg';
+import windyIcon      from './assets/weather-icons/windy.svg';
+import partlyIcon     from './assets/weather-icons/sun-clouds.svg';
+
+const getConditionIcon = (condition) => {
+  if (condition === "Clear")                          return sunnyIcon;
+  if (condition === "Clouds")                         return cloudsIcon;
+  if (condition === "Rain" || condition === "Drizzle") return rainyIcon;
+  if (condition === "Thunderstorm")                   return stormyIcon;
+  if (condition === "Wind")                           return windyIcon;
+  return partlyIcon;
+};
 import HourlyV2 from "./components/HourlyV2";
-import { fetchWeatherByCity } from "./services/weatherApi";
+import { fetchWeatherByCity, fetchWeatherByCoords } from "./services/weatherApi";
 import SearchBar from "./components/SearchBar";
 
 function TodayWeather() {
@@ -37,7 +51,22 @@ function TodayWeather() {
 
   useEffect(() => {
     const saved = localStorage.getItem("lastCity");
-    if (saved) loadWeather(saved);
+    if (saved) {
+      loadWeather(saved);
+    } else if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          try {
+            const data = await fetchWeatherByCoords(pos.coords.latitude, pos.coords.longitude);
+            setWeather(data);
+            localStorage.setItem("lastCity", data.locationName);
+          } catch (err) {
+            setError(err.message);
+          }
+        },
+        () => {} // permission denied — user can search manually
+      );
+    }
   }, []);
 
   const handleSearch = () => {
@@ -95,7 +124,7 @@ function TodayWeather() {
           <h2 className="location-header">{w ? w.locationName : "—"}</h2>
 
           <div className="weather-primary-row">
-            <img src={cloudyIcon} alt="Cloudy" className="main-weather-icon" />
+            <img src={getConditionIcon(cur?.condition)} alt={cur?.condition || "Weather"} className="main-weather-icon" />
 
             <div className="temperature-stack">
               <h1 className="huge-temp">{cur ? fmtTemp(cur.temp) : "—"}</h1>

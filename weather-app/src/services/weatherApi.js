@@ -119,11 +119,18 @@ export const activityMessage = (activity, score) => {
   return (msgs[activity] || msgs.hiking)[tier];
 };
 
-// ─── Main fetch ───────────────────────────────────────────────────────────────
+// ─── Reverse geocode ──────────────────────────────────────────────────────────
 
-export const fetchWeatherByCity = async (city) => {
-  const { lat, lon, name } = await geocodeCity(city);
-  const data = await fetchOneCall(lat, lon);
+export const reverseGeocode = async (lat, lon) => {
+  const res = await axios.get(
+    `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${apiKey}`
+  );
+  return res.data.length ? res.data[0].name : "Your Location";
+};
+
+// ─── Shared data processor ────────────────────────────────────────────────────
+
+const buildWeatherPayload = (lat, lon, name, data) => {
   const { current, daily, hourly, timezone_offset: tz } = data;
 
   const today    = daily[0];
@@ -207,4 +214,22 @@ export const fetchWeatherByCity = async (city) => {
     daily,
     timezone_offset: tz,
   };
+};
+
+// ─── Fetch by city name ───────────────────────────────────────────────────────
+
+export const fetchWeatherByCity = async (city) => {
+  const { lat, lon, name } = await geocodeCity(city);
+  const data = await fetchOneCall(lat, lon);
+  return buildWeatherPayload(lat, lon, name, data);
+};
+
+// ─── Fetch by coordinates (auto-location) ────────────────────────────────────
+
+export const fetchWeatherByCoords = async (lat, lon) => {
+  const [name, data] = await Promise.all([
+    reverseGeocode(lat, lon),
+    fetchOneCall(lat, lon),
+  ]);
+  return buildWeatherPayload(lat, lon, name, data);
 };

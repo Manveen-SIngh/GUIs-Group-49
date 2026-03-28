@@ -1,3 +1,10 @@
+import sunnyIcon  from '../assets/weather-icons/Sunny.svg';
+import cloudsIcon from '../assets/weather-icons/clouds.svg';
+import rainyIcon  from '../assets/weather-icons/rainy.svg';
+import stormyIcon from '../assets/weather-icons/stormy.svg';
+import windyIcon  from '../assets/weather-icons/windy.svg';
+import partlyIcon from '../assets/weather-icons/sun-clouds.svg';
+
 function InfoButton({ message }) {
   return (
     <button
@@ -28,36 +35,22 @@ function InfoButton({ message }) {
   );
 }
 
-function WeatherIcon() {
+const getConditionIcon = (condition) => {
+  if (condition === "Clear")                           return sunnyIcon;
+  if (condition === "Clouds")                          return cloudsIcon;
+  if (condition === "Rain" || condition === "Drizzle") return rainyIcon;
+  if (condition === "Thunderstorm")                    return stormyIcon;
+  if (condition === "Wind")                            return windyIcon;
+  return partlyIcon;
+};
+
+function WeatherIcon({ condition }) {
   return (
-    <div style={{ width: 34, height: 24, position: "relative" }}>
-      <div
-        style={{
-          width: 22,
-          height: 14,
-          position: "absolute",
-          left: 8,
-          top: 0,
-          background: "linear-gradient(30deg, #FF9900 0%, #FFEE94 100%)",
-          borderRadius: "50%",
-          boxShadow: "0px 3px 8px rgba(255,255,255,0.7) inset",
-        }}
-      />
-      <div
-        style={{
-          width: 30,
-          height: 14,
-          position: "absolute",
-          left: 0,
-          top: 9,
-          borderRadius: 20,
-          background:
-            "linear-gradient(322deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.5) 100%)",
-          boxShadow:
-            "0px 6px 6px rgba(255,255,255,0.7) inset, 0px 2px 3px rgba(0,0,0,0.18)",
-        }}
-      />
-    </div>
+    <img
+      src={getConditionIcon(condition)}
+      alt={condition || "weather"}
+      style={{ width: 34, height: 34, objectFit: "contain" }}
+    />
   );
 }
 
@@ -122,7 +115,7 @@ function HourBlock({ hour }) {
       </div>
 
       <div style={{ marginBottom: 8 }}>
-        <WeatherIcon />
+        <WeatherIcon condition={hour.condition} />
       </div>
 
       <div

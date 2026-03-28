@@ -30,12 +30,6 @@
   padding: 0;
 }
 
-body {
-  background: var(--bg-base);
-  color: var(--text-primary);
-  font-family: var(--font-main);
-  -webkit-font-smoothing: antialiased;
-}
 
 /* ── Settings Root ─────────────────────────────────────────────────────── */
 .settings-root {

@@ -9,7 +9,7 @@ import UVBox from "./components/UVBox";
 import VisibilityBox from "./components/VisibilityBox";
 import HumidityBox from "./components/HumidityBox";
 
-import { fetchWeatherByCity } from "./services/weatherApi";
+import { fetchWeatherByCity, fetchWeatherByCoords } from "./services/weatherApi";
 import SearchBar from "./components/SearchBar";
 
 function Metrics() {
@@ -30,7 +30,22 @@ function Metrics() {
 
   useEffect(() => {
     const saved = localStorage.getItem("lastCity");
-    if (saved) loadWeather(saved);
+    if (saved) {
+      loadWeather(saved);
+    } else if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          try {
+            const data = await fetchWeatherByCoords(pos.coords.latitude, pos.coords.longitude);
+            setWeather(data);
+            localStorage.setItem("lastCity", data.locationName);
+          } catch (err) {
+            setError(err.message);
+          }
+        },
+        () => {}
+      );
+    }
   }, []);
 
   const handleSearch = () => {
