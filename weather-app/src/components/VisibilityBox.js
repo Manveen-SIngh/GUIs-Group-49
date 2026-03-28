@@ -28,7 +28,7 @@ function InfoButton({ message }) {
   );
 }
 
-export default function VisibilityBox() {
+export default function VisibilityBox({ visibility = 0, nowTime = "" }) {
   return (
     <div
       style={{
@@ -54,7 +54,9 @@ export default function VisibilityBox() {
         👁️
       </div>
 
-      <InfoButton message="Visibility is around 15 miles and conditions are perfectly clear." />
+      <InfoButton
+        message={`Visibility is around ${visibility} miles.`}
+      />
 
       <div
         style={{
@@ -70,9 +72,9 @@ export default function VisibilityBox() {
           zIndex: 2,
         }}
       >
-        Now,12:11
+        {nowTime ? `Now, ${nowTime}` : "Now"}
         <br />
-        15mi, Perfectly Clear
+        {visibility}mi visibility
       </div>
 
       <div

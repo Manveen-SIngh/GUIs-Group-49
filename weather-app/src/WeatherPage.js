@@ -20,6 +20,8 @@ function WeatherPage()
   const [weeklyData, setWeeklyData] = useState([]);
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
   const [error, setError] = useState("");
+  const [locationName, setLocationName] = useState("");
+  const [coords, setCoords] = useState(null);
 
   const apiKey = process.env.REACT_APP_OPENWEATHER_KEY;
 
@@ -51,51 +53,65 @@ function WeatherPage()
     };
   };
 
-  const buildWeeklyData = (forecastList) =>
+  // Normalize a OneCall 3.0 hourly item into the same shape that
+  // HourlyForecast.js expects (matching the old 2.5 forecast format).
+  const normalizeHourlyItem = (item, timezoneOffset) =>
   {
-    const groupedDays = {};
+    const localMs = (item.dt + timezoneOffset) * 1000;
+    const d = new Date(localMs);
+    const hh = String(d.getUTCHours()).padStart(2, "0");
+    const mm = String(d.getUTCMinutes()).padStart(2, "0");
+    const yy = d.getUTCFullYear();
+    const mo = String(d.getUTCMonth() + 1).padStart(2, "0");
+    const dd = String(d.getUTCDate()).padStart(2, "0");
 
-    forecastList.forEach((item) =>
+    return {
+      dt_txt: `${yy}-${mo}-${dd} ${hh}:${mm}:00`,
+      main: {
+        temp: item.temp,
+        humidity: item.humidity,
+        feels_like: item.feels_like
+      },
+      weather: item.weather,
+      wind: { speed: item.wind_speed },
+      pop: item.pop || 0
+    };
+  };
+
+  const buildWeeklyData = (daily, hourlyList, timezoneOffset) =>
+  {
+    const normalizedHourly = hourlyList.map((h) =>
+      normalizeHourlyItem(h, timezoneOffset)
+    );
+
+    return daily.slice(0, 6).map((day) =>
     {
-      const dateKey = item.dt_txt.slice(0, 10);
+      const localMs = (day.dt + timezoneOffset) * 1000;
+      const d = new Date(localMs);
+      const yy = d.getUTCFullYear();
+      const mo = String(d.getUTCMonth() + 1).padStart(2, "0");
+      const dd = String(d.getUTCDate()).padStart(2, "0");
+      const dateKey = `${yy}-${mo}-${dd}`;
 
-      if (!groupedDays[dateKey])
-      {
-        groupedDays[dateKey] = [];
-      }
-
-      groupedDays[dateKey].push(item);
-    });
-
-    const dailyArray = Object.keys(groupedDays).map((dateKey) =>
-    {
-      const dayItems = groupedDays[dateKey];
-
-      const temps = dayItems.map((item) => item.main.temp);
-      const low = Math.min(...temps);
-      const high = Math.max(...temps);
-
-      const middayItem =
-        dayItems.find((item) => item.dt_txt.includes("12:00:00")) ||
-        dayItems[Math.floor(dayItems.length / 2)];
+      const dayHourly = normalizedHourly.filter((h) =>
+        h.dt_txt.slice(0, 10) === dateKey
+      );
 
       const labels = formatDayLabel(dateKey);
 
       return {
         day: labels.day,
         date: labels.date,
-        condition: middayItem.weather[0].main,
-        low: Math.round(low),
-        high: Math.round(high),
-        humidity: `${middayItem.main.humidity}%`,
-        rain: `${Math.round((middayItem.pop || 0) * 100)}%`,
-        wind: `${Math.round(middayItem.wind.speed)}mph`,
-        hourly: dayItems,
-        feelsLike : Math.round(middayItem.main.feels_like)
+        condition: day.weather[0].main,
+        low: Math.round(day.temp.min),
+        high: Math.round(day.temp.max),
+        humidity: `${day.humidity}%`,
+        rain: `${Math.round((day.pop || 0) * 100)}%`,
+        wind: `${Math.round(day.wind_speed)}mph`,
+        hourly: dayHourly,
+        feelsLike: Math.round(day.feels_like.day)
       };
     });
-
-    return dailyArray.slice(0, 6);
   };
 
   const handleSearch = async () =>
@@ -104,17 +120,32 @@ function WeatherPage()
     {
       setError("");
 
-      const currentResponse = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${query}&units=metric&appid=${apiKey}`
+      // Step 1: Geocode the city name to lat/lon
+      const geoResponse = await axios.get(
+        `https://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=1&appid=${apiKey}`
       );
 
-      const forecastResponse = await axios.get(
-        `https://api.openweathermap.org/data/2.5/forecast?q=${query}&units=metric&appid=${apiKey}`
+      if (!geoResponse.data.length)
+      {
+        setError("City not found. Please try another name.");
+        return;
+      }
+
+      const { lat, lon, name } = geoResponse.data[0];
+
+      // Step 2: OneCall 3.0 — true hourly data (48 h) + 8-day daily forecast
+      const oneCallResponse = await axios.get(
+        `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
       );
 
-      const builtWeeklyData = buildWeeklyData(forecastResponse.data.list);
+      const { current, hourly, daily, timezone_offset } = oneCallResponse.data;
 
-      setWeatherData(currentResponse.data);
+      const builtWeeklyData = buildWeeklyData(daily, hourly, timezone_offset);
+
+      setLocationName(name);
+      setCoords({ lat, lon });
+      setWeatherData(current);
+      localStorage.setItem("lastCity", query);
       setWeeklyData(builtWeeklyData);
       setSelectedDayIndex(0);
 
@@ -123,8 +154,7 @@ function WeatherPage()
         setHourlyData(builtWeeklyData[0].hourly.slice(0, 6));
       }
 
-      console.log(currentResponse.data);
-      console.log(forecastResponse.data);
+      console.log("OneCall 3.0 data:", oneCallResponse.data);
     }
     catch (err)
     {
@@ -185,7 +215,7 @@ function WeatherPage()
               weeklyData={weeklyData}
               selectedDayIndex={selectedDayIndex}
               onSelectDay={handleSelectDay}
-              locationName={weatherData ? weatherData.name : "."}
+              locationName={locationName || "."}
             />
           </div>
 
@@ -196,14 +226,14 @@ function WeatherPage()
                   selectedDay
                     ? selectedDay.high
                     : weatherData
-                    ? Math.round(weatherData.main.temp)
+                    ? Math.round(weatherData.temp)
                     : 13
                 }
                 feelsLike={
                   selectedDay
-                  ?selectedDay.feelsLike
+                  ? selectedDay.feelsLike
                   : weatherData
-                    ? Math.round(weatherData.main.feels_like)
+                    ? Math.round(weatherData.feels_like)
                     : 10
                 }
                 day={
@@ -214,9 +244,7 @@ function WeatherPage()
                     : weatherData
                     ? weatherData.Date
                     : "Today"
-
                 }
-
               />
             </div>
 
@@ -231,9 +259,9 @@ function WeatherPage()
             </div>
           <div className="right-bottom-section">
             <MapCard
-              lat={weatherData ? weatherData.coord.lat : 51.5072}
-              lon={weatherData ? weatherData.coord.lon : -0.1276}
-              locationName={weatherData ? weatherData.name : "London"}
+              lat={coords ? coords.lat : 51.5072}
+              lon={coords ? coords.lon : -0.1276}
+              locationName={locationName || "London"}
             />
           </div>
         </div>

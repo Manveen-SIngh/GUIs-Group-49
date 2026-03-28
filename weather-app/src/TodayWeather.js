@@ -1,18 +1,49 @@
-import React, { useState } from "react";
-import bg from "./assets/PartlyCloudy.png"; 
+import { useState, useEffect } from "react";
+import bg from "./assets/PartlyCloudy.png";
 import "./TodayWeather.css";
 import backBtn from './assets/BackBtn.png';
-import searchIcon from './assets/search.svg';
 import cloudyIcon from './assets/weather-icons/clouds.svg';
 import HourlyV2 from "./components/HourlyV2";
+import { fetchWeatherByCity } from "./services/weatherApi";
+import SearchBar from "./components/SearchBar";
 
 function TodayWeather() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [weather, setWeather] = useState(null);
+  const [error, setError] = useState("");
+
+  const loadWeather = async (city) => {
+    try {
+      setError("");
+      const data = await fetchWeatherByCity(city);
+      setWeather(data);
+      localStorage.setItem("lastCity", city);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  useEffect(() => {
+    const saved = localStorage.getItem("lastCity");
+    if (saved) loadWeather(saved);
+  }, []);
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) loadWeather(searchQuery.trim());
+  };
+
+  const w = weather;
+  const cur = w ? w.current : null;
+  const tod = w ? w.today : null;
+  const scores = w ? w.scores : null;
+  const avgScore = scores
+    ? Math.round((scores.cycling + scores.hiking + scores.running + scores.camping) / 4)
+    : null;
 
   return (
     <div className="dashboard-container" style={{ backgroundImage: `url(${bg})` }}>
-      
-      {/* TOP*/}
+
+      {/* TOP */}
       <nav className="top-nav">
         <button className="back-btn">
           <img src={backBtn} alt="Back" />
@@ -28,56 +59,58 @@ function TodayWeather() {
           <div className="toggle-opt">km</div>
         </div>
 
-        <div className="search-bar">
-          <input 
-            type="text" 
-            placeholder="Search Location..." 
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <img src={searchIcon} alt="Search" />
-        </div>
+        <SearchBar
+          query={searchQuery}
+          onQueryChange={setSearchQuery}
+          onSearch={handleSearch}
+        />
       </nav>
 
-      {/*MIDDLE stuff*/}
+      {error && (
+        <div style={{ color: "red", padding: "4px 16px", fontFamily: "Rubik" }}>
+          {error}
+        </div>
+      )}
+
+      {/* MIDDLE */}
       <main className="main-content-area">
-        
+
         {/* Current Weather */}
         <div className="current-weather-col">
-          <h2 className="location-header">location_current</h2>
-          
+          <h2 className="location-header">{w ? w.locationName : "—"}</h2>
+
           <div className="weather-primary-row">
             <img src={cloudyIcon} alt="Cloudy" className="main-weather-icon" />
-            
+
             <div className="temperature-stack">
-              <h1 className="huge-temp">temp_current</h1>
+              <h1 className="huge-temp">{cur ? `${cur.temp}°C` : "—"}</h1>
               <div className="weather-desc">
-                <p>Feels like: feels_like_current</p>
-                <p>weather_current</p>
-                <p>rain_current</p>
+                <p>Feels like: {cur ? `${cur.feelsLike}°C` : "—"}</p>
+                <p>{cur ? cur.condition : "—"}</p>
+                <p>Rain: {cur ? `${cur.pop}%` : "—"}</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/*Metrics*/}
+        {/* Metrics */}
         <div className="metrics-card">
           <div className="metrics-header">
-            <h2>Sport</h2>
-            <h2>score_current/10</h2>
+            <h2>Overall</h2>
+            <h2>{avgScore !== null ? `${avgScore}/10` : "—"}</h2>
           </div>
-          <p>Temperature ... temp_high/temp_low</p>
-          <p>Wind speeds ... metric_wind</p>
-          <p>Humidity ... metric_humidity</p>
-          <p>Chance of rain ... metric_rain</p>
-          <p>Visibility ... metric_visibility</p>
+          <p>Temperature ... {tod ? `${tod.tempHigh}° / ${tod.tempLow}°` : "—"}</p>
+          <p>Wind speeds ... {tod ? `${tod.windSpeed}mph` : "—"}</p>
+          <p>Humidity ... {tod ? `${tod.humidity}%` : "—"}</p>
+          <p>Chance of rain ... {tod ? `${tod.pop}%` : "—"}</p>
+          <p>Visibility ... {cur ? `${cur.visibility}mi` : "—"}</p>
         </div>
 
       </main>
 
-      {/*bottom part */}
+      {/* BOTTOM */}
       <div className="bottom-forecast-area">
-        <HourlyV2 />
+        <HourlyV2 hourly={w ? w.hourly : []} />
       </div>
 
     </div>

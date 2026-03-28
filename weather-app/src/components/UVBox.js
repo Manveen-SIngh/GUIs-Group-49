@@ -28,7 +28,7 @@ function InfoButton({ message }) {
   );
 }
 
-export default function UVBox() {
+export default function UVBox({ uvLabel = "Low", uvi = 0, nowTime = "" }) {
   return (
     <div
       style={{
@@ -54,7 +54,7 @@ export default function UVBox() {
         ☀️
       </div>
 
-      <InfoButton message="UV levels are low throughout the day." />
+      <InfoButton message={`UV index is ${uvi} (${uvLabel}) today.`} />
 
       <div
         style={{
@@ -70,9 +70,9 @@ export default function UVBox() {
           zIndex: 2,
         }}
       >
-        Now, 12:11
+        {nowTime ? `Now, ${nowTime}` : "Now"}
         <br />
-        Low levels all day
+        UV Index: {uvi} — {uvLabel}
       </div>
 
       <div
