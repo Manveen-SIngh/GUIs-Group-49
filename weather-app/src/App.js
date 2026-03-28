@@ -10,6 +10,8 @@ import OdACamping from './OdACamping';
 import Navbar from "./Navbar";
 import WeatherPage from "./WeatherPage";
 import TodayWeather from "./TodayWeather";
+import Settings from "./Settings"
+
 
 
 
@@ -25,6 +27,9 @@ function App() {
         <Route path="/Metrics" element={<Metrics />} />
         <Route path="/WeatherPage" element={<WeatherPage />} />
         <Route path="/TodayWeather" element={<TodayWeather />} />
+        <Route path="/Settings" element={<Settings />} />
+
+
 
       </Routes>
     </Router>
