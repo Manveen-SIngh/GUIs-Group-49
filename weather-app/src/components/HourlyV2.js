@@ -1,4 +1,5 @@
 import "./HourlyV2.css";
+import HourCard from "./HourCard";
 import sunnyIcon  from '../assets/weather-icons/Sunny.svg';
 import cloudsIcon from '../assets/weather-icons/clouds.svg';
 import rainyIcon  from '../assets/weather-icons/rainy.svg';
@@ -19,13 +20,14 @@ function HourlyV2({ hourly = [] }) {
   return (
     <div className="hourly-forecast-v2">
       {hourly.map((h, i) => (
-        <div key={i} className="v2-hour-card">
-          <span style={{ fontWeight: "bold", fontSize: "1.1rem" }}>{h.time}</span>
-          <img src={getConditionIcon(h.condition)} alt={h.condition || "weather"} className="v2-weather-icon" />
-          <span style={{ fontSize: "1.3rem" }}>{h.temp}</span>
-          <span style={{ color: "#005bb5", fontWeight: "500" }}>{h.rain}</span>
-          <span>{h.wind}</span>
-        </div>
+        <HourCard
+          key={i}
+          time={h.time}
+          icon={getConditionIcon(h.condition)}
+          temp={h.temp}
+          rain={h.rain}
+          wind={h.wind}
+        />
       ))}
     </div>
   );
