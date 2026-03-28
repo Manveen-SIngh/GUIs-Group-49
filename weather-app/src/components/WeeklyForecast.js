@@ -10,7 +10,6 @@ import partlyCloudy from "../assets/weather-icons/sun-clouds.svg";
 
 
 
-
 const getIcon = (condition) =>
 {
   if (condition === "Clear")

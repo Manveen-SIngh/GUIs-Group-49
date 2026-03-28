@@ -163,9 +163,9 @@ const buildWeatherPayload = (lat, lon, name, data) => {
   // Hourly items normalized for WeatherBox (first 12 h)
   const normalizedHourly = hourly.slice(0, 12).map((h) => ({
     time:      localTimeStr(h.dt, tz),
-    temp:      `${Math.round(h.temp)}°C`,
+    temp:      Math.round(h.temp),
     rain:      `${Math.round((h.pop || 0) * 100)}%`,
-    wind:      `${msToMph(h.wind_speed)}mph`,
+    wind:      msToMph(h.wind_speed),
     condition: h.weather[0].main,
   }));
 
