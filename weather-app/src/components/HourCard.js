@@ -9,7 +9,11 @@ function HourCard({ time, icon, temp, rain, wind })
 
   let newtime;
 
-  if (hour === 0)
+  if (isNaN(hour))
+  {
+    newtime = time;
+  }
+  else if (hour === 0)
   {
     newtime = "12am";
   }
