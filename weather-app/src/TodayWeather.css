@@ -96,7 +96,6 @@
   flex-shrink: 0;
 }
 
-/* LEFT COLUMN */
 .current-weather-col {
   display: flex;
   flex-direction: column;
@@ -137,7 +136,7 @@
   color: #333;
 }
 
-/* RIGHT COLUMN (Metrics Card) */
+/*Metrics Card*/
 .metrics-card {
   background: rgba(255, 255, 255, 0.85);
   border-radius: 30px;
@@ -166,7 +165,7 @@
   word-wrap: break-word; 
 }
 
-/* --- BOTTOM FORECAST --- */
+
 .bottom-forecast-area {
   width: 100%;
   margin-top: auto;

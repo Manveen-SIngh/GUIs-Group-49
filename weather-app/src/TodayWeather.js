@@ -39,7 +39,7 @@ function TodayWeather() {
         </div>
       </nav>
 
-      {/*MIDDLE*/}
+      {/*MIDDLE stuff*/}
       <main className="main-content-area">
         
         {/* Current Weather */}
