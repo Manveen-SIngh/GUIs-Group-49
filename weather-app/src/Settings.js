@@ -303,7 +303,7 @@ const Settings = () => {
     <div className="settings-root">
       {/* Header back button */}
       <button className="back-btn" onClick={() => navigate('/WeatherPage')} aria-label="Go back">
-        <IconBack />
+        <img src={backIcon} alt="Back" />
       </button>
 
       <div className="settings-layout">
