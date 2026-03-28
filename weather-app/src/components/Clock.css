@@ -1,17 +1,16 @@
 .clock
 {
-  border-radius: 12px;
+  border-radius: 28px;
 
   display: flex;
   width: 165px;
   height: 91px;
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255,0.7);
 
   font-family: "Rubik";
   font-size: 50px;
   font-weight: 500;
 
-  color: rgba(0, 0, 0, 0.85);
   text-align: center;
   align-items: center;
   justify-content: center;
