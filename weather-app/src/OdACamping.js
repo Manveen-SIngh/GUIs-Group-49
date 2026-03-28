@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import bg from "./assets/PartlyCloudy.png";
@@ -16,6 +17,29 @@ import windDirection from "./assets/Compass.png";
 function OdACamping() {
   //constants for changing values on page (including images) LONG LIST
   const navigate = useNavigate();
+
+  const [time, setTime] = useState("");
+
+  useEffect(() =>
+  {
+    const updateTime = () =>
+    {
+      const now = new Date();
+
+      const formatted = now.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+
+      setTime(formatted);
+    };
+
+    updateTime();
+
+    const interval = setInterval(updateTime, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   // colours :'#3BC50F' '#FFAB1C' '#FF4A3A'
 
@@ -59,7 +83,7 @@ function OdACamping() {
   //page details
   var pageActivity = "Camping";
   var mainActivityMessage = "Maybe wait for another day";
-  var currentTime = "11:23";
+  var currentTime = time;
 
   
 

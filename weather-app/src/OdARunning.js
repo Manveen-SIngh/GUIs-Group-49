@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import bg from "./assets/PartlyCloudy.png";
 import menuIcon from "./assets/menu.svg";
 
@@ -13,7 +14,28 @@ import windDirection from "./assets/Compass.png";
 
 function OdARunning() {
   //constants for changing values on page (including images) LONG LIST
+  const [time, setTime] = useState("");
+  
+  useEffect(() =>
+  {
+    const updateTime = () =>
+    {
+      const now = new Date();
 
+      const formatted = now.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+
+      setTime(formatted);
+    };
+
+    updateTime();
+
+    const interval = setInterval(updateTime, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
   //Measurement values
   //unit customisations change these values
   var unitTemp = "C";
@@ -53,7 +75,7 @@ function OdARunning() {
   //page details
   var pageActivity = "Running";
   var mainActivityMessage = "Almost great for a marathon";
-  var currentTime = "11:23";
+  var currentTime = time;
 
   
 
