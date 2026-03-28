@@ -114,6 +114,38 @@ function WeatherPage()
     });
   };
 
+  const loadByCoords = async (lat, lon) => {
+    try {
+      setError("");
+      const [geoRes, oneCallRes] = await Promise.all([
+        axios.get(`https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${apiKey}`),
+        axios.get(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`),
+      ]);
+      const name = geoRes.data.length ? geoRes.data[0].name : "Your Location";
+      const { current, hourly, daily, timezone_offset } = oneCallRes.data;
+      const builtWeeklyData = buildWeeklyData(daily, hourly, timezone_offset);
+      setLocationName(name);
+      setCoords({ lat, lon });
+      setWeatherData(current);
+      setWeeklyData(builtWeeklyData);
+      setSelectedDayIndex(0);
+      if (builtWeeklyData.length > 0) setHourlyData(builtWeeklyData[0].hourly.slice(0, 6));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // Auto-load on mount using browser geolocation
+  React.useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => loadByCoords(pos.coords.latitude, pos.coords.longitude),
+        () => {}
+      );
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleSearch = async () =>
   {
     try

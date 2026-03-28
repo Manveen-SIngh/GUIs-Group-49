@@ -4,7 +4,7 @@ import "./TodayWeather.css";
 import backBtn from './assets/BackBtn.png';
 import cloudyIcon from './assets/weather-icons/clouds.svg';
 import HourlyV2 from "./components/HourlyV2";
-import { fetchWeatherByCity } from "./services/weatherApi";
+import { fetchWeatherByCity, fetchWeatherByCoords } from "./services/weatherApi";
 import SearchBar from "./components/SearchBar";
 
 function TodayWeather() {
@@ -25,7 +25,22 @@ function TodayWeather() {
 
   useEffect(() => {
     const saved = localStorage.getItem("lastCity");
-    if (saved) loadWeather(saved);
+    if (saved) {
+      loadWeather(saved);
+    } else if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          try {
+            const data = await fetchWeatherByCoords(pos.coords.latitude, pos.coords.longitude);
+            setWeather(data);
+            localStorage.setItem("lastCity", data.locationName);
+          } catch (err) {
+            setError(err.message);
+          }
+        },
+        () => {} // permission denied — user can search manually
+      );
+    }
   }, []);
 
   const handleSearch = () => {
