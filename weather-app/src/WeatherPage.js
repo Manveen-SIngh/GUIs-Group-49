@@ -226,7 +226,9 @@ function WeatherPage()
           </div>
 
           <div className="right-section">
-            <div className="right-top-section">Activities</div>
+            <div className="right-top-section">
+              
+            </div>
           <div className="right-bottom-section">
             <MapCard
               lat={weatherData ? weatherData.coord.lat : 51.5072}
