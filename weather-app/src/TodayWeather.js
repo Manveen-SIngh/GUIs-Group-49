@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import bg from "./assets/PartlyCloudy.png";
 import "./TodayWeather.css";
 import backBtn from './assets/BackBtn.png';
@@ -8,6 +9,7 @@ import { fetchWeatherByCity, fetchWeatherByCoords } from "./services/weatherApi"
 import SearchBar from "./components/SearchBar";
 
 function TodayWeather() {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState("");
@@ -60,7 +62,7 @@ function TodayWeather() {
 
       {/* TOP */}
       <nav className="top-nav">
-        <button className="back-btn">
+        <button className="back-btn" onClick={() => navigate('/WeatherPage')}>
           <img src={backBtn} alt="Back" />
         </button>
 

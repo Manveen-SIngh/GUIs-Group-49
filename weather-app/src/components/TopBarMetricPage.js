@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import backIcon from "../assets/BackBtn.png";
 
 export default function TopBarMetricPage() {
+  const navigate = useNavigate();
   const [unit, setUnit] = useState("C");
 
   return (
@@ -17,7 +19,7 @@ export default function TopBarMetricPage() {
       <img
         src={backIcon}
         alt="back"
-        onClick={() => window.history.back()}
+        onClick={() => navigate('/WeatherPage')}
         style={{
           width: 64,
           height: 64,

@@ -11,9 +11,11 @@ import HourlyForecast from "./components/HourlyForecast";
 import Clock from "./components/Clock";
 import menuIcon from "./assets/menu.svg";
 import MapCard from "./components/MapCard";
+import { useSidebar } from "./Sidebar";
 
 function WeatherPage()
 {
+  const { open } = useSidebar();
   const [query, setQuery] = useState("");
   const [weatherData, setWeatherData] = useState(null);
   const [hourlyData, setHourlyData] = useState([]);
@@ -220,6 +222,8 @@ function WeatherPage()
                 src={menuIcon}
                 alt="menuIcon"
                 className="weather-page-menu-button"
+                onClick={open}
+                style={{ cursor: 'pointer' }}
               />
             </div>
           </div>

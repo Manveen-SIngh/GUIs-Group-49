@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSidebar } from "./Sidebar";
 
 import "./OdAPage.css";
 
@@ -114,6 +115,7 @@ const WEATHER = {
  */
 function OdAPage({ activityKey }) {
   const navigate = useNavigate();
+  const { open } = useSidebar();
   const [time, setTime] = useState("");
 
   useEffect(() => {
@@ -157,9 +159,9 @@ function OdAPage({ activityKey }) {
       </div>
 
       {/* ── Menu button ─────────────────────────────────────────── */}
-      <div className="layer">
+      <div className="layer" style={{ zIndex: 100 }}>
         <div className="menu-btn-bg" />
-        <div className="menu-btn-icon-wrap">
+        <div className="menu-btn-icon-wrap" onClick={open} style={{ cursor: 'pointer' }}>
           <div className="menu-btn-icon-inner">
             <img src={menuIcon} alt="Menu" />
           </div>

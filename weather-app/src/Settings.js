@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Settings.css";
 
 // ── Icons ──────────────────────────────────────────────────────────────────
@@ -291,7 +292,8 @@ const LocationPanel = () => {
 };
 
 // ── Main Settings Page ─────────────────────────────────────────────────────
-const Settings = ({ onBack }) => {
+const Settings = () => {
+  const navigate = useNavigate();
   const [active, setActive] = useState("profile");
 
   const panels = {
@@ -304,7 +306,7 @@ const Settings = ({ onBack }) => {
   return (
     <div className="settings-root">
       {/* Header back button */}
-      <button className="back-btn" onClick={onBack} aria-label="Go back">
+      <button className="back-btn" onClick={() => navigate('/WeatherPage')} aria-label="Go back">
         <IconBack />
       </button>
 
