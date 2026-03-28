@@ -19,6 +19,7 @@ function WeatherPage()
   const [query, setQuery] = useState("");
   const [weatherData, setWeatherData] = useState(null);
   const [hourlyData, setHourlyData] = useState([]);
+  const [selectedPeriods, setSelectedPeriods] = useState([]);
   const [weeklyData, setWeeklyData] = useState([]);
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
   const [error, setError] = useState("");
@@ -101,6 +102,9 @@ function WeatherPage()
 
       const labels = formatDayLabel(dateKey);
 
+      const rainStr = `${Math.round((day.pop || 0) * 100)}%`;
+      const windNum = Math.round(day.wind_speed);
+
       return {
         day: labels.day,
         date: labels.date,
@@ -108,10 +112,16 @@ function WeatherPage()
         low: Math.round(day.temp.min),
         high: Math.round(day.temp.max),
         humidity: `${day.humidity}%`,
-        rain: `${Math.round((day.pop || 0) * 100)}%`,
-        wind: `${Math.round(day.wind_speed)}mph`,
+        rain: rainStr,
+        wind: `${windNum}mph`,
         hourly: dayHourly,
-        feelsLike: Math.round(day.feels_like.day)
+        feelsLike: Math.round(day.feels_like.day),
+        periods: [
+          { label: "Morning",   temp: Math.round(day.temp.morn),  condition: day.weather[0].main, rain: rainStr, wind: windNum },
+          { label: "Afternoon", temp: Math.round(day.temp.day),   condition: day.weather[0].main, rain: rainStr, wind: windNum },
+          { label: "Evening",   temp: Math.round(day.temp.eve),   condition: day.weather[0].main, rain: rainStr, wind: windNum },
+          { label: "Night",     temp: Math.round(day.temp.night), condition: day.weather[0].main, rain: rainStr, wind: windNum },
+        ],
       };
     });
   };
@@ -131,7 +141,10 @@ function WeatherPage()
       setWeatherData(current);
       setWeeklyData(builtWeeklyData);
       setSelectedDayIndex(0);
-      if (builtWeeklyData.length > 0) setHourlyData(builtWeeklyData[0].hourly.slice(0, 6));
+      if (builtWeeklyData.length > 0) {
+        setHourlyData(builtWeeklyData[0].hourly.slice(0, 6));
+        setSelectedPeriods(builtWeeklyData[0].periods || []);
+      }
     } catch (err) {
       setError(err.message);
     }
@@ -186,6 +199,7 @@ function WeatherPage()
       if (builtWeeklyData.length > 0)
       {
         setHourlyData(builtWeeklyData[0].hourly.slice(0, 6));
+        setSelectedPeriods(builtWeeklyData[0].periods || []);
       }
 
       console.log("OneCall 3.0 data:", oneCallResponse.data);
@@ -204,6 +218,7 @@ function WeatherPage()
     if (weeklyData[index])
     {
       setHourlyData(weeklyData[index].hourly.slice(0, 6));
+      setSelectedPeriods(weeklyData[index].periods || []);
     }
   };
 
@@ -285,7 +300,7 @@ function WeatherPage()
             </div>
 
             <div className="center-bottom-section">
-              <HourlyForecast hourlyData={hourlyData} />
+              <HourlyForecast hourlyData={hourlyData} periods={selectedPeriods} />
             </div>
           </div>
 

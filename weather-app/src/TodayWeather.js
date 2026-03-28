@@ -3,16 +3,40 @@ import { useNavigate } from "react-router-dom";
 import bg from "./assets/PartlyCloudy.png";
 import "./TodayWeather.css";
 import backBtn from './assets/BackBtn.png';
-import cloudyIcon from './assets/weather-icons/clouds.svg';
+import sunnyIcon      from './assets/weather-icons/Sunny.svg';
+import cloudsIcon     from './assets/weather-icons/clouds.svg';
+import rainyIcon      from './assets/weather-icons/rainy.svg';
+import stormyIcon     from './assets/weather-icons/stormy.svg';
+import windyIcon      from './assets/weather-icons/windy.svg';
+import partlyIcon     from './assets/weather-icons/sun-clouds.svg';
 import HourlyV2 from "./components/HourlyV2";
 import { fetchWeatherByCity, fetchWeatherByCoords } from "./services/weatherApi";
 import SearchBar from "./components/SearchBar";
+
+const getConditionIcon = (condition) => {
+  if (condition === "Clear")                           return sunnyIcon;
+  if (condition === "Clouds")                          return cloudsIcon;
+  if (condition === "Rain" || condition === "Drizzle") return rainyIcon;
+  if (condition === "Thunderstorm")                    return stormyIcon;
+  if (condition === "Wind")                            return windyIcon;
+  return partlyIcon;
+};
 
 function TodayWeather() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState("");
+  const [tempUnit, setTempUnit] = useState("C");
+  const [distUnit, setDistUnit] = useState("mi");
+
+  const toF = (c) => Math.round(c * 9 / 5 + 32);
+  const toKm = (mi) => Math.round(mi * 1.60934);
+  const toKmh = (mph) => Math.round(mph * 1.60934);
+
+  const fmtTemp = (c) => c == null ? "—" : tempUnit === "C" ? `${c}°C` : `${toF(c)}°F`;
+  const fmtWind = (mph) => mph == null ? "—" : distUnit === "mi" ? `${mph}mph` : `${toKmh(mph)}km/h`;
+  const fmtVis = (mi) => mi == null ? "—" : distUnit === "mi" ? `${mi}mi` : `${toKm(mi)}km`;
 
   const loadWeather = async (city) => {
     try {
@@ -67,13 +91,13 @@ function TodayWeather() {
         </button>
 
         <div className="toggle-pill toggle-shift">
-          <div className="toggle-opt active">°C</div>
-          <div className="toggle-opt">°F</div>
+          <div className={`toggle-opt ${tempUnit === "C" ? "active" : ""}`} onClick={() => setTempUnit("C")}>°C</div>
+          <div className={`toggle-opt ${tempUnit === "F" ? "active" : ""}`} onClick={() => setTempUnit("F")}>°F</div>
         </div>
 
         <div className="toggle-pill">
-          <div className="toggle-opt active">mi</div>
-          <div className="toggle-opt">km</div>
+          <div className={`toggle-opt ${distUnit === "mi" ? "active" : ""}`} onClick={() => setDistUnit("mi")}>mi</div>
+          <div className={`toggle-opt ${distUnit === "km" ? "active" : ""}`} onClick={() => setDistUnit("km")}>km</div>
         </div>
 
         <SearchBar
@@ -97,12 +121,12 @@ function TodayWeather() {
           <h2 className="location-header">{w ? w.locationName : "—"}</h2>
 
           <div className="weather-primary-row">
-            <img src={cloudyIcon} alt="Cloudy" className="main-weather-icon" />
+            <img src={getConditionIcon(cur?.condition)} alt={cur?.condition || "Weather"} className="main-weather-icon" />
 
             <div className="temperature-stack">
-              <h1 className="huge-temp">{cur ? `${cur.temp}°C` : "—"}</h1>
+              <h1 className="huge-temp">{cur ? fmtTemp(cur.temp) : "—"}</h1>
               <div className="weather-desc">
-                <p>Feels like: {cur ? `${cur.feelsLike}°C` : "—"}</p>
+                <p>Feels like: {cur ? fmtTemp(cur.feelsLike) : "—"}</p>
                 <p>{cur ? cur.condition : "—"}</p>
                 <p>Rain: {cur ? `${cur.pop}%` : "—"}</p>
               </div>
@@ -116,11 +140,11 @@ function TodayWeather() {
             <h2>Overall</h2>
             <h2>{avgScore !== null ? `${avgScore}/10` : "—"}</h2>
           </div>
-          <p>Temperature ... {tod ? `${tod.tempHigh}° / ${tod.tempLow}°` : "—"}</p>
-          <p>Wind speeds ... {tod ? `${tod.windSpeed}mph` : "—"}</p>
+          <p>Temperature ... {tod ? `${fmtTemp(tod.tempHigh)} / ${fmtTemp(tod.tempLow)}` : "—"}</p>
+          <p>Wind speeds ... {tod ? fmtWind(tod.windSpeed) : "—"}</p>
           <p>Humidity ... {tod ? `${tod.humidity}%` : "—"}</p>
           <p>Chance of rain ... {tod ? `${tod.pop}%` : "—"}</p>
-          <p>Visibility ... {cur ? `${cur.visibility}mi` : "—"}</p>
+          <p>Visibility ... {cur ? fmtVis(cur.visibility) : "—"}</p>
         </div>
 
       </main>
