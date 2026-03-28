@@ -6,7 +6,7 @@
   background-position: center;
   display: flex;
   flex-direction: column;
-  padding: 30px 40px 40px 40px;
+  padding: 30px 240px 40px 240px;
   box-sizing: border-box;
   color: black; 
   font-family: 'Rubik', sans-serif;
@@ -159,10 +159,10 @@
 }
 
 .metrics-card p {
-  font-size: 1rem;
-  margin: 12px 0;
+  font-size: 1.15rem;
+  margin: 14px 0;
   color: #444;
-  word-wrap: break-word; 
+  word-wrap: break-word;
 }
 
 
