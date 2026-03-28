@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import bg from "./assets/PartlyCloudy.png";
 import menuIcon from "./assets/menu.svg";
 
@@ -11,16 +13,16 @@ import partlySunnyIcon from "./assets/weather-icons/sun-clouds.svg";
 import rainyIcon from "./assets/weather-icons/rainy.svg";
 import windDirection from "./assets/Compass.png";
 
-function OdA() {
+function OdACamping() {
   //constants for changing values on page (including images) LONG LIST
-
+  const navigate = useNavigate();
 
   // colours :'#3BC50F' '#FFAB1C' '#FF4A3A'
 
   //Measurement values
   //unit customisations change these values
 
-  var unitTemp = "C";
+  var unitTemp = "F";
   var distanceUnitSpeed = "m";
   var distanceUnit = "mi";
 
@@ -152,30 +154,32 @@ function OdA() {
     {/* Scores Box */}
     <div style={{width: '100%', height: '100%', position: 'absolute', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'}}>
       <div style={{width: 349, height: 311, left: 299, top: 280, position: 'absolute', background: 'rgba(255, 255, 255, 0.70)', boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)', borderRadius: 43}} />
+      
+      
+      <div onClick={() => {console.log("Clicked"); navigate("/OdACycling")}} style={{zIndex:9999, cursor: "pointer", left: 360, top: 300, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>{activity1}</div>
+   
+      <div onClick={() => {console.log("Clicked"); navigate("/OdACycling")}} style={{zIndex:9999, cursor: "pointer",width: 32.08, height: 30.11, left: 320, top: 300, position: 'absolute', background: colour1, borderRadius: 10}} />
+      <img onClick={() => {console.log("Clicked"); navigate("/OdACycling")}} style={{zIndex:9999, cursor: "pointer",position: "absolute",top:295, left: 505}} src ={cyclingIcon} />
+      <div onClick={() => {console.log("Clicked"); navigate("/OdACycling")}} style={{zIndex:9999, cursor: "pointer",left: 570, top: 300, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>{score1}/10</div>
+      <div onClick={() => {console.log("Clicked"); navigate("/OdACycling")}} style={{zIndex:9999, cursor: "pointer",width: 349, height: 1, left: 299, top: 340, position: 'absolute', background: 'rgba(0, 0, 0, 0.05)'}} />
+      
+      <div onClick={() => {console.log("Clicked"); navigate("/OdAHiking")}} style={{zIndex:9999, cursor: "pointer",left: 360, top: 350, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>{activity2}</div>
+      <div onClick={() => {console.log("Clicked"); navigate("/OdAHiking")}} style={{zIndex:9999, cursor: "pointer",width: 32.08, height: 30.11, left: 320, top: 350, position: 'absolute', background: colour2, borderRadius: 10}} />
+      <img onClick={() => {console.log("Clicked"); navigate("/OdAHiking")}} style={{zIndex:9999, cursor: "pointer",position: "absolute",top:345, left: 505}} src ={hikingIcon} />
+      <div onClick={() => {console.log("Clicked"); navigate("/OdAHiking")}} style={{zIndex:9999, cursor: "pointer",left: 570, top: 350, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>{score2}/10</div>
+      <div onClick={() => {console.log("Clicked"); navigate("/OdAHiking")}} style={{zIndex:9999, cursor: "pointer",width: 349, height: 1, left: 299, top: 390, position: 'absolute', background: 'rgba(0, 0, 0, 0.05)'}} />
 
-      <div style={{left: 360, top: 300, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>{activity1}</div>
-      <div style={{width: 32.08, height: 30.11, left: 320, top: 300, position: 'absolute', background: colour1, borderRadius: 10}} />
-      <img style={{position: "absolute",top:295, left: 505}} src ={cyclingIcon} />
-      <div style={{left: 570, top: 300, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>{score1}/10</div>
-      <div style={{width: 349, height: 1, left: 299, top: 340, position: 'absolute', background: 'rgba(0, 0, 0, 0.05)'}} />
-
-      <div style={{left: 360, top: 350, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>{activity2}</div>
-      <div style={{width: 32.08, height: 30.11, left: 320, top: 350, position: 'absolute', background: colour2, borderRadius: 10}} />
-      <img style={{position: "absolute",top:345, left: 505}} src ={hikingIcon} />
-      <div style={{left: 570, top: 350, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>{score2}/10</div>
-      <div style={{width: 349, height: 1, left: 299, top: 390, position: 'absolute', background: 'rgba(0, 0, 0, 0.05)'}} />
-
-      <div style={{left: 360, top: 400, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>{activity3}</div>
+      <div style={{left: 360, top: 400, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '450', wordWrap: 'break-word'}}>{activity3}</div>
       <div style={{width: 32.08, height: 30.11, left: 320, top: 400, position: 'absolute', background: colour3, borderRadius: 10}} />
       <img style={{position: "absolute",top:395, left: 505}} src ={campingIcon} />
-      <div style={{left: 570, top: 400, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>{score3}/10</div>
+      <div style={{left: 570, top: 400, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '450', wordWrap: 'break-word'}}>{score3}/10</div>
       <div style={{width: 349, height: 1, left: 299, top: 440, position: 'absolute', background: 'rgba(0, 0, 0, 0.05)'}} />
 
-      <div style={{left: 360, top: 450, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>{activity4}</div>
-      <div style={{width: 32.08, height: 30.11, left: 320, top: 450, position: 'absolute', background: colour4, borderRadius: 10}} />
-      <img style={{position: "absolute",top:445, left: 505}} src ={runningIcon} />
-      <div style={{left: 570, top: 450, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>{score4}/10</div>
-      <div style={{width: 349, height: 1, left: 299, top: 490, position: 'absolute', background: 'rgba(0, 0, 0, 0.05)'}} />
+      <div onClick={() => {console.log("Clicked"); navigate("/OdARunning")}} style={{zIndex:9999, cursor: "pointer",left: 360, top: 450, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>{activity4}</div>
+      <div onClick={() => {console.log("Clicked"); navigate("/OdARunning")}} style={{zIndex:9999, cursor: "pointer",width: 32.08, height: 30.11, left: 320, top: 450, position: 'absolute', background: colour4, borderRadius: 10}} />
+      <img onClick={() => {console.log("Clicked"); navigate("/OdARunning")}} style={{zIndex:9999, cursor: "pointer",position: "absolute",top:445, left: 505}} src ={runningIcon} />
+      <div onClick={() => {console.log("Clicked"); navigate("/OdARunning")}} style={{zIndex:9999, cursor: "pointer",left: 570, top: 450, position: 'absolute', color: 'black', fontSize: 26, fontFamily: 'Rubik', fontWeight: '400', wordWrap: 'break-word'}}>{score4}/10</div>
+      <div onClick={() => {console.log("Clicked"); navigate("/OdARunning")}} style={{zIndex:9999, cursor: "pointer",width: 349, height: 1, left: 299, top: 490, position: 'absolute', background: 'rgba(0, 0, 0, 0.05)'}} />
 
     </div>
 
@@ -296,4 +300,4 @@ function OdA() {
   );
 }
 
-export default OdA;
+export default OdACamping;

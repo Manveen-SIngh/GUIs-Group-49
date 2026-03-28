@@ -11,7 +11,7 @@ import partlySunnyIcon from "./assets/weather-icons/sun-clouds.svg";
 import rainyIcon from "./assets/weather-icons/rainy.svg";
 import windDirection from "./assets/Compass.png";
 
-function OdA() {
+function OdAHiking() {
   //constants for changing values on page (including images) LONG LIST
 
   //Measurement values
@@ -292,4 +292,4 @@ function OdA() {
   );
 }
 
-export default OdA;
+export default OdAHiking;
