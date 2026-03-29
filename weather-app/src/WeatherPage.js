@@ -12,7 +12,7 @@ import Clock from "./components/Clock";
 import menuIcon from "./assets/menu.svg";
 import MapCard from "./components/MapCard";
 import { useSidebar } from "./Sidebar";
-import ActivityScoresBox from "./components/ActivityScoresBox";
+import ActivityScoresWidget from "./components/ActivityScoresWidget";
 function WeatherPage()
 {
   const { open } = useSidebar();
@@ -306,7 +306,7 @@ function WeatherPage()
 
           <div className="right-section">
             <div className="right-top-section">
-              <ActivityScoresBox />
+              <ActivityScoresWidget />
             </div>
           <div className="right-bottom-section">
             <MapCard

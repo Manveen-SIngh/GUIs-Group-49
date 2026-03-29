@@ -1,0 +1,56 @@
+.activity-scores-widget {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 24px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.activity-scores-widget__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.activity-scores-widget__row--active {
+  cursor: default;
+}
+
+.activity-scores-widget__divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.activity-scores-widget__swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.activity-scores-widget__icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.activity-scores-widget__label {
+  flex: 1;
+  font-family: "Rubik", sans-serif;
+  font-size: 18px;
+  color: #222;
+}
+
+.activity-scores-widget__score {
+  font-family: "Rubik", sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #222;
+}
