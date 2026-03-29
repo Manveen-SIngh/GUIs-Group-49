@@ -302,9 +302,12 @@ const Settings = () => {
   return (
     <div className="settings-root">
       {/* Header back button */}
-      <button className="back-btn" onClick={() => navigate('/WeatherPage')} aria-label="Go back">
-        <img src={backIcon} alt="Back" />
-      </button>
+      <img
+        src={backIcon}
+        alt="Back"
+        onClick={() => navigate('/WeatherPage')}
+        style={{ width: 64, height: 64, cursor: "pointer" }}
+      />
 
       <div className="settings-layout">
         {/* Sidebar */}
