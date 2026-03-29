@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import backIcon from "../assets/BackBtn.png";
+import Clock from "./Clock";
 
 export default function TopBarMetricPage() {
   const navigate = useNavigate();
@@ -100,20 +101,9 @@ export default function TopBarMetricPage() {
           position: "absolute",
           right: 18,
           top: 6,
-          width: 164,
-          height: 84,
-          borderRadius: 24,
-          background: "rgba(255,255,255,0.55)",
-          boxShadow: "0px 4px 8px rgba(0,0,0,0.16)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: 44,
-          fontWeight: 500,
-          color: "black",
         }}
       >
-        12:11
+        <Clock />
       </div>
     </div>
   );
