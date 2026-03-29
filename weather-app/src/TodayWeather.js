@@ -12,6 +12,10 @@ import partlyIcon     from './assets/weather-icons/sun-clouds.svg';
 import HourlyV2 from "./components/HourlyV2";
 import { fetchWeatherByCity, fetchWeatherByCoords } from "./services/weatherApi";
 import SearchBar from "./components/SearchBar";
+import precipIcon from './assets/precipitation.svg';
+import windIcon   from './assets/weather-icons/windy.svg';
+import uvIcon     from './assets/UV.png';
+import compassIcon from './assets/Compass.png';
 
 const getConditionIcon = (condition) => {
   if (condition === "Clear")                           return sunnyIcon;
@@ -86,9 +90,12 @@ function TodayWeather() {
 
       {/* TOP */}
       <nav className="top-nav">
-        <button className="back-btn" onClick={() => navigate('/WeatherPage')}>
-          <img src={backBtn} alt="Back" />
-        </button>
+        <img
+          src={backBtn}
+          alt="Back"
+          onClick={() => navigate('/WeatherPage')}
+          style={{ width: 64, height: 64, cursor: "pointer" }}
+        />
 
         <div className="toggle-pill toggle-shift">
           <div className={`toggle-opt ${tempUnit === "C" ? "active" : ""}`} onClick={() => setTempUnit("C")}>°C</div>
@@ -140,11 +147,36 @@ function TodayWeather() {
             <h2>Overall</h2>
             <h2>{avgScore !== null ? `${avgScore}/10` : "—"}</h2>
           </div>
-          <p>Temperature ... {tod ? `${fmtTemp(tod.tempHigh)} / ${fmtTemp(tod.tempLow)}` : "—"}</p>
-          <p>Wind speeds ... {tod ? fmtWind(tod.windSpeed) : "—"}</p>
-          <p>Humidity ... {tod ? `${tod.humidity}%` : "—"}</p>
-          <p>Chance of rain ... {tod ? `${tod.pop}%` : "—"}</p>
-          <p>Visibility ... {cur ? fmtVis(cur.visibility) : "—"}</p>
+          <div className="metric-row">
+            <span className="metric-icon">🌡️</span>
+            <span className="metric-label">Temperature</span>
+            <span className="metric-value">{tod ? `${fmtTemp(tod.tempHigh)} / ${fmtTemp(tod.tempLow)}` : "—"}</span>
+          </div>
+          <div className="metric-row">
+            <img src={windIcon} alt="Wind" className="metric-icon-img" />
+            <span className="metric-label">Wind</span>
+            <span className="metric-value">{tod ? fmtWind(tod.windSpeed) : "—"}</span>
+          </div>
+          <div className="metric-row">
+            <span className="metric-icon">💧</span>
+            <span className="metric-label">Humidity</span>
+            <span className="metric-value">{tod ? `${tod.humidity}%` : "—"}</span>
+          </div>
+          <div className="metric-row">
+            <img src={precipIcon} alt="Rain" className="metric-icon-img" />
+            <span className="metric-label">Rain</span>
+            <span className="metric-value">{tod ? `${tod.pop}%` : "—"}</span>
+          </div>
+          <div className="metric-row">
+            <img src={uvIcon} alt="UV" className="metric-icon-img" />
+            <span className="metric-label">UV Index</span>
+            <span className="metric-value">{cur ? (cur.uvi ?? "—") : "—"}</span>
+          </div>
+          <div className="metric-row">
+            <img src={compassIcon} alt="Visibility" className="metric-icon-img" />
+            <span className="metric-label">Visibility</span>
+            <span className="metric-value">{cur ? fmtVis(cur.visibility) : "—"}</span>
+          </div>
         </div>
 
       </main>
