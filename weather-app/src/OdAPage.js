@@ -3,9 +3,18 @@ import { useSidebar } from "./Sidebar";
 
 import "./OdAPage.css";
 
-import bg from "./assets/PartlyCloudy.png";
-import menuIcon from "./assets/menu.svg";
+// 1. Updated Background Imports
+import { 
+  fetchWeatherByCity, 
+  fetchWeatherByCoords, 
+  fetchYesterdayPrecip, 
+  scoreColor, 
+  activityMessage,
+  getBackgroundImage // Added this
+} from "./services/weatherApi";
+import fallbackBg from "./assets/PartlyCloudy.png"; // Renamed for clarity
 
+import menuIcon from "./assets/menu.svg";
 import ActivityScoresBox, { ACTIVITIES } from "./components/ActivityScoresBox";
 import hiArrow         from "./assets/redArrowUp.svg";
 import loArrow         from "./assets/blueArrowDown.svg";
@@ -16,13 +25,6 @@ import cloudsIcon       from "./assets/weather-icons/clouds.svg";
 import stormyIcon       from "./assets/weather-icons/stormy.svg";
 import windyIcon        from "./assets/weather-icons/windy.svg";
 import windDirection    from "./assets/Compass.png";
-import {
-  fetchWeatherByCity,
-  fetchWeatherByCoords,
-  fetchYesterdayPrecip,
-  scoreColor,
-  activityMessage,
-} from "./services/weatherApi";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -77,7 +79,7 @@ function OdAPage({ activityKey }) {
     return () => clearInterval(id);
   }, []);
 
-  // Weather data — loads cache instantly to avoid flash, then refreshes from API
+  // Weather data
   useEffect(() => {
     const cached = localStorage.getItem("cachedWeather");
     if (cached) {
@@ -101,7 +103,7 @@ function OdAPage({ activityKey }) {
     }
   }, []);
 
-  // Fetch yesterday's precipitation once we have coordinates
+  // Fetch yesterday's precipitation
   useEffect(() => {
     if (!weather?.lat || !weather?.lon) return;
     const cached = localStorage.getItem("cachedPrevPrecip");
@@ -117,7 +119,7 @@ function OdAPage({ activityKey }) {
   }, [weather?.lat, weather?.lon]);
 
   const pageLabel = ACTIVITIES.find((a) => a.key === activityKey)?.label ?? activityKey;
-  const D = "—"; // loading placeholder
+  const D = "—"; 
 
   const score   = weather ? weather.scores[activityKey] : null;
   const today   = weather ? weather.today   : null;
@@ -127,8 +129,25 @@ function OdAPage({ activityKey }) {
   const mainColor = score != null ? scoreColor(score) : "#FFAB1C";
   const mainMsg   = score != null ? activityMessage(activityKey, score) : "Loading…";
 
+  // 2. Dynamic Background Logic
+  let currentBg = fallbackBg;
+  if (current) {
+    const isNight = current.nowHour < current.sunriseHour || current.nowHour >= current.sunsetHour;
+    currentBg = getBackgroundImage(current.condition, isNight);
+  }
+
   return (
-    <div className="page-wrapper" style={{ backgroundImage: `url(${bg})` }}>
+    // 3. Updated styles to use dynamic background
+    <div 
+      className="page-wrapper" 
+      style={{ 
+        backgroundImage: `url(${currentBg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+        transition: "background-image 0.5s ease-in-out" 
+      }}
+    >
 
       {/* ── Clock ───────────────────────────────────────────────── */}
       <div className="layer layer--shadow">
@@ -136,7 +155,7 @@ function OdAPage({ activityKey }) {
         <div className="clock-display">{time}</div>
       </div>
 
-      {/* ── Unit toggle – Distance ──────────────────────────────── */}
+      {/* ... (rest of the component remains the same) ... */}
       <div className="layer">
         <div className="unit-distance-bg" />
         <div className="unit-distance-active" />
@@ -144,7 +163,6 @@ function OdAPage({ activityKey }) {
         <div className="unit-distance-km">km</div>
       </div>
 
-      {/* ── Unit toggle – Temperature ───────────────────────────── */}
       <div className="layer">
         <div className="unit-temp-bg" />
         <div className="unit-temp-active" />
@@ -152,7 +170,6 @@ function OdAPage({ activityKey }) {
         <div className="unit-temp-f">°F</div>
       </div>
 
-      {/* ── Menu button ─────────────────────────────────────────── */}
       <div className="layer" style={{ zIndex: 100 }}>
         <div className="menu-btn-bg" />
         <div className="menu-btn-icon-wrap" onClick={open} style={{ cursor: "pointer" }}>
@@ -162,29 +179,24 @@ function OdAPage({ activityKey }) {
         </div>
       </div>
 
-      {/* ── Header ──────────────────────────────────────────────── */}
       <div className="layer">
         <div className="header-subtitle">Outdoor Activity Summary</div>
         <div className="header-activity-title">{pageLabel}:</div>
       </div>
 
-      {/* ── Main activity score ─────────────────────────────────── */}
       <div className="layer layer--shadow">
         <div className="main-score-swatch" style={{ background: mainColor }} />
         <div className="main-score-value">{score != null ? `${score}/10` : D}</div>
         <div className="main-score-message">{mainMsg}</div>
       </div>
 
-      {/* ── Scores box ──────────────────────────────────────────── */}
       <ActivityScoresBox activeKey={activityKey} scores={weather?.scores} />
 
-      {/* ── Map box ─────────────────────────────────────────────── */}
       <div className="layer layer--shadow">
         <div className="map-box" />
         <div className="map-label">Map</div>
       </div>
 
-      {/* ── Temperature box ─────────────────────────────────────── */}
       <div className="layer layer--shadow">
         <div className="temp-box" />
         <div className="temp-score-swatch" style={{ background: today ? tempColor(today.tempHigh) : "#FFAB1C" }} />
@@ -198,7 +210,6 @@ function OdAPage({ activityKey }) {
         <div className="temp-now-value">{current ? `${current.temp}${labels.temp}` : D}</div>
       </div>
 
-      {/* ── Precipitation box ───────────────────────────────────── */}
       <div className="layer layer--shadow">
         <div className="precip-box" />
         <div className="precip-score-swatch" style={{ background: today ? rainColor(today.pop) : "#FFAB1C" }} />
@@ -219,7 +230,6 @@ function OdAPage({ activityKey }) {
         </div>
       </div>
 
-      {/* ── Humidity box ────────────────────────────────────────── */}
       <div className="layer layer--shadow">
         <div className="humidity-box" />
         <div className="humidity-score-swatch" style={{ background: today ? humidColor(today.humidityHigh) : "#FFAB1C" }} />
@@ -238,7 +248,6 @@ function OdAPage({ activityKey }) {
         <div className="humidity-prev-lo-value humidity-value">{current ? `${current.humidity}%` : D}</div>
       </div>
 
-      {/* ── Visibility box ──────────────────────────────────────── */}
       <div className="layer layer--shadow">
         <div className="visibility-box" />
         <div className="visibility-score-swatch" style={{ background: today ? visColor(today.visibilityHigh) : "#FFAB1C" }} />
@@ -252,7 +261,6 @@ function OdAPage({ activityKey }) {
         <div className="visibility-now-value">{current ? `${current.visibility}${labels.dist}` : D}</div>
       </div>
 
-      {/* ── Wind speed box ──────────────────────────────────────── */}
       <div className="layer layer--shadow">
         <div className="wind-box" />
         <div className="wind-score-swatch" style={{ background: today ? windColorFn(today.windSpeed, labels.wind) : "#FFAB1C" }} />
@@ -267,7 +275,6 @@ function OdAPage({ activityKey }) {
         <div className="wind-avg-label">Daily<br /> Average</div>
       </div>
 
-      {/* ── UV box ──────────────────────────────────────────────── */}
       <div className="layer layer--shadow">
         <div className="uv-box" />
         <div className="uv-score-swatch" style={{ background: today ? uvColorFn(today.uvi) : "#FFAB1C" }} />

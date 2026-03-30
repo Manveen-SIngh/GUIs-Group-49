@@ -170,19 +170,30 @@ const ProfilePanel = () => (
 );
 
 const UNIT_OPTIONS = {
-  Temperature:   ["Celsius (C)", "Fahrenheit (F)", "Kelvin (K)"],
+  // Removed "Kelvin (K)" from this list
+  Temperature:   ["Celsius (C)", "Fahrenheit (F)"], 
   "Wind Speed":  ["Kilometers per hour (km/h)", "Miles per hour (mph)", "Meters per second (m/s)", "Knots (kn)"],
   Precipitation: ["Millimeters (mm)", "Inches (in)", "Centimeters (cm)"],
   Distance:      ["Kilometers (km)", "Miles (mi)", "Meters (m)"],
 };
-
 const UnitsPanel = () => {
-  const [values, setValues] = useState({
-    Temperature:   "Celsius (C)",
-    "Wind Speed":  "Kilometers per hour (km/h)",
-    Precipitation: "Millimeters (mm)",
-    Distance:      "Kilometers (km)",
-  });
+  // Inside UnitsPanel component
+const [values, setValues] = useState(() => {
+  const saved = localStorage.getItem("unitSettings");
+  const parsed = saved ? JSON.parse(saved) : {
+    Temperature: "Celsius (C)", 
+    "Wind Speed": "Kilometers per hour (km/h)",
+    Precipitation: "Millimeters (mm)", 
+    Distance: "Kilometers (km)",
+  };
+
+  // Logic to reset Kelvin to Celsius if it was previously saved
+  if (parsed.Temperature === "Kelvin (K)") {
+    parsed.Temperature = "Celsius (C)";
+  }
+  
+  return parsed;
+});
 
   const rows = [
     { icon: <IconThermometer />, label: "Temperature" },

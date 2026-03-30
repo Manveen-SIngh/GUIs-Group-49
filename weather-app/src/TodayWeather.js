@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-import bg from "./assets/PartlyCloudy.png";
+// 1. Remove static bg import and add weatherApi helpers
+import { fetchWeatherByCity, fetchWeatherByCoords, getBackgroundImage } from "./services/weatherApi";
+import fallbackBg from "./assets/PartlyCloudy.png"; 
+
 import "./TodayWeather.css";
 import menuIcon from './assets/menu.svg';
 import { useSidebar } from "./Sidebar";
@@ -10,7 +13,6 @@ import stormyIcon     from './assets/weather-icons/stormy.svg';
 import windyIcon      from './assets/weather-icons/windy.svg';
 import partlyIcon     from './assets/weather-icons/sun-clouds.svg';
 import HourlyV2 from "./components/HourlyV2";
-import { fetchWeatherByCity, fetchWeatherByCoords } from "./services/weatherApi";
 import SearchBar from "./components/SearchBar";
 import precipIcon from './assets/precipitation.svg';
 import windIcon   from './assets/weather-icons/windy.svg';
@@ -68,7 +70,7 @@ function TodayWeather() {
             setError(err.message);
           }
         },
-        () => {} // permission denied — user can search manually
+        () => {} 
       );
     }
   }, []);
@@ -85,8 +87,25 @@ function TodayWeather() {
     ? Math.round((scores.cycling + scores.hiking + scores.running + scores.camping) / 4)
     : null;
 
+  // 2. Logic mirrored from Metrics.js to determine dynamic background
+  let currentBg = fallbackBg;
+  if (cur) {
+    const isNight = cur.nowHour < cur.sunriseHour || cur.nowHour >= cur.sunsetHour;
+    currentBg = getBackgroundImage(cur.condition, isNight);
+  }
+
   return (
-    <div className="dashboard-container" style={{ backgroundImage: `url(${bg})` }}>
+    // 3. Apply the dynamic background style and transition
+    <div 
+        className="dashboard-container" 
+        style={{ 
+            backgroundImage: `url(${currentBg})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundAttachment: "fixed",
+            transition: "background-image 0.5s ease-in-out"
+        }}
+    >
       <div className="dashboard-inner">
 
       {/* TOP */}

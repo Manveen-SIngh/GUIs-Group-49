@@ -12,6 +12,10 @@ import stormyNightBg from '../assets/backgrounds/weather-stormyNight.svg';
 import windyBg from '../assets/backgrounds/weather-windy.svg';
 import windyNightBg from '../assets/backgrounds/weather-windyNight.svg';
 
+// 1. New Rainy Imports
+import rainyBg from '../assets/backgrounds/Weather- rainy.svg';
+import rainyNightBg from '../assets/backgrounds/Weather- rainyNight.svg';
+
 const apiKey = process.env.REACT_APP_OPENWEATHER_KEY;
 
 export const geocodeCity = async (city) => {
@@ -32,21 +36,24 @@ export const fetchOneCall = async (lat, lon) => {
 
 // ─── Unit Conversion Logic ────────────────────────────────────────────────────
 
-// Get saved preferences, or use defaults
 const getUnitSettings = () => {
   const saved = localStorage.getItem("unitSettings");
-  return saved ? JSON.parse(saved) : {
+  let settings = saved ? JSON.parse(saved) : {
     Temperature: "Celsius (C)",
     "Wind Speed": "Kilometers per hour (km/h)",
     Precipitation: "Millimeters (mm)",
     Distance: "Kilometers (km)",
   };
+
+  if (settings.Temperature === "Kelvin (K)") {
+    settings.Temperature = "Celsius (C)";
+  }
+
+  return settings;
 };
 
-// Converters (Base from API is Celsius, m/s, mm, and meters)
 const convertTemp = (celsius, setting) => {
   if (setting === "Fahrenheit (F)") return (celsius * 9/5) + 32;
-  if (setting === "Kelvin (K)") return celsius + 273.15;
   return celsius;
 };
 
@@ -54,18 +61,17 @@ const convertWind = (ms, setting) => {
   if (setting === "Miles per hour (mph)") return ms * 2.237;
   if (setting === "Meters per second (m/s)") return ms;
   if (setting === "Knots (kn)") return ms * 1.94384;
-  return ms * 3.6; // Default to km/h
+  return ms * 3.6; 
 };
 
 const convertDist = (m, setting) => {
   if (setting === "Miles (mi)") return m / 1609.34;
   if (setting === "Meters (m)") return m;
-  return m / 1000; // Default to km
+  return m / 1000; 
 };
 
-// UI Label Helpers
 const getUnitLabels = (settings) => ({
-  temp: settings.Temperature === "Fahrenheit (F)" ? "°F" : settings.Temperature === "Kelvin (K)" ? "K" : "°C",
+  temp: settings.Temperature === "Fahrenheit (F)" ? "°F" : "°C",
   wind: settings["Wind Speed"] === "Miles per hour (mph)" ? "mph" : settings["Wind Speed"] === "Meters per second (m/s)" ? "m/s" : settings["Wind Speed"] === "Knots (kn)" ? "kn" : "km/h",
   dist: settings.Distance === "Miles (mi)" ? "mi" : settings.Distance === "Meters (m)" ? "m" : "km",
   precip: settings.Precipitation === "Inches (in)" ? "in" : settings.Precipitation === "Centimeters (cm)" ? "cm" : "mm"
@@ -96,23 +102,24 @@ const localHour = (dt, tz) => {
   return d.getUTCHours() + d.getUTCMinutes() / 60;
 };
 
+// 2. Updated Background Logic
 export const getBackgroundImage = (condition, isNight) => {
   if (isNight) {
     if (condition === "Clear") return nightBg;
     if (condition === "Clouds") return cloudyNightBg;
-    if (condition === "Rain" || condition === "Drizzle" || condition === "Thunderstorm") return stormyNightBg;
+    if (condition === "Rain" || condition === "Drizzle") return rainyNightBg; // Use new rainy night asset
+    if (condition === "Thunderstorm") return stormyNightBg;
     if (condition === "Wind" || condition === "Tornado" || condition === "Squall") return windyNightBg;
     return partlyCloudyNightBg; 
   } else {
     if (condition === "Clear") return sunnyBg;
     if (condition === "Clouds") return cloudyBg;
-    if (condition === "Rain" || condition === "Drizzle" || condition === "Thunderstorm") return stormyBg;
+    if (condition === "Rain" || condition === "Drizzle") return rainyBg; // Use new rainy day asset
+    if (condition === "Thunderstorm") return stormyBg;
     if (condition === "Wind" || condition === "Tornado" || condition === "Squall") return windyBg;
     return partlyCloudyBg; 
   }
 };
-
-// ─── Activity scoring (Kept using original metric logic so scores don't break) ───
 
 const scoreTmp = (t) => {
   if (t < 0)   return 1;
@@ -151,11 +158,10 @@ const WEIGHTS = {
 
 export const calculateActivityScore = (todayRaw, activity) => {
   const w = WEIGHTS[activity] || WEIGHTS.hiking;
-  // Use raw metric data to ensure scores remain consistent regardless of user unit preference
   const raw =
     scoreTmp(todayRaw.temp.max)                * w.temp +
     scoreRain(todayRaw.pop * 100)              * w.rain +
-    scoreWind(todayRaw.wind_speed * 2.237, activity) * w.wind + // convert ms to mph for the score algo
+    scoreWind(todayRaw.wind_speed * 2.237, activity) * w.wind + 
     scoreUV(todayRaw.uvi)                      * w.uv;
   return Math.max(1, Math.min(10, Math.round(raw)));
 };
@@ -184,12 +190,9 @@ export const reverseGeocode = async (lat, lon) => {
   return res.data.length ? res.data[0].name : "Your Location";
 };
 
-// ─── Shared data processor ────────────────────────────────────────────────────
-
 const buildWeatherPayload = (lat, lon, name, data) => {
   const { current, daily, hourly, timezone_offset: tz } = data;
   
-  // 1. Fetch User Settings
   const settings = getUnitSettings();
   const unitLabels = getUnitLabels(settings);
 
@@ -201,7 +204,6 @@ const buildWeatherPayload = (lat, lon, name, data) => {
   const humidities   = todayHourly.map((h) => h.humidity);
   const visibilities = todayHourly.map((h) => h.visibility || 0).filter((v) => v > 0);
 
-  // 2. Apply Conversions to Today Data
   const todayData = {
     tempHigh:        Math.round(convertTemp(today.temp.max, settings.Temperature)),
     tempLow:         Math.round(convertTemp(today.temp.min, settings.Temperature)),
@@ -221,7 +223,6 @@ const buildWeatherPayload = (lat, lon, name, data) => {
     visibilityCurrent: parseFloat(convertDist(current.visibility || 10000, settings.Distance).toFixed(1)),
   };
 
-  // 3. Apply Conversions to Hourly
   const normalizedHourly = hourly.slice(0, 12).map((h) => ({
     time:      localTimeStr(h.dt, tz),
     temp:      Math.round(convertTemp(h.temp, settings.Temperature)),
@@ -239,7 +240,7 @@ const buildWeatherPayload = (lat, lon, name, data) => {
     locationName: name,
     lat,
     lon,
-    unitLabels, // Passed out so the UI knows what to render (e.g., °C vs °F)
+    unitLabels,
     current: {
       temp:        Math.round(convertTemp(current.temp, settings.Temperature)),
       feelsLike:   Math.round(convertTemp(current.feels_like, settings.Temperature)),
@@ -266,7 +267,7 @@ const buildWeatherPayload = (lat, lon, name, data) => {
       condition: tomorrow.weather[0].main,
     },
     scores: {
-      cycling: calculateActivityScore(today, "cycling"), // Passing raw daily array to prevent score breaking
+      cycling: calculateActivityScore(today, "cycling"),
       hiking:  calculateActivityScore(today, "hiking"),
       running: calculateActivityScore(today, "running"),
       camping: calculateActivityScore(today, "camping"),
@@ -279,7 +280,7 @@ const buildWeatherPayload = (lat, lon, name, data) => {
 };
 
 export const fetchYesterdayPrecip = async (lat, lon) => {
-  const dt  = Math.floor(Date.now() / 1000) - 86400; // exactly 24 hours ago
+  const dt  = Math.floor(Date.now() / 1000) - 86400; 
   const res = await axios.get(
     `https://api.openweathermap.org/data/3.0/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${dt}&appid=${apiKey}`
   );
