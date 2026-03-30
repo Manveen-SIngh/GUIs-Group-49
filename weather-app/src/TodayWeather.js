@@ -66,7 +66,6 @@ function TodayWeather() {
     setDistUnit(unit);
     const saved = localStorage.getItem("unitSettings");
     const parsed = saved ? JSON.parse(saved) : {};
-    // Synchronize both Distance and Wind Speed settings
     parsed.Distance = unit === "mi" ? "Miles (mi)" : "Kilometers (km)";
     parsed["Wind Speed"] = unit === "mi" ? "Miles per hour (mph)" : "Kilometers per hour (km/h)";
     localStorage.setItem("unitSettings", JSON.stringify(parsed));
@@ -76,7 +75,7 @@ function TodayWeather() {
   // Helper functions: API provides the number, we provide the label
   const fmtTemp = (val) => val == null ? "—" : `${Math.round(val)}°${tempUnit}`;
   const fmtWind = (val) => val == null ? "—" : `${Math.round(val)}${distUnit === "mi" ? "mph" : "km/h"}`;
-  const fmtVis = (val) => val == null ? "—" : `${val}${distUnit}`;
+  const fmtVis  = (val) => val == null ? "—" : `${val} ${w?.unitLabels?.dist ?? distUnit}`;
 
   const loadWeather = async (city) => {
     try {
