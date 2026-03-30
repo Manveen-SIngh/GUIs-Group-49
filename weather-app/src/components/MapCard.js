@@ -1,7 +1,27 @@
-import React from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import React, { useEffect } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./MapCard.css";
+
+import markerIcon2x   from "leaflet/dist/images/marker-icon-2x.png";
+import markerIcon     from "leaflet/dist/images/marker-icon.png";
+import markerShadow   from "leaflet/dist/images/marker-shadow.png";
+
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconUrl:       markerIcon,
+  iconRetinaUrl: markerIcon2x,
+  shadowUrl:     markerShadow,
+});
+
+function MapUpdater({ lat, lon }) {
+  const map = useMap();
+  useEffect(() => {
+    map.setView([lat, lon], map.getZoom());
+  }, [lat, lon, map]);
+  return null;
+}
 
 function MapCard({
   lat = 51.5072,
@@ -19,15 +39,15 @@ function MapCard({
         scrollWheelZoom={false}
         className="map-card__map"
       >
+        <MapUpdater lat={lat} lon={lon} />
         <TileLayer
           attribution='&copy; OpenStreetMap contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-      <TileLayer
-        attribution="&copy; OpenWeather"
-        url={`https://maps.openweathermap.org/maps/2.0/weather/PA0/{z}/{x}/{y}?opacity=1&fill_bound=true&appid=${process.env.REACT_APP_OPENWEATHER_KEY}`}
-      />
-
+        <TileLayer
+          attribution="&copy; OpenWeather"
+          url={`https://maps.openweathermap.org/maps/2.0/weather/PA0/{z}/{x}/{y}?opacity=1&fill_bound=true&appid=${process.env.REACT_APP_OPENWEATHER_KEY}`}
+        />
         <Marker position={[lat, lon]}>
           <Popup>{locationName}</Popup>
         </Marker>
