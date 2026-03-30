@@ -278,6 +278,17 @@ const buildWeatherPayload = (lat, lon, name, data) => {
   };
 };
 
+export const fetchYesterdayPrecip = async (lat, lon) => {
+  const dt  = Math.floor(Date.now() / 1000) - 86400; // exactly 24 hours ago
+  const res = await axios.get(
+    `https://api.openweathermap.org/data/3.0/onecall/timemachine?lat=${lat}&lon=${lon}&dt=${dt}&appid=${apiKey}`
+  );
+  const point    = res.data.data[0];
+  const rainMm   = point.rain?.["1h"] ?? 0;
+  const condition = point.weather[0].main;
+  return { condition, rainMm };
+};
+
 export const fetchWeatherByCity = async (city) => {
   const { lat, lon, name } = await geocodeCity(city);
   const data = await fetchOneCall(lat, lon);

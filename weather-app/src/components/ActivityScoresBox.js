@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { scoreColor } from "../services/weatherApi";
 
 import hikingIcon  from "../assets/Activity-icons/hiking.svg";
 import runningIcon from "../assets/Activity-icons/running.svg";
@@ -17,7 +18,11 @@ export const ACTIVITIES = [
  * @param {{ activeKey?: string }} props
  * activeKey — the activity key of the current page (highlights that row). Omit on non-activity pages.
  */
-function ActivityScoresBox({ activeKey }) {
+/**
+ * @param {{ activeKey?: string, scores?: Record<string,number> }} props
+ * scores — live scores from the weather API; falls back to defaults when absent.
+ */
+function ActivityScoresBox({ activeKey, scores }) {
   const navigate = useNavigate();
 
   return (
@@ -25,8 +30,11 @@ function ActivityScoresBox({ activeKey }) {
       <div className="scores-box" />
 
       {ACTIVITIES.map((activity, i) => {
-        const isActive = activity.key === activeKey;
-        const rowKey   = activity.key;
+        const isActive     = activity.key === activeKey;
+        const rowKey       = activity.key;
+        const liveScore    = scores?.[rowKey];
+        const displayScore = liveScore ?? activity.score;
+        const colour       = liveScore ? scoreColor(liveScore) : activity.colour;
 
         return (
           <React.Fragment key={rowKey}>
@@ -38,7 +46,7 @@ function ActivityScoresBox({ activeKey }) {
             </div>
             <div
               className={`activity-swatch activity-swatch--${rowKey}${isActive ? " activity-swatch--active" : ""}`}
-              style={{ background: activity.colour }}
+              style={{ background: colour }}
               onClick={isActive ? undefined : () => navigate(activity.route)}
             />
             <img
@@ -51,7 +59,7 @@ function ActivityScoresBox({ activeKey }) {
               className={`activity-score activity-score--${rowKey}${isActive ? " activity-score--active" : ""}`}
               onClick={isActive ? undefined : () => navigate(activity.route)}
             >
-              {activity.score}/10
+              {displayScore}/10
             </div>
             <div className={`activity-divider activity-divider--${i + 1}`} />
           </React.Fragment>
