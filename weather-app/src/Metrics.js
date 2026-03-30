@@ -79,19 +79,20 @@ function Metrics() {
         backgroundImage: `url(${currentBg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundAttachment: "fixed", // Keeps background stable on scroll
+        backgroundAttachment: "fixed",
         display: "flex",
         justifyContent: "center",
         alignItems: "flex-start",
-        padding: "40px 0",
+        padding: "32px 0",
         boxSizing: "border-box",
-        transition: "background-image 0.5s ease-in-out" // Smooth transition when background changes
+        transition: "background-image 0.5s ease-in-out"
       }}
     >
       <div
         style={{
-          width: 1200,
-          padding: "0 30px 30px",
+          width: "1400px",
+          maxWidth: "100%",
+          padding: "0 24px 24px",
           boxSizing: "border-box",
         }}
       >
