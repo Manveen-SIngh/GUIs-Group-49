@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import bg from "./assets/PartlyCloudy.png";
 import "./TodayWeather.css";
-import backBtn from './assets/BackBtn.png';
+import menuIcon from './assets/menu.svg';
+import { useSidebar } from "./Sidebar";
 import sunnyIcon      from './assets/weather-icons/Sunny.svg';
 import cloudsIcon     from './assets/weather-icons/clouds.svg';
 import rainyIcon      from './assets/weather-icons/rainy.svg';
@@ -27,7 +27,7 @@ const getConditionIcon = (condition) => {
 };
 
 function TodayWeather() {
-  const navigate = useNavigate();
+  const { open } = useSidebar();
   const [searchQuery, setSearchQuery] = useState("");
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState("");
@@ -90,12 +90,15 @@ function TodayWeather() {
 
       {/* TOP */}
       <nav className="top-nav">
-        <img
-          src={backBtn}
-          alt="Back"
-          onClick={() => navigate('/WeatherPage')}
-          style={{ width: 64, height: 64, cursor: "pointer" }}
-        />
+        <div className="top-button-box">
+          <img
+            src={menuIcon}
+            alt="menuIcon"
+            className="weather-page-menu-button"
+            onClick={open}
+            style={{ cursor: 'pointer' }}
+          />
+        </div>
 
         <div className="toggle-pill toggle-shift">
           <div className={`toggle-opt ${tempUnit === "C" ? "active" : ""}`} onClick={() => setTempUnit("C")}>°C</div>

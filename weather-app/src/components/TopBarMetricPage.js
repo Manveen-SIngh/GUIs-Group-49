@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import backIcon from "../assets/BackBtn.png";
+import menuIcon from "../assets/menu.svg";
+import { useSidebar } from "../Sidebar";
 import Clock from "./Clock";
 
 export default function TopBarMetricPage() {
-  const navigate = useNavigate();
+  const { open } = useSidebar();
   const [unit, setUnit] = useState("C");
 
   return (
@@ -17,19 +17,18 @@ export default function TopBarMetricPage() {
         fontFamily: "Rubik",
       }}
     >
-      <img
-        src={backIcon}
-        alt="back"
-        onClick={() => navigate('/WeatherPage')}
-        style={{
-          width: 64,
-          height: 64,
-          position: "absolute",
-          left: 8,
-          top: 8,
-          cursor: "pointer",
-        }}
-      />
+      <div
+        className="top-button-box"
+        style={{ position: "absolute", left: 8, top: 8 }}
+      >
+        <img
+          src={menuIcon}
+          alt="menuIcon"
+          className="weather-page-menu-button"
+          onClick={open}
+          style={{ cursor: 'pointer' }}
+        />
+      </div>
 
       <div
         style={{
