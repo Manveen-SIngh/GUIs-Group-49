@@ -139,17 +139,16 @@ function OdAPage({ activityKey }) {
 
   return (
     // 3. Updated styles to use dynamic background
-    <div 
-      className="page-wrapper" 
-      style={{ 
+    <div
+      className="page-wrapper"
+      style={{
         backgroundImage: `url(${currentBg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
-        transition: "background-image 0.5s ease-in-out" 
+        transition: "background-image 0.5s ease-in-out"
       }}
     >
-
       {/* ── Clock ───────────────────────────────────────────────── */}
       <div className="layer layer--shadow">
         <div className="clock-bg" />
@@ -193,7 +192,7 @@ function OdAPage({ activityKey }) {
 
       <ActivityScoresBox activeKey={activityKey} scores={weather?.scores} />
 
-      <div className="layer layer--shadow" style={{ position: "absolute", left: 299, top: 600, width: 349, height: 311, borderRadius: 43, overflow: "hidden", zIndex: 10 }}>
+      <div className="layer layer--shadow" style={{ position: "absolute", left: 277, top: 600, width: 349, height: 311, borderRadius: 43, overflow: "hidden", zIndex: 10 }}>
         <MapCard
           lat={weather?.lat ?? 51.5072}
           lon={weather?.lon ?? -0.1276}
