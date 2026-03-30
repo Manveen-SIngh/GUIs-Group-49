@@ -13,6 +13,7 @@ import menuIcon from "./assets/menu.svg";
 import MapCard from "./components/MapCard";
 import { useSidebar } from "./Sidebar";
 import ActivityScoresWidget from "./components/ActivityScoresWidget";
+import CustomWidget from "./components/CustomWidget";
 function WeatherPage()
 {
   const { open } = useSidebar();
@@ -224,6 +225,23 @@ function WeatherPage()
 
   const selectedDay = weeklyData[selectedDayIndex];
 
+  const uvLabel = (uvi) => {
+    if (uvi == null) return "—";
+    if (uvi <= 2)  return "Low";
+    if (uvi <= 5)  return "Moderate";
+    if (uvi <= 7)  return "High";
+    if (uvi <= 10) return "Very High";
+    return "Extreme";
+  };
+
+  const widgetValues = {
+    wind:       weatherData ? `${Math.round(weatherData.wind_speed * 3.6)} km/h` : "—",
+    humidity:   weatherData ? `${weatherData.humidity}%`                          : "—",
+    rain:       selectedDay ? selectedDay.rain                                    : "—",
+    uv:         weatherData ? uvLabel(weatherData.uvi)                            : "—",
+    visibility: weatherData ? `${(weatherData.visibility / 1000).toFixed(1)} km` : "—",
+  };
+
   return (
     <div
       className="weather-page-background"
@@ -301,6 +319,11 @@ function WeatherPage()
 
             <div className="center-bottom-section">
               <HourlyForecast hourlyData={hourlyData} periods={selectedPeriods} />
+            </div>
+
+            <div className="center-widgets-row">
+              <CustomWidget values={widgetValues} />
+              <CustomWidget values={widgetValues} />
             </div>
           </div>
 

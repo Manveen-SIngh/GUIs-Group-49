@@ -95,8 +95,8 @@
 {
   width: 100%;
   display: grid;
-  grid-template-columns: 441.732px 399.883px 320px;
-  justify-content: space-between;
+  grid-template-columns: 441.732px 399.883px 346px;
+  column-gap: 84px;
   align-items: start;
 }
 
@@ -112,7 +112,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 50px;
+  gap: 23px;
 }
 
 .center-top-section
@@ -135,12 +135,19 @@
   align-items: center;
 }
 
+.center-widgets-row
+{
+  display: flex;
+  flex-direction: row;
+  gap: 28px;
+}
+
 .right-section
 {
-  width: 320px;
+  width: 346px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 23px;
 }
 
 .right-top-section
@@ -152,8 +159,8 @@
 
 .right-bottom-section
 {
-  width: 345.13px;
-  height: 314px;
+  width: 346px;
+  height: 298.09px;
   display: flex;
   justify-content: center;
   align-items: center;

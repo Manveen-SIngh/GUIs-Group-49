@@ -1,0 +1,104 @@
+.custom-widget {
+  position: relative;
+  width: 186px;
+  height: 163px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 43px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  font-family: "Rubik", sans-serif;
+}
+
+/* ── Empty state ─────────────────────────────────── */
+
+.custom-widget__plus {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.custom-widget__picker {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 16px;
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  min-width: 160px;
+}
+
+.custom-widget__picker-item {
+  padding: 12px 20px;
+  font-size: 16px;
+  color: #222;
+  cursor: pointer;
+}
+
+.custom-widget__picker-item:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* ── Filled state ────────────────────────────────── */
+
+.custom-widget__ellipsis {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.custom-widget__menu {
+  position: absolute;
+  top: 38px;
+  right: 12px;
+  z-index: 200;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 12px;
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  min-width: 110px;
+}
+
+.custom-widget__menu-item {
+  padding: 10px 18px;
+  font-size: 15px;
+  color: #d00;
+  cursor: pointer;
+}
+
+.custom-widget__menu-item:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.custom-widget__icon {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  margin-bottom: 4px;
+}
+
+.custom-widget__condition-label {
+  font-size: 13px;
+  color: #555;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.custom-widget__value {
+  font-size: 28px;
+  font-weight: 500;
+  color: #000;
+  margin-top: 2px;
+}
