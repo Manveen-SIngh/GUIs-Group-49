@@ -22,6 +22,7 @@ const navItems = [
   { to: '/TodayWeather', label: "Today's Weather", icon: '🌤️' },
   { to: '/WeatherPage',  label: 'Weekly Forecast',  icon: '📅' },
   { to: '/Metrics',      label: 'Metrics',           icon: '📊' },
+  { to: '/FullMap',      label: 'Map',               icon: '🗺️' },
   { section: 'Activities' },
   { to: '/OdACycling',  label: 'Cycling',  icon: '🚴' },
   { to: '/OdAHiking',   label: 'Hiking',   icon: '🥾' },

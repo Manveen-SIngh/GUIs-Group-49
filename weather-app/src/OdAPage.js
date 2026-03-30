@@ -16,6 +16,7 @@ import fallbackBg from "./assets/PartlyCloudy.png"; // Renamed for clarity
 
 import menuIcon from "./assets/menu.svg";
 import ActivityScoresBox, { ACTIVITIES } from "./components/ActivityScoresBox";
+import MapCard from "./components/MapCard";
 import hiArrow         from "./assets/redArrowUp.svg";
 import loArrow         from "./assets/blueArrowDown.svg";
 import partlySunnyIcon from "./assets/weather-icons/sun-clouds.svg";
@@ -192,9 +193,12 @@ function OdAPage({ activityKey }) {
 
       <ActivityScoresBox activeKey={activityKey} scores={weather?.scores} />
 
-      <div className="layer layer--shadow">
-        <div className="map-box" />
-        <div className="map-label">Map</div>
+      <div className="layer layer--shadow" style={{ position: "absolute", left: 299, top: 600, width: 349, height: 311, borderRadius: 43, overflow: "hidden", zIndex: 10 }}>
+        <MapCard
+          lat={weather?.lat ?? 51.5072}
+          lon={weather?.lon ?? -0.1276}
+          locationName={weather?.locationName ?? "—"}
+        />
       </div>
 
       <div className="layer layer--shadow">

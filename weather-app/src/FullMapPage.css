@@ -1,0 +1,52 @@
+.fmp-background {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 32px 0;
+  box-sizing: border-box;
+}
+
+.fmp-container {
+  width: 1400px;
+  max-width: 100%;
+  padding: 0 24px 24px;
+  box-sizing: border-box;
+  font-family: "Rubik", sans-serif;
+}
+
+/* ── Location name ── */
+.fmp-location-name {
+  text-align: center;
+  font-family: Rubik, sans-serif;
+  font-size: 52px;
+  font-weight: 500;
+  color: black;
+  margin-bottom: 12px;
+}
+
+.fmp-error {
+  color: red;
+  text-align: center;
+  font-family: Rubik, sans-serif;
+  margin: 4px 0 8px;
+}
+
+/* ── Map card ── */
+.fmp-map-card {
+  width: 100%;
+  height: 560px;
+  border-radius: 43px;
+  overflow: hidden;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.fmp-map-card .leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 43px;
+}

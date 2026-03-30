@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -29,6 +30,12 @@ function MapCard({
   locationName = "London"
 })
 {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/FullMap?lat=${lat}&lon=${lon}&name=${encodeURIComponent(locationName)}`);
+  };
+
   return (
     <div className="map-card">
       <div className="map-card__title">{locationName}</div>
@@ -52,6 +59,9 @@ function MapCard({
           <Popup>{locationName}</Popup>
         </Marker>
       </MapContainer>
+
+      {/* Transparent overlay to capture clicks over the Leaflet map */}
+      <div className="map-card__overlay" onClick={handleClick} />
     </div>
   );
 }

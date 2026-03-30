@@ -182,7 +182,7 @@
   top: 110px;
   align-items: left;
   font-family: Rubik, sans-serif;
-  font-size: 52px;
+  font-size: 42px;
   font-weight: 400;
   color: black;
 }
@@ -190,10 +190,10 @@
 .header-activity-title {
   position: absolute;
   left: 280px;
-  top: 153px;
+  top: 162px;
   align-items: left;
   font-family: Rubik, sans-serif;
-  font-size: 92px;
+  font-size: 82px;
   font-weight: 500;
   color: black;
 }
