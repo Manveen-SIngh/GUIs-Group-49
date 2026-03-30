@@ -2,31 +2,21 @@ import React from "react";
 import "./HourCard.css";
 import precipitation from "../assets/precipitation.svg";
 
-function HourCard({ time, icon, temp, rain, wind, windDeg = 0 })
-{
+// 1. Added tempUnit and distUnit to the destructured props
+function HourCard({ time, icon, temp, rain, wind, windDeg = 0, tempUnit = "C", distUnit = "mi" }) {
 
   const hour = parseInt(time);
-
   let newtime;
 
-  if (isNaN(hour))
-  {
+  if (isNaN(hour)) {
     newtime = time;
-  }
-  else if (hour === 0)
-  {
+  } else if (hour === 0) {
     newtime = "12am";
-  }
-  else if (hour < 12)
-  {
+  } else if (hour < 12) {
     newtime = hour + "am";
-  }
-  else if (hour === 12)
-  {
+  } else if (hour === 12) {
     newtime = "12pm";
-  }
-  else
-  {
+  } else {
     newtime = (hour - 12) + "pm";
   }
   
@@ -41,7 +31,8 @@ function HourCard({ time, icon, temp, rain, wind, windDeg = 0 })
         className="hour-card__icon"
       />
 
-      <div className="hour-card__temp">{temp}°C</div>
+      {/* 2. Dynamically show C or F label */}
+      <div className="hour-card__temp">{Math.round(temp)}°{tempUnit}</div>
 
       <div className="hour-card__rain">
         <img
@@ -56,8 +47,13 @@ function HourCard({ time, icon, temp, rain, wind, windDeg = 0 })
         <div
           className="hour-card__wind-arrow"
           style={{ transform: `rotate(${windDeg}deg)` }}
-        >↑</div>
-        <div className="hour-card__wind">{wind}mph</div>
+        >
+          ↑
+        </div>
+        {/* 3. Dynamically show mph or km/h label */}
+        <div className="hour-card__wind">
+          {Math.round(wind)}{distUnit === "mi" ? "mph" : "km/h"}
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-// 1. Remove static bg import and add weatherApi helpers
 import { fetchWeatherByCity, fetchWeatherByCoords, getBackgroundImage } from "./services/weatherApi";
 import fallbackBg from "./assets/PartlyCloudy.png"; 
 
@@ -33,16 +32,51 @@ function TodayWeather() {
   const [searchQuery, setSearchQuery] = useState("");
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState("");
-  const [tempUnit, setTempUnit] = useState("C");
-  const [distUnit, setDistUnit] = useState("mi");
 
-  const toF = (c) => Math.round(c * 9 / 5 + 32);
-  const toKm = (mi) => Math.round(mi * 1.60934);
-  const toKmh = (mph) => Math.round(mph * 1.60934);
+  // Initialize state from localStorage to keep UI in sync with Settings
+  const [tempUnit, setTempUnit] = useState(() => {
+    const saved = localStorage.getItem("unitSettings");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return parsed.Temperature === "Fahrenheit (F)" ? "F" : "C";
+    }
+    return "C";
+  });
 
-  const fmtTemp = (c) => c == null ? "—" : tempUnit === "C" ? `${c}°C` : `${toF(c)}°F`;
-  const fmtWind = (mph) => mph == null ? "—" : distUnit === "mi" ? `${mph}mph` : `${toKmh(mph)}km/h`;
-  const fmtVis = (mi) => mi == null ? "—" : distUnit === "mi" ? `${mi}mi` : `${toKm(mi)}km`;
+  const [distUnit, setDistUnit] = useState(() => {
+    const saved = localStorage.getItem("unitSettings");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return (parsed.Distance && parsed.Distance.includes("mi")) ? "mi" : "km";
+    }
+    return "mi";
+  });
+
+  // Toggles save to localStorage and trigger a re-fetch so the API does the math
+  const handleTempToggle = (unit) => {
+    setTempUnit(unit);
+    const saved = localStorage.getItem("unitSettings");
+    const parsed = saved ? JSON.parse(saved) : {};
+    parsed.Temperature = unit === "F" ? "Fahrenheit (F)" : "Celsius (C)";
+    localStorage.setItem("unitSettings", JSON.stringify(parsed));
+    if (weather) loadWeather(weather.locationName);
+  };
+
+  const handleDistToggle = (unit) => {
+    setDistUnit(unit);
+    const saved = localStorage.getItem("unitSettings");
+    const parsed = saved ? JSON.parse(saved) : {};
+    // Synchronize both Distance and Wind Speed settings
+    parsed.Distance = unit === "mi" ? "Miles (mi)" : "Kilometers (km)";
+    parsed["Wind Speed"] = unit === "mi" ? "Miles per hour (mph)" : "Kilometers per hour (km/h)";
+    localStorage.setItem("unitSettings", JSON.stringify(parsed));
+    if (weather) loadWeather(weather.locationName);
+  };
+
+  // Helper functions: API provides the number, we provide the label
+  const fmtTemp = (val) => val == null ? "—" : `${Math.round(val)}°${tempUnit}`;
+  const fmtWind = (val) => val == null ? "—" : `${Math.round(val)}${distUnit === "mi" ? "mph" : "km/h"}`;
+  const fmtVis = (val) => val == null ? "—" : `${val}${distUnit}`;
 
   const loadWeather = async (city) => {
     try {
@@ -87,7 +121,6 @@ function TodayWeather() {
     ? Math.round((scores.cycling + scores.hiking + scores.running + scores.camping) / 4)
     : null;
 
-  // 2. Logic mirrored from Metrics.js to determine dynamic background
   let currentBg = fallbackBg;
   if (cur) {
     const isNight = cur.nowHour < cur.sunriseHour || cur.nowHour >= cur.sunsetHour;
@@ -95,7 +128,6 @@ function TodayWeather() {
   }
 
   return (
-    // 3. Apply the dynamic background style and transition
     <div 
         className="dashboard-container" 
         style={{ 
@@ -107,8 +139,6 @@ function TodayWeather() {
         }}
     >
       <div className="dashboard-inner">
-
-      {/* TOP */}
       <nav className="top-nav">
         <div className="top-button-box">
           <img
@@ -121,38 +151,25 @@ function TodayWeather() {
         </div>
 
         <div className="toggle-pill toggle-shift">
-          <div className={`toggle-opt ${tempUnit === "C" ? "active" : ""}`} onClick={() => setTempUnit("C")}>°C</div>
-          <div className={`toggle-opt ${tempUnit === "F" ? "active" : ""}`} onClick={() => setTempUnit("F")}>°F</div>
+          <div className={`toggle-opt ${tempUnit === "C" ? "active" : ""}`} onClick={() => handleTempToggle("C")}>°C</div>
+          <div className={`toggle-opt ${tempUnit === "F" ? "active" : ""}`} onClick={() => handleTempToggle("F")}>°F</div>
         </div>
 
         <div className="toggle-pill">
-          <div className={`toggle-opt ${distUnit === "mi" ? "active" : ""}`} onClick={() => setDistUnit("mi")}>mi</div>
-          <div className={`toggle-opt ${distUnit === "km" ? "active" : ""}`} onClick={() => setDistUnit("km")}>km</div>
+          <div className={`toggle-opt ${distUnit === "mi" ? "active" : ""}`} onClick={() => handleDistToggle("mi")}>mi</div>
+          <div className={`toggle-opt ${distUnit === "km" ? "active" : ""}`} onClick={() => handleDistToggle("km")}>km</div>
         </div>
 
-        <SearchBar
-          query={searchQuery}
-          onQueryChange={setSearchQuery}
-          onSearch={handleSearch}
-        />
+        <SearchBar query={searchQuery} onQueryChange={setSearchQuery} onSearch={handleSearch} />
       </nav>
 
-      {error && (
-        <div style={{ color: "red", padding: "4px 16px", fontFamily: "Rubik" }}>
-          {error}
-        </div>
-      )}
+      {error && <div style={{ color: "red", padding: "4px 16px", fontFamily: "Rubik" }}>{error}</div>}
 
-      {/* MIDDLE */}
       <main className="main-content-area">
-
-        {/* Current Weather */}
         <div className="current-weather-col">
           <h2 className="location-header">{w ? w.locationName : "—"}</h2>
-
           <div className="weather-primary-row">
             <img src={getConditionIcon(cur?.condition)} alt={cur?.condition || "Weather"} className="main-weather-icon" />
-
             <div className="temperature-stack">
               <h1 className="huge-temp">{cur ? fmtTemp(cur.temp) : "—"}</h1>
               <div className="weather-desc">
@@ -164,7 +181,6 @@ function TodayWeather() {
           </div>
         </div>
 
-        {/* Metrics */}
         <div className="metrics-card">
           <div className="metrics-header">
             <h2>Overall</h2>
@@ -201,14 +217,11 @@ function TodayWeather() {
             <span className="metric-value">{cur ? fmtVis(cur.visibility) : "—"}</span>
           </div>
         </div>
-
       </main>
 
-      {/* BOTTOM */}
       <div className="bottom-forecast-area">
-        <HourlyV2 hourly={w ? w.hourly : []} />
+        <HourlyV2 hourly={w ? w.hourly : []} tempUnit={tempUnit} distUnit={distUnit} />
       </div>
-
       </div>
     </div>
   );

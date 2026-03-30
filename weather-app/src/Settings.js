@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Settings.css";
 import backIcon from "./assets/BackBtn.png";
@@ -100,15 +100,14 @@ const IconChevron = () => (
 // ── Custom Dropdown ───────────────────────────────────────────────────────
 const UnitDropdown = ({ options, value, onChange }) => {
   const [open, setOpen] = useState(false);
+  const ref = useRef(null);
 
   const handleSelect = (opt) => {
     onChange(opt);
     setOpen(false);
   };
 
-  // Close on outside click
-  const ref = React.useRef(null);
-  React.useEffect(() => {
+  useEffect(() => {
     const handler = (e) => {
       if (ref.current && !ref.current.contains(e.target)) setOpen(false);
     };
@@ -170,30 +169,34 @@ const ProfilePanel = () => (
 );
 
 const UNIT_OPTIONS = {
-  // Removed "Kelvin (K)" from this list
   Temperature:   ["Celsius (C)", "Fahrenheit (F)"], 
   "Wind Speed":  ["Kilometers per hour (km/h)", "Miles per hour (mph)", "Meters per second (m/s)", "Knots (kn)"],
   Precipitation: ["Millimeters (mm)", "Inches (in)", "Centimeters (cm)"],
   Distance:      ["Kilometers (km)", "Miles (mi)", "Meters (m)"],
 };
-const UnitsPanel = () => {
-  // Inside UnitsPanel component
-const [values, setValues] = useState(() => {
-  const saved = localStorage.getItem("unitSettings");
-  const parsed = saved ? JSON.parse(saved) : {
-    Temperature: "Celsius (C)", 
-    "Wind Speed": "Kilometers per hour (km/h)",
-    Precipitation: "Millimeters (mm)", 
-    Distance: "Kilometers (km)",
-  };
 
-  // Logic to reset Kelvin to Celsius if it was previously saved
-  if (parsed.Temperature === "Kelvin (K)") {
-    parsed.Temperature = "Celsius (C)";
-  }
-  
-  return parsed;
-});
+const UnitsPanel = () => {
+  const [values, setValues] = useState(() => {
+    const saved = localStorage.getItem("unitSettings");
+    const parsed = saved ? JSON.parse(saved) : {
+      Temperature: "Celsius (C)", 
+      "Wind Speed": "Kilometers per hour (km/h)",
+      Precipitation: "Millimeters (mm)", 
+      Distance: "Kilometers (km)",
+    };
+
+    if (parsed.Temperature === "Kelvin (K)") {
+      parsed.Temperature = "Celsius (C)";
+    }
+    return parsed;
+  });
+
+  // Updated handler to save to localStorage whenever a change occurs
+  const updateUnit = (label, newValue) => {
+    const updatedValues = { ...values, [label]: newValue };
+    setValues(updatedValues);
+    localStorage.setItem("unitSettings", JSON.stringify(updatedValues));
+  };
 
   const rows = [
     { icon: <IconThermometer />, label: "Temperature" },
@@ -213,7 +216,7 @@ const [values, setValues] = useState(() => {
             <UnitDropdown
               options={UNIT_OPTIONS[r.label]}
               value={values[r.label]}
-              onChange={(v) => setValues((prev) => ({ ...prev, [r.label]: v }))}
+              onChange={(v) => updateUnit(r.label, v)}
             />
           </div>
         ))}
@@ -249,33 +252,25 @@ const LocationPanel = () => {
   const [saved, setSaved] = useState([]);
   const [inputVal, setInputVal] = useState("");
   const [adding, setAdding] = useState(false);
-  
-  // Track the currently active city from localStorage
   const [activeCity, setActiveCity] = useState(localStorage.getItem("lastCity") || "");
 
   const handleAdd = () => {
     if (inputVal.trim()) {
       const newCity = inputVal.trim();
-      
-      // Prevent duplicates in the saved list
       if (!saved.includes(newCity)) {
         setSaved([...saved, newCity]);
       }
-      
       setInputVal("");
       setAdding(false);
-      
-      // Set the newly added city as the active one
       localStorage.setItem("lastCity", newCity);
       setActiveCity(newCity);
     }
   };
 
   const handleSelectLocation = (city) => {
-    // Update localStorage and local state when a user clicks a saved location
     localStorage.setItem("lastCity", city);
     setActiveCity(city);
-    setUseCurrent(false); // Optionally toggle off "Use Current Location" since they picked a specific one
+    setUseCurrent(false);
   };
 
   return (
@@ -287,7 +282,6 @@ const LocationPanel = () => {
         <Toggle checked={useCurrent} onChange={(val) => {
             setUseCurrent(val);
             if (val) {
-                // Optional: Logic to revert to geolocation if turned back on
                 localStorage.removeItem("lastCity"); 
                 setActiveCity("");
             }
@@ -295,8 +289,6 @@ const LocationPanel = () => {
       </div>
       <div className="saved-locations">
         <p className="saved-locations__heading">Saved Locations</p>
-        
-        {/* Render Saved Locations */}
         {saved.map((s, i) => (
           <div 
             className="saved-location-item" 
@@ -313,7 +305,6 @@ const LocationPanel = () => {
             {activeCity === s && <span style={{ marginLeft: "auto" }}>✓</span>}
           </div>
         ))}
-
         {adding ? (
           <div className="add-location-input-row">
             <input
@@ -352,16 +343,13 @@ const Settings = () => {
 
   return (
     <div className="settings-root">
-      {/* Header back button */}
       <img
         src={backIcon}
         alt="Back"
         onClick={() => navigate('/WeatherPage')}
         style={{ width: 64, height: 64, cursor: "pointer" }}
       />
-
       <div className="settings-layout">
-        {/* Sidebar */}
         <aside className="settings-sidebar">
           <h1 className="settings-title">Settings</h1>
           <nav className="settings-nav">
@@ -377,8 +365,6 @@ const Settings = () => {
             ))}
           </nav>
         </aside>
-
-        {/* Content */}
         <main className="settings-content">
           {panels[active]}
         </main>
