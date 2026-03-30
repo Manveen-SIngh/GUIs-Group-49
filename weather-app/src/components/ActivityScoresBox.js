@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { scoreColor } from "../services/weatherApi";
 
 import hikingIcon  from "../assets/Activity-icons/hiking.svg";
 import runningIcon from "../assets/Activity-icons/running.svg";
@@ -13,13 +14,26 @@ export const ACTIVITIES = [
   { key: "running", label: "Running", icon: runningIcon, score: 8, colour: "#3BC50F", route: "/OdARunning" },
 ];
 
-function ActivityScoresBox({ activeKey }) {
+/**
+ * @param {{ activeKey?: string }} props
+ * activeKey — the activity key of the current page (highlights that row). Omit on non-activity pages.
+ */
+/**
+ * @param {{ activeKey?: string, scores?: Record<string,number> }} props
+ * scores — live scores from the weather API; falls back to defaults when absent.
+ */
+function ActivityScoresBox({ activeKey, scores }) {
   const navigate = useNavigate();
 
   return (
     <div className="oda-card oda-scores-card">
       {ACTIVITIES.map((activity, i) => {
-        const isActive = activity.key === activeKey;
+        const isActive     = activity.key === activeKey;
+        const rowKey       = activity.key;
+        const liveScore    = scores?.[rowKey];
+        const displayScore = liveScore ?? activity.score;
+        const colour       = liveScore ? scoreColor(liveScore) : activity.colour;
+
         return (
           <React.Fragment key={activity.key}>
             <div
@@ -31,7 +45,24 @@ function ActivityScoresBox({ activeKey }) {
               <img src={activity.icon} alt={activity.label} className="oda-activity-icon" />
               <span className="oda-activity-score">{activity.score}/10</span>
             </div>
-            {i < ACTIVITIES.length - 1 && <div className="oda-activity-divider" />}
+            <div
+              className={`activity-swatch activity-swatch--${rowKey}${isActive ? " activity-swatch--active" : ""}`}
+              style={{ background: colour }}
+              onClick={isActive ? undefined : () => navigate(activity.route)}
+            />
+            <img
+              className={`activity-icon activity-icon--${rowKey}${isActive ? " activity-icon--active" : ""}`}
+              src={activity.icon}
+              alt={activity.label}
+              onClick={isActive ? undefined : () => navigate(activity.route)}
+            />
+            <div
+              className={`activity-score activity-score--${rowKey}${isActive ? " activity-score--active" : ""}`}
+              onClick={isActive ? undefined : () => navigate(activity.route)}
+            >
+              {displayScore}/10
+            </div>
+            <div className={`activity-divider activity-divider--${i + 1}`} />
           </React.Fragment>
         );
       })}

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import bg from "./assets/PartlyCloudy.png";
 
 import TopBarMetricPage from "./components/TopBarMetricPage";
 import WeatherBox from "./components/WeatherBox";
@@ -9,7 +8,9 @@ import UVBox from "./components/UVBox";
 import VisibilityBox from "./components/VisibilityBox";
 import HumidityBox from "./components/HumidityBox";
 
-import { fetchWeatherByCity, fetchWeatherByCoords } from "./services/weatherApi";
+// 1. Import dynamic background helper and a fallback image
+import { fetchWeatherByCity, fetchWeatherByCoords, getBackgroundImage } from "./services/weatherApi";
+import fallbackBg from "./assets/backgrounds/weather-partly-cloudy.svg";
 import SearchBar from "./components/SearchBar";
 
 function Metrics() {
@@ -55,19 +56,36 @@ function Metrics() {
   const w = weather;
   const cur = w ? w.current : null;
   const tod = w ? w.today : null;
+  
+  // Extract unitLabels from our new API payload, providing defaults if data hasn't loaded
+  const unitLabels = w ? w.unitLabels : { temp: "°C", wind: "km/h", dist: "km", precip: "mm" };
 
+  // 2. Determine dynamic background based on weather and time
+  let currentBg = fallbackBg;
+  if (cur) {
+    const isNight = cur.nowHour < cur.sunriseHour || cur.nowHour >= cur.sunsetHour;
+    currentBg = getBackgroundImage(cur.condition, isNight);
+  }
+  const getHourlyIntervals = (dataKey) => {
+      if (!w || !w.rawHourly) return [];
+      return [0, 6, 12, 18, 24].map(hourOffset => 
+          w.rawHourly[hourOffset] ? w.rawHourly[hourOffset][dataKey] : 0
+      );
+  };
   return (
     <div
       style={{
         minHeight: "100vh",
-        backgroundImage: `url(${bg})`,
+        backgroundImage: `url(${currentBg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
+        backgroundAttachment: "fixed", // Keeps background stable on scroll
         display: "flex",
         justifyContent: "center",
         alignItems: "flex-start",
         padding: "40px 0",
         boxSizing: "border-box",
+        transition: "background-image 0.5s ease-in-out" // Smooth transition when background changes
       }}
     >
       <div
@@ -89,7 +107,7 @@ function Metrics() {
         </div>
 
         {error && (
-          <div style={{ color: "red", marginBottom: 8, fontFamily: "Rubik" }}>
+          <div style={{ color: "red", marginBottom: 8, fontFamily: "Rubik", fontWeight: "bold" }}>
             {error}
           </div>
         )}
@@ -120,6 +138,7 @@ function Metrics() {
             windDeg={cur ? cur.windDeg : 0}
             windDir={cur ? cur.windDir : "N"}
             nowTime={cur ? cur.sunrise : ""}
+            unitWind={unitLabels.wind} // Pass dynamic wind unit
           />
           <SunriseSunsetBox
             sunrise={cur ? cur.sunrise : "06:00"}
@@ -140,19 +159,25 @@ function Metrics() {
           }}
         >
           <UVBox
-            uvLabel={cur ? cur.uvLabel : "Low"}
-            uvi={cur ? cur.uvi : 0}
-            nowTime={cur ? `${String(Math.floor(cur.nowHour)).padStart(2, "0")}:00` : ""}
-          />
-          <VisibilityBox
-            visibility={cur ? cur.visibility : 0}
-            nowTime={cur ? `${String(Math.floor(cur.nowHour)).padStart(2, "0")}:00` : ""}
-          />
-          <HumidityBox
-            humidity={cur ? cur.humidity : 0}
-            humidityAvg={tod ? Math.round((tod.humidityHigh + tod.humidityLow) / 2) : 0}
-            nowTime={cur ? `${String(Math.floor(cur.nowHour)).padStart(2, "0")}:00` : ""}
-          />
+    uvLabel={cur ? cur.uvLabel : "Low"}
+    uvi={cur ? cur.uvi : 0}
+    nowTime={cur ? `${String(Math.floor(cur.nowHour)).padStart(2, "0")}:00` : ""}
+    hourlyData={getHourlyIntervals('uvi')}
+/>
+
+<VisibilityBox
+    visibility={cur ? cur.visibility : 0}
+    nowTime={cur ? `${String(Math.floor(cur.nowHour)).padStart(2, "0")}:00` : ""}
+    unitDist={unitLabels.dist}
+    hourlyData={getHourlyIntervals('visibility')}
+/>
+
+<HumidityBox
+    humidity={cur ? cur.humidity : 0}
+    humidityAvg={tod ? Math.round((tod.humidityHigh + tod.humidityLow) / 2) : 0}
+    nowTime={cur ? `${String(Math.floor(cur.nowHour)).padStart(2, "0")}:00` : ""}
+    hourlyData={getHourlyIntervals('humidity')}
+/>
         </div>
       </div>
     </div>
