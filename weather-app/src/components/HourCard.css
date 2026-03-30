@@ -10,7 +10,7 @@
   font-family: "Rubik";
   color: #222;
 
-  padding: 0 6px;
+  padding: 12px 6px;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
 }
@@ -22,22 +22,21 @@
 
 .hour-card__time
 {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 500;
+  color:black;
 }
 
 .hour-card__icon
 {
-  opacity: 0.7;
-  width: 40px;
   height: 40px;
-  object-fit: contain;
+  width: auto;
 }
 
 .hour-card__temp
 {
   opacity: 0.7;
-  font-size: 17px;
+  font-size: 20px;
 }
 
 .hour-card__rain
@@ -45,18 +44,34 @@
   opacity: 0.7;
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
+  font-size: 18px;
 }
 
 .hour-card__rain-icon
 {
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
+}
+
+.hour-card__wind-group
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.hour-card__wind-arrow
+{
+  font-size: 26px;
+  line-height: 1;
+  display: inline-block;
 }
 
 .hour-card__wind
 {
-  font-size: 15px;
+  font-size: 18px;
   opacity: 0.7;
 }
 

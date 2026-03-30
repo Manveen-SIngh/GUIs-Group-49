@@ -32,7 +32,7 @@ function WeatherPage() {
 
   const apiKey = process.env.REACT_APP_OPENWEATHER_KEY;
 
-  // ─── restored helper functions ─────────────────────────────────────────────
+  // ─── Helper Functions ──────────────────────────────────────────────────────
 
   const formatDayLabel = (dateString) => {
     const date = new Date(dateString);
@@ -64,7 +64,8 @@ function WeatherPage() {
         feels_like: item.feels_like,
       },
       weather: item.weather,
-      wind: { speed: item.wind_speed },
+      // Merged: Keep wind speed AND teammate's wind degree
+      wind: { speed: item.wind_speed, deg: item.wind_deg ?? 0 },
       pop: item.pop || 0,
     };
   };
@@ -96,11 +97,12 @@ function WeatherPage() {
         wind: `${windNum}mph`,
         hourly: dayHourly,
         feelsLike: Math.round(day.feels_like.day),
+        // Merged: Keep time periods AND teammate's windDeg
         periods: [
-          { label: "Morning", temp: Math.round(day.temp.morn), condition: day.weather[0].main, rain: rainStr, wind: windNum },
-          { label: "Afternoon", temp: Math.round(day.temp.day), condition: day.weather[0].main, rain: rainStr, wind: windNum },
-          { label: "Evening", temp: Math.round(day.temp.eve), condition: day.weather[0].main, rain: rainStr, wind: windNum },
-          { label: "Night", temp: Math.round(day.temp.night), condition: day.weather[0].main, rain: rainStr, wind: windNum },
+          { label: "Morning",   temp: Math.round(day.temp.morn),  condition: day.weather[0].main, rain: rainStr, wind: windNum, windDeg: day.wind_deg ?? 0 },
+          { label: "Afternoon", temp: Math.round(day.temp.day),   condition: day.weather[0].main, rain: rainStr, wind: windNum, windDeg: day.wind_deg ?? 0 },
+          { label: "Evening",   temp: Math.round(day.temp.eve),   condition: day.weather[0].main, rain: rainStr, wind: windNum, windDeg: day.wind_deg ?? 0 },
+          { label: "Night",     temp: Math.round(day.temp.night), condition: day.weather[0].main, rain: rainStr, wind: windNum, windDeg: day.wind_deg ?? 0 },
         ],
       };
     });
@@ -189,7 +191,8 @@ function WeatherPage() {
     }
   };
 
-  // Dynamic Background
+  // ─── Render Logic ──────────────────────────────────────────────────────────
+
   let currentBg = fallbackBg;
   if (weatherData) {
     const isNight = weatherData.dt < weatherData.sunrise || weatherData.dt >= weatherData.sunset;

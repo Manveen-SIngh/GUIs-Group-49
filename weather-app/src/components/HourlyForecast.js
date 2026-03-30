@@ -47,6 +47,7 @@ function HourlyForecast({ hourlyData, periods = [] })
             temp={p.temp}
             rain={p.rain}
             wind={p.wind}
+            windDeg={p.windDeg ?? 0}
           />
         ))}
       </div>
@@ -66,6 +67,7 @@ function HourlyForecast({ hourlyData, periods = [] })
             temp={Math.round(hour.main.temp)}
             rain={`${Math.round(hour.pop * 100)}%`}
             wind={Math.round(hour.wind.speed)}
+            windDeg={hour.wind.deg ?? 0}
           />
         );
       })}
