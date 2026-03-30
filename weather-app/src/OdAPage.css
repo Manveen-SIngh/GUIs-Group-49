@@ -1,212 +1,318 @@
-/* ── Page wrapper ─────────────────────────────────────────────────────────── */
+
+/* ---------- Root / page wrapper ---------- */
 .page-wrapper {
   min-height: 100vh;
   background-size: cover;
   background-position: center;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding: 32px 0;
 }
 
-.page-content {
-  width: 1400px;
-  max-width: 100%;
-  padding: 0 24px 24px;
-  box-sizing: border-box;
-  font-family: Rubik, sans-serif;
+/* ---------- Shared layer shell ---------- */
+.layer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
 }
 
-/* ── Top bar ──────────────────────────────────────────────────────────────── */
-.oda-top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
+.layer--shadow {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* ============================================================
+   Clock
+   ============================================================ */
+.clock-bg {
+  width: 165px;
   height: 91px;
-}
-
-.oda-top-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.oda-menu-btn {
-  width: 91px;
-  height: 91px;
+  left: 1460px;
+  top: 42px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.5);
+}
+
+.clock-display {
+  position: absolute;
+  left: 1460px;
+  top: 42px;
+  width: 165px;
+  height: 91px;
+  border-radius: 24px;
   display: flex;
+  align-items: center;
   justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.oda-menu-btn img {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-}
-
-.oda-toggle-pill {
-  display: flex;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 43px;
-  padding: 4px;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-  align-items: center;
-}
-
-.oda-toggle-pill span {
-  padding: 8px 18px;
-  font-size: 28px;
-  font-weight: 700;
-  border-radius: 43px;
+  font-family: Rubik, sans-serif;
+  font-size: 50px;
+  font-weight: 500;
   color: black;
 }
 
-/* ── Header ───────────────────────────────────────────────────────────────── */
-.oda-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 20px;
+/* ============================================================
+   Unit toggles – Distance (mi / km)
+   ============================================================ */
+.unit-distance-bg {
+  width: 139px;
+  height: 53px;
+  left: 591px;
+  top: 55px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 43px;
 }
 
-.oda-subtitle {
-  font-size: 42px;
+.unit-distance-active {
+  width: 79.11px;
+  height: 53px;
+  left: 591px;
+  top: 55px;
+  position: absolute;
+  background: rgba(203, 210, 208, 0.4);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 43px;
+}
+
+.unit-distance-mi {
+  width: 64.41px;
+  left: 607px;
+  top: 64px;
+  position: absolute;
+  color: black;
+  font-size: 32px;
+  font-family: Rubik, sans-serif;
+  font-weight: 700;
+  word-wrap: break-word;
+}
+
+.unit-distance-km {
+  width: 48.59px;
+  left: 675px;
+  top: 64px;
+  position: absolute;
+  color: black;
+  font-size: 32px;
+  font-family: Rubik, sans-serif;
+  font-weight: 700;
+  word-wrap: break-word;
+}
+
+/* ---------- Unit toggles – Temperature (°C / °F) ---------- */
+.unit-temp-bg {
+  width: 123px;
+  height: 53px;
+  left: 418px;
+  top: 55px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 43px;
+}
+
+.unit-temp-active {
+  width: 70px;
+  height: 53px;
+  left: 418px;
+  top: 55px;
+  position: absolute;
+  background: rgba(203, 210, 208, 0.4);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 43px;
+}
+
+.unit-temp-c {
+  width: 43px;
+  left: 426px;
+  top: 64px;
+  position: absolute;
+  color: black;
+  font-size: 32px;
+  font-family: Rubik, sans-serif;
+  font-weight: 700;
+  word-wrap: break-word;
+}
+
+.unit-temp-f {
+  width: 43px;
+  left: 498px;
+  top: 64px;
+  position: absolute;
+  color: black;
+  font-size: 32px;
+  font-family: Rubik, sans-serif;
+  font-weight: 700;
+  word-wrap: break-word;
+}
+
+/* ============================================================
+   Menu button
+   ============================================================ */
+.menu-btn-bg {
+  width: 91px;
+  height: 91px;
+  left: 277px;
+  top: 36px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 28px;
+}
+
+.menu-btn-icon-wrap {
+  width: 60px;
+  height: 60px;
+  left: 277px;
+  top: 36px;
+  position: absolute;
+}
+
+.menu-btn-icon-inner {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 15px;
+  top: 15.5px;
+}
+
+/* ============================================================
+   Page title / header text
+   ============================================================ */
+.header-subtitle {
+  position: absolute;
+  left: 280px;
+  top: 110px;
+  align-items: left;
+  font-family: Rubik, sans-serif;
+  font-size: 52px;
   font-weight: 400;
   color: black;
 }
 
-.oda-activity-name {
-  font-size: 82px;
-  font-weight: 500;
-  color: black;
-  line-height: 1;
-}
-
-.oda-main-score {
-  text-align: right;
-}
-
-.oda-score-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  justify-content: flex-end;
-}
-
-.oda-score-swatch {
-  width: 80px;
-  height: 80px;
-  border-radius: 10px;
-  flex-shrink: 0;
-}
-
-.oda-score-value {
+.header-activity-title {
+  position: absolute;
+  left: 280px;
+  top: 153px;
+  align-items: left;
+  font-family: Rubik, sans-serif;
   font-size: 92px;
   font-weight: 500;
   color: black;
-  line-height: 1;
 }
 
-.oda-score-message {
-  font-size: 32px;
-  font-weight: 400;
-  color: black;
-  margin-top: 4px;
+/* ============================================================
+   Main activity score
+   ============================================================ */
+.main-score-swatch {
+  width: 92px;
+  height: 86px;
+  left: 1160px;
+  top: 142px;
+  position: absolute;
+  border-radius: 10px;
 }
 
-/* ── Grid ─────────────────────────────────────────────────────────────────── */
-.oda-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: auto auto;
-  gap: 20px;
-}
-
-/* ── Cards ────────────────────────────────────────────────────────────────── */
-.oda-card {
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 43px;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-  padding: 20px 24px;
+.main-score-value {
+  position: absolute;
+  top: 142px;
+  left: 1260px;
+  justify-content: center;
   display: flex;
   flex-direction: column;
-  min-height: 280px;
-}
-
-.oda-card-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
-.oda-card-swatch {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  flex-shrink: 0;
-}
-
-.oda-card-title {
-  font-size: 30px;
-  font-weight: 400;
   color: black;
+  font-size: 92px;
+  font-family: Rubik, sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
-/* ── Scores card ──────────────────────────────────────────────────────────── */
-.oda-scores-card {
-  padding: 20px 24px;
-  justify-content: space-around;
-}
-
-.oda-activity-row {
+.main-score-message {
+  position: absolute;
+  top: 230px;
+  left: 1060px;
+  justify-content: center;
   display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 6px 0;
+  flex-direction: column;
+  color: black;
+  font-size: 38px;
+  font-family: Rubik, sans-serif;
+  font-weight: 450;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   Scores box
+   ============================================================ */
+.scores-box {
+  width: 349px;
+  height: 311px;
+  left: 299px;
+  top: 280px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 43px;
+}
+
+/* Generic activity row */
+.activity-label {
+  position: absolute;
+  color: black;
+  font-size: 26px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  word-wrap: break-word;
+  z-index: 9999;
   cursor: pointer;
 }
 
-.oda-activity-row.active {
+.activity-label--active {
+  font-weight: 450; /* current page – not clickable */
   cursor: default;
-  font-weight: 500;
 }
 
-.oda-activity-swatch {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  flex-shrink: 0;
+.activity-swatch {
+  width: 32.08px;
+  height: 30.11px;
+  position: absolute;
+  border-radius: 10px;
+  z-index: 9999;
+  cursor: pointer;
 }
 
-.oda-activity-label {
-  flex: 1;
-  font-size: 24px;
-  font-family: Rubik, sans-serif;
+.activity-swatch--active {
+  cursor: default;
+}
+
+.activity-icon {
+  position: absolute;
+  z-index: 9999;
+  cursor: pointer;
+}
+
+.activity-icon--active {
+  cursor: default;
+}
+
+.activity-score {
+  position: absolute;
   color: black;
-}
-
-.oda-activity-icon {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-}
-
-.oda-activity-score {
-  font-size: 24px;
+  font-size: 26px;
   font-family: Rubik, sans-serif;
-  color: black;
-  min-width: 56px;
-  text-align: right;
+  font-weight: 400;
+  word-wrap: break-word;
+  z-index: 9999;
+  cursor: pointer;
 }
 
-.oda-activity-divider {
+.activity-score--active {
+  font-weight: 450;
+  cursor: default;
+}
+
+.activity-divider {
+  width: 349px;
   height: 1px;
+  left: 299px;
+  position: absolute;
   background: rgba(0, 0, 0, 0.05);
 }
 
@@ -560,6 +666,7 @@
   flex-direction: column;
   color: black;
   font-size: 28px;
+  font-family: Rubik, sans-serif;
   font-weight: 400;
   letter-spacing: 0.5px;
   overflow: hidden;
@@ -596,8 +703,11 @@
   width: 220px;
   text-align: left;
   justify-content: center;
-  gap: 20px;
-  font-size: 30px;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  font-size: 35px;
+  font-family: Rubik, sans-serif;
   font-weight: 400;
   letter-spacing: 0.5px;
   overflow: hidden;
@@ -609,29 +719,7 @@
   left: 1041px;
   width: 349px;
   text-align: center;
-}
-
-.oda-card-footer {
-  font-size: 24px;
-  font-weight: 400;
-  color: black;
-  text-align: center;
-  margin-top: auto;
-  padding-top: 12px;
-}
-
-/* ── Humidity card ────────────────────────────────────────────────────────── */
-.oda-humidity-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
   justify-content: center;
-  gap: 8px;
-}
-
-/* ── Temperature card ─────────────────────────────────────────────────────── */
-.oda-temp-content {
   display: flex;
   flex-direction: column;
   color: black;
@@ -642,7 +730,15 @@
   overflow: hidden;
 }
 
-.oda-temp-hi-lo {
+.humidity-hi-label  { color: #FF6B6B; }
+.humidity-lo-label  { color: #0048FF; }
+.humidity-value     { color: rgba(0, 0, 0, 0.7); }
+
+.humidity-today-hi-label {
+  position: absolute;
+  top: 390px;
+  left: 1097px;
+  text-align: left;
   display: flex;
   flex-direction: column;
   font-size: 36px;
@@ -856,9 +952,18 @@
   white-space: nowrap;
 }
 
-.oda-arrow {
-  width: 18px;
-  height: auto;
+.visibility-lo-label {
+  color: #0048FF;
+  position: absolute;
+  top: 717px;
+  left: 1242px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
 }
 
 .visibility-lo-value {
@@ -887,14 +992,8 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  flex: 1;
-  justify-content: center;
-  gap: 8px;
-}
-
-.oda-vis-now {
-  font-size: 30px;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
   font-weight: 400;
   letter-spacing: 0.5px;
   overflow: hidden;
@@ -909,20 +1008,8 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  flex: 1;
-  justify-content: center;
-  gap: 8px;
-}
-
-.oda-compass {
-  width: 130px;
-  height: 130px;
-  object-fit: contain;
-}
-
-.oda-wind-speed {
-  font-size: 28px;
+  font-size: 36px;
+  font-family: Rubik, sans-serif;
   font-weight: 400;
   letter-spacing: 0.5px;
   overflow: hidden;
@@ -960,12 +1047,46 @@
   display: flex;
   flex-direction: column;
   color: black;
+  font-size: 35px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
 }
 
-.oda-wind-avg-label {
-  font-size: 22px;
-  font-weight: 400;
+.wind-compass {
+  position: absolute;
+  width: 168px;
+  height: 168px;
+  top: 372px;
+  left: 1425px;
+}
+
+.wind-speed-value {
   color: black;
+  position: absolute;
+  top: 445px;
+  left: 1465px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 25px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.wind-avg-label {
+  color: black;
+  position: absolute;
+  top: 535px;
+  left: 1465px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 22px;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
 }
 
 /* ============================================================
@@ -1033,6 +1154,7 @@
   flex-direction: column;
   color: black;
   font-size: 38px;
+  font-family: Rubik, sans-serif;
   font-weight: 400;
   letter-spacing: 0.5px;
   overflow: hidden;

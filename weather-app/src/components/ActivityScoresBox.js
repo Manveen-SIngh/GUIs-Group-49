@@ -26,7 +26,9 @@ function ActivityScoresBox({ activeKey, scores }) {
   const navigate = useNavigate();
 
   return (
-    <div className="oda-card oda-scores-card">
+    <div className="layer layer--shadow">
+      <div className="scores-box" />
+
       {ACTIVITIES.map((activity, i) => {
         const isActive     = activity.key === activeKey;
         const rowKey       = activity.key;
@@ -35,15 +37,12 @@ function ActivityScoresBox({ activeKey, scores }) {
         const colour       = liveScore ? scoreColor(liveScore) : activity.colour;
 
         return (
-          <React.Fragment key={activity.key}>
+          <React.Fragment key={rowKey}>
             <div
-              className={`oda-activity-row${isActive ? " active" : ""}`}
+              className={`activity-label activity-label--${rowKey}${isActive ? " activity-label--active" : ""}`}
               onClick={isActive ? undefined : () => navigate(activity.route)}
             >
-              <div className="oda-activity-swatch" style={{ background: activity.colour }} />
-              <span className="oda-activity-label">{activity.label}</span>
-              <img src={activity.icon} alt={activity.label} className="oda-activity-icon" />
-              <span className="oda-activity-score">{activity.score}/10</span>
+              {activity.label}
             </div>
             <div
               className={`activity-swatch activity-swatch--${rowKey}${isActive ? " activity-swatch--active" : ""}`}
