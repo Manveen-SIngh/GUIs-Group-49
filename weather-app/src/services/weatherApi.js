@@ -1,8 +1,18 @@
 import axios from "axios";
 
-const apiKey = process.env.REACT_APP_OPENWEATHER_KEY;
+// ─── Background Asset Imports ─────────────────────────────────────────────────
+import sunnyBg from '../assets/backgrounds/weather-sunny.svg';
+import nightBg from '../assets/backgrounds/weather-night.svg';
+import cloudyBg from '../assets/backgrounds/weather-cloudy.svg';
+import cloudyNightBg from '../assets/backgrounds/weather-cloudyNight.svg';
+import partlyCloudyBg from '../assets/backgrounds/weather-partly-cloudy.svg';
+import partlyCloudyNightBg from '../assets/backgrounds/weather-partyCloudyNight.svg';
+import stormyBg from '../assets/backgrounds/weather-stormy.svg';
+import stormyNightBg from '../assets/backgrounds/weather-stormyNight.svg';
+import windyBg from '../assets/backgrounds/weather-windy.svg';
+import windyNightBg from '../assets/backgrounds/weather-windyNight.svg';
 
-// ─── Raw API calls ────────────────────────────────────────────────────────────
+const apiKey = process.env.REACT_APP_OPENWEATHER_KEY;
 
 export const geocodeCity = async (city) => {
   const res = await axios.get(
@@ -20,10 +30,48 @@ export const fetchOneCall = async (lat, lon) => {
   return res.data;
 };
 
-// ─── Utility ──────────────────────────────────────────────────────────────────
+// ─── Unit Conversion Logic ────────────────────────────────────────────────────
 
-const msToMph = (ms) => Math.round(ms * 2.237);
-const mToMi  = (m)  => parseFloat((m / 1609.34).toFixed(1));
+// Get saved preferences, or use defaults
+const getUnitSettings = () => {
+  const saved = localStorage.getItem("unitSettings");
+  return saved ? JSON.parse(saved) : {
+    Temperature: "Celsius (C)",
+    "Wind Speed": "Kilometers per hour (km/h)",
+    Precipitation: "Millimeters (mm)",
+    Distance: "Kilometers (km)",
+  };
+};
+
+// Converters (Base from API is Celsius, m/s, mm, and meters)
+const convertTemp = (celsius, setting) => {
+  if (setting === "Fahrenheit (F)") return (celsius * 9/5) + 32;
+  if (setting === "Kelvin (K)") return celsius + 273.15;
+  return celsius;
+};
+
+const convertWind = (ms, setting) => {
+  if (setting === "Miles per hour (mph)") return ms * 2.237;
+  if (setting === "Meters per second (m/s)") return ms;
+  if (setting === "Knots (kn)") return ms * 1.94384;
+  return ms * 3.6; // Default to km/h
+};
+
+const convertDist = (m, setting) => {
+  if (setting === "Miles (mi)") return m / 1609.34;
+  if (setting === "Meters (m)") return m;
+  return m / 1000; // Default to km
+};
+
+// UI Label Helpers
+const getUnitLabels = (settings) => ({
+  temp: settings.Temperature === "Fahrenheit (F)" ? "°F" : settings.Temperature === "Kelvin (K)" ? "K" : "°C",
+  wind: settings["Wind Speed"] === "Miles per hour (mph)" ? "mph" : settings["Wind Speed"] === "Meters per second (m/s)" ? "m/s" : settings["Wind Speed"] === "Knots (kn)" ? "kn" : "km/h",
+  dist: settings.Distance === "Miles (mi)" ? "mi" : settings.Distance === "Meters (m)" ? "m" : "km",
+  precip: settings.Precipitation === "Inches (in)" ? "in" : settings.Precipitation === "Centimeters (cm)" ? "cm" : "mm"
+});
+
+// ─── Utility ──────────────────────────────────────────────────────────────────
 
 export const uvLabel = (uvi) => {
   if (uvi < 3)  return "Low";
@@ -35,11 +83,7 @@ export const uvLabel = (uvi) => {
 
 const localDateKey = (dt, tz) => {
   const d = new Date((dt + tz) * 1000);
-  return [
-    d.getUTCFullYear(),
-    String(d.getUTCMonth() + 1).padStart(2, "0"),
-    String(d.getUTCDate()).padStart(2, "0"),
-  ].join("-");
+  return [d.getUTCFullYear(), String(d.getUTCMonth() + 1).padStart(2, "0"), String(d.getUTCDate()).padStart(2, "0")].join("-");
 };
 
 const localTimeStr = (dt, tz) => {
@@ -52,7 +96,23 @@ const localHour = (dt, tz) => {
   return d.getUTCHours() + d.getUTCMinutes() / 60;
 };
 
-// ─── Activity scoring ─────────────────────────────────────────────────────────
+export const getBackgroundImage = (condition, isNight) => {
+  if (isNight) {
+    if (condition === "Clear") return nightBg;
+    if (condition === "Clouds") return cloudyNightBg;
+    if (condition === "Rain" || condition === "Drizzle" || condition === "Thunderstorm") return stormyNightBg;
+    if (condition === "Wind" || condition === "Tornado" || condition === "Squall") return windyNightBg;
+    return partlyCloudyNightBg; 
+  } else {
+    if (condition === "Clear") return sunnyBg;
+    if (condition === "Clouds") return cloudyBg;
+    if (condition === "Rain" || condition === "Drizzle" || condition === "Thunderstorm") return stormyBg;
+    if (condition === "Wind" || condition === "Tornado" || condition === "Squall") return windyBg;
+    return partlyCloudyBg; 
+  }
+};
+
+// ─── Activity scoring (Kept using original metric logic so scores don't break) ───
 
 const scoreTmp = (t) => {
   if (t < 0)   return 1;
@@ -64,9 +124,7 @@ const scoreTmp = (t) => {
   if (t <= 34) return 5;
   return 3;
 };
-
 const scoreRain = (pop) => Math.max(1, Math.round(10 - pop / 10));
-
 const scoreWind = (mph, activity) => {
   const cyclingPenalty = activity === "cycling" ? 2 : 0;
   if (mph < 5)  return 10;
@@ -76,7 +134,6 @@ const scoreWind = (mph, activity) => {
   if (mph < 25) return 3;
   return 1;
 };
-
 const scoreUV = (uvi) => {
   if (uvi < 3)  return 10;
   if (uvi < 6)  return 8;
@@ -92,13 +149,14 @@ const WEIGHTS = {
   camping: { temp: 0.25, rain: 0.40, wind: 0.25, uv: 0.10 },
 };
 
-export const calculateActivityScore = (todayData, activity) => {
+export const calculateActivityScore = (todayRaw, activity) => {
   const w = WEIGHTS[activity] || WEIGHTS.hiking;
+  // Use raw metric data to ensure scores remain consistent regardless of user unit preference
   const raw =
-    scoreTmp(todayData.tempHigh)           * w.temp +
-    scoreRain(todayData.pop)               * w.rain +
-    scoreWind(todayData.windSpeed, activity) * w.wind +
-    scoreUV(todayData.uvi)                 * w.uv;
+    scoreTmp(todayRaw.temp.max)                * w.temp +
+    scoreRain(todayRaw.pop * 100)              * w.rain +
+    scoreWind(todayRaw.wind_speed * 2.237, activity) * w.wind + // convert ms to mph for the score algo
+    scoreUV(todayRaw.uvi)                      * w.uv;
   return Math.max(1, Math.min(10, Math.round(raw)));
 };
 
@@ -110,16 +168,14 @@ export const scoreColor = (score) => {
 
 export const activityMessage = (activity, score) => {
   const msgs = {
-    cycling: ["Avoid cycling today",          "It's an alright day to cycle",       "Perfect conditions for cycling!"],
-    hiking:  ["Not great for hiking today",    "Decent conditions for a hike",        "It's a great day to go on a hike!"],
-    running: ["Avoid running today",           "Almost great for a marathon",         "Perfect conditions for a run!"],
-    camping: ["Not ideal camping conditions",  "Maybe wait for another day",          "Great night for camping!"],
+    cycling: ["Avoid cycling today", "It's an alright day to cycle", "Perfect conditions for cycling!"],
+    hiking:  ["Not great for hiking today", "Decent conditions for a hike", "It's a great day to go on a hike!"],
+    running: ["Avoid running today", "Almost great for a marathon", "Perfect conditions for a run!"],
+    camping: ["Not ideal camping conditions", "Maybe wait for another day", "Great night for camping!"],
   };
   const tier = score >= 8 ? 2 : score >= 5 ? 1 : 0;
   return (msgs[activity] || msgs.hiking)[tier];
 };
-
-// ─── Reverse geocode ──────────────────────────────────────────────────────────
 
 export const reverseGeocode = async (lat, lon) => {
   const res = await axios.get(
@@ -132,6 +188,10 @@ export const reverseGeocode = async (lat, lon) => {
 
 const buildWeatherPayload = (lat, lon, name, data) => {
   const { current, daily, hourly, timezone_offset: tz } = data;
+  
+  // 1. Fetch User Settings
+  const settings = getUnitSettings();
+  const unitLabels = getUnitLabels(settings);
 
   const today    = daily[0];
   const tomorrow = daily[1];
@@ -141,31 +201,32 @@ const buildWeatherPayload = (lat, lon, name, data) => {
   const humidities   = todayHourly.map((h) => h.humidity);
   const visibilities = todayHourly.map((h) => h.visibility || 0).filter((v) => v > 0);
 
+  // 2. Apply Conversions to Today Data
   const todayData = {
-    tempHigh:        Math.round(today.temp.max),
-    tempLow:         Math.round(today.temp.min),
+    tempHigh:        Math.round(convertTemp(today.temp.max, settings.Temperature)),
+    tempLow:         Math.round(convertTemp(today.temp.min, settings.Temperature)),
     humidity:        today.humidity,
     humidityHigh:    humidities.length ? Math.max(...humidities) : today.humidity,
     humidityLow:     humidities.length ? Math.min(...humidities) : today.humidity,
-    windSpeed:       msToMph(today.wind_speed),
-    windGust:        today.wind_gust ? msToMph(today.wind_gust) : msToMph(today.wind_speed),
+    windSpeed:       Math.round(convertWind(today.wind_speed, settings["Wind Speed"])),
+    windGust:        today.wind_gust ? Math.round(convertWind(today.wind_gust, settings["Wind Speed"])) : Math.round(convertWind(today.wind_speed, settings["Wind Speed"])),
     windDeg:         today.wind_deg,
     pop:             Math.round((today.pop || 0) * 100),
     uvi:             today.uvi,
     uvLabel:         uvLabel(today.uvi),
     condition:       today.weather[0].main,
     description:     today.weather[0].description,
-    visibilityHigh:  visibilities.length ? mToMi(Math.max(...visibilities)) : mToMi(current.visibility || 10000),
-    visibilityLow:   visibilities.length ? mToMi(Math.min(...visibilities)) : mToMi(current.visibility || 10000),
-    visibilityCurrent: mToMi(current.visibility || 10000),
+    visibilityHigh:  visibilities.length ? parseFloat(convertDist(Math.max(...visibilities), settings.Distance).toFixed(1)) : parseFloat(convertDist(current.visibility || 10000, settings.Distance).toFixed(1)),
+    visibilityLow:   visibilities.length ? parseFloat(convertDist(Math.min(...visibilities), settings.Distance).toFixed(1)) : parseFloat(convertDist(current.visibility || 10000, settings.Distance).toFixed(1)),
+    visibilityCurrent: parseFloat(convertDist(current.visibility || 10000, settings.Distance).toFixed(1)),
   };
 
-  // Hourly items normalized for WeatherBox (first 12 h)
+  // 3. Apply Conversions to Hourly
   const normalizedHourly = hourly.slice(0, 12).map((h) => ({
     time:      localTimeStr(h.dt, tz),
-    temp:      Math.round(h.temp),
+    temp:      Math.round(convertTemp(h.temp, settings.Temperature)),
     rain:      `${Math.round((h.pop || 0) * 100)}%`,
-    wind:      msToMph(h.wind_speed),
+    wind:      Math.round(convertWind(h.wind_speed, settings["Wind Speed"])),
     condition: h.weather[0].main,
   }));
 
@@ -178,15 +239,16 @@ const buildWeatherPayload = (lat, lon, name, data) => {
     locationName: name,
     lat,
     lon,
+    unitLabels, // Passed out so the UI knows what to render (e.g., °C vs °F)
     current: {
-      temp:        Math.round(current.temp),
-      feelsLike:   Math.round(current.feels_like),
+      temp:        Math.round(convertTemp(current.temp, settings.Temperature)),
+      feelsLike:   Math.round(convertTemp(current.feels_like, settings.Temperature)),
       humidity:    current.humidity,
-      windSpeed:   msToMph(current.wind_speed),
-      windGust:    current.wind_gust ? msToMph(current.wind_gust) : msToMph(current.wind_speed),
+      windSpeed:   Math.round(convertWind(current.wind_speed, settings["Wind Speed"])),
+      windGust:    current.wind_gust ? Math.round(convertWind(current.wind_gust, settings["Wind Speed"])) : Math.round(convertWind(current.wind_speed, settings["Wind Speed"])),
       windDeg:     current.wind_deg,
       windDir:     windDirLabel(current.wind_deg),
-      visibility:  mToMi(current.visibility || 10000),
+      visibility:  parseFloat(convertDist(current.visibility || 10000, settings.Distance).toFixed(1)),
       uvi:         current.uvi,
       uvLabel:     uvLabel(current.uvi),
       condition:   current.weather[0].main,
@@ -204,10 +266,10 @@ const buildWeatherPayload = (lat, lon, name, data) => {
       condition: tomorrow.weather[0].main,
     },
     scores: {
-      cycling: calculateActivityScore(todayData, "cycling"),
-      hiking:  calculateActivityScore(todayData, "hiking"),
-      running: calculateActivityScore(todayData, "running"),
-      camping: calculateActivityScore(todayData, "camping"),
+      cycling: calculateActivityScore(today, "cycling"), // Passing raw daily array to prevent score breaking
+      hiking:  calculateActivityScore(today, "hiking"),
+      running: calculateActivityScore(today, "running"),
+      camping: calculateActivityScore(today, "camping"),
     },
     hourly:    normalizedHourly,
     rawHourly: hourly,
@@ -216,15 +278,11 @@ const buildWeatherPayload = (lat, lon, name, data) => {
   };
 };
 
-// ─── Fetch by city name ───────────────────────────────────────────────────────
-
 export const fetchWeatherByCity = async (city) => {
   const { lat, lon, name } = await geocodeCity(city);
   const data = await fetchOneCall(lat, lon);
   return buildWeatherPayload(lat, lon, name, data);
 };
-
-// ─── Fetch by coordinates (auto-location) ────────────────────────────────────
 
 export const fetchWeatherByCoords = async (lat, lon) => {
   const [name, data] = await Promise.all([

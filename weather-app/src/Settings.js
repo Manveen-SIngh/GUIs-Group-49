@@ -238,13 +238,33 @@ const LocationPanel = () => {
   const [saved, setSaved] = useState([]);
   const [inputVal, setInputVal] = useState("");
   const [adding, setAdding] = useState(false);
+  
+  // Track the currently active city from localStorage
+  const [activeCity, setActiveCity] = useState(localStorage.getItem("lastCity") || "");
 
   const handleAdd = () => {
     if (inputVal.trim()) {
-      setSaved([...saved, inputVal.trim()]);
+      const newCity = inputVal.trim();
+      
+      // Prevent duplicates in the saved list
+      if (!saved.includes(newCity)) {
+        setSaved([...saved, newCity]);
+      }
+      
       setInputVal("");
       setAdding(false);
+      
+      // Set the newly added city as the active one
+      localStorage.setItem("lastCity", newCity);
+      setActiveCity(newCity);
     }
+  };
+
+  const handleSelectLocation = (city) => {
+    // Update localStorage and local state when a user clicks a saved location
+    localStorage.setItem("lastCity", city);
+    setActiveCity(city);
+    setUseCurrent(false); // Optionally toggle off "Use Current Location" since they picked a specific one
   };
 
   return (
@@ -253,16 +273,36 @@ const LocationPanel = () => {
       <div className="loc-row">
         <span className="loc-row__dot" />
         <span className="loc-row__label">Use Current Location</span>
-        <Toggle checked={useCurrent} onChange={setUseCurrent} />
+        <Toggle checked={useCurrent} onChange={(val) => {
+            setUseCurrent(val);
+            if (val) {
+                // Optional: Logic to revert to geolocation if turned back on
+                localStorage.removeItem("lastCity"); 
+                setActiveCity("");
+            }
+        }} />
       </div>
       <div className="saved-locations">
         <p className="saved-locations__heading">Saved Locations</p>
+        
+        {/* Render Saved Locations */}
         {saved.map((s, i) => (
-          <div className="saved-location-item" key={i}>
+          <div 
+            className="saved-location-item" 
+            key={i} 
+            onClick={() => handleSelectLocation(s)}
+            style={{ 
+                cursor: "pointer", 
+                backgroundColor: activeCity === s ? "rgba(255, 255, 255, 0.1)" : "transparent",
+                fontWeight: activeCity === s ? "bold" : "normal"
+            }}
+          >
             <IconPin />
             <span>{s}</span>
+            {activeCity === s && <span style={{ marginLeft: "auto" }}>✓</span>}
           </div>
         ))}
+
         {adding ? (
           <div className="add-location-input-row">
             <input

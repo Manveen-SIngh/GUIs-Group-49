@@ -1,26 +1,16 @@
+import React from 'react';
+
 function InfoButton({ message }) {
   return (
     <button
       onClick={() => alert(message)}
       style={{
-        position: "absolute",
-        top: 10,
-        right: 12,
-        width: 28,
-        height: 28,
-        borderRadius: "50%",
-        border: "none",
-        background: "#CBD2D0",
-        boxShadow: "0px 2px 4px rgba(0,0,0,0.18)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: 18,
-        fontWeight: 700,
-        fontFamily: "Rubik, sans-serif",
-        cursor: "pointer",
-        color: "black",
-        zIndex: 20,
+        position: "absolute", top: 12, right: 12, width: 28, height: 28,
+        borderRadius: "50%", border: "none", background: "#CBD2D0",
+        boxShadow: "0px 2px 4px rgba(0,0,0,0.18)", display: "flex",
+        alignItems: "center", justifyContent: "center", fontSize: 18,
+        fontWeight: 700, fontFamily: "Rubik, sans-serif", cursor: "pointer",
+        color: "black", zIndex: 20,
       }}
     >
       i
@@ -28,179 +18,59 @@ function InfoButton({ message }) {
   );
 }
 
-export default function UVBox({ uvLabel = "Low", uvi = 0, nowTime = "" }) {
+export default function UVBox({ uvLabel = "Low", uvi = 0, nowTime = "", hourlyData = [] }) {
+  const data = (Array.isArray(hourlyData) && hourlyData.length >= 5)
+    ? hourlyData.slice(0, 5)
+    : [uvi, uvi, uvi, uvi, uvi];
+
+  const maxUV = 11;
+  const width = 255;
+  const height = 130;
+  const points = data.map((val, i) => {
+    const safeVal = isNaN(Number(val)) ? uvi : Number(val);
+    const clampedVal = Math.max(0, Math.min(safeVal, maxUV));
+    return `${i * (width / 4)},${height - (clampedVal / maxUV) * height}`;
+  }).join(" ");
+
+  const uvRanges = [
+    { label: "Extreme", val: 11 },
+    { label: "Very High", val: 8 },
+    { label: "High", val: 6 },
+    { label: "Moderate", val: 3 },
+    { label: "Low", val: 0 }
+  ];
+
   return (
-    <div
-      style={{
-        width: "100%",
-        height: 220,
-        position: "relative",
-        background: "rgba(255, 255, 255, 0.70)",
-        boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.18)",
-        borderRadius: 28,
-        overflow: "hidden",
-        fontFamily: "Rubik",
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          left: 14,
-          top: 10,
-          fontSize: 22,
-          zIndex: 2,
-        }}
-      >
-        ☀️
+    <div style={{ width: "100%", height: 220, position: "relative", background: "rgba(255, 255, 255, 0.70)", boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.18)", borderRadius: 28, overflow: "hidden", fontFamily: "Rubik, sans-serif" }}>
+      <div style={{ position: "absolute", left: 16, top: 16, right: 46, fontSize: 14, fontWeight: 500, color: "black", zIndex: 2, lineHeight: 1.4 }}>
+        {nowTime ? `Now, ${nowTime}` : "Now"}<br />
+        UV Index: {uvi} ({uvLabel})
       </div>
 
-      <InfoButton message={`UV index is ${uvi} (${uvLabel}) today.`} />
+      <InfoButton message={`Current UV Index is ${uvi} (${uvLabel}).`} />
 
-      <div
-        style={{
-          position: "absolute",
-          top: 10,
-          left: 0,
-          right: 0,
-          textAlign: "center",
-          color: "black",
-          fontSize: 11,
-          fontWeight: 500,
-          lineHeight: 1.2,
-          zIndex: 2,
-        }}
-      >
-        {nowTime ? `Now, ${nowTime}` : "Now"}
-        <br />
-        UV Index: {uvi} — {uvLabel}
-      </div>
-
-      <div
-        style={{
-          position: "absolute",
-          left: 50,
-          right: 16,
-          top: 40,
-          bottom: 30,
-          borderLeft: "1px solid black",
-          borderBottom: "1px solid black",
-          zIndex: 1,
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            left: 0,
-            right: 0,
-            bottom: "32%",
-            height: 2,
-            background: "black",
-          }}
-        />
-
-        <svg
-          width="100%"
-          height="100%"
-          viewBox="0 0 255 160"
-          preserveAspectRatio="none"
-          style={{ position: "absolute", left: 0, top: 0 }}
-        >
-          <path
-            d="M0 145
-               Q28 142 52 136
-               Q78 126 104 112
-               Q130 98 154 92
-               Q182 92 205 101
-               Q228 112 255 138"
-            fill="none"
-            stroke="black"
-            strokeWidth="2"
-          />
+      {/* Expanded left margin to 65 to fit "Very High" text cleanly */}
+      <div style={{ position: "absolute", left: 65, right: 16, top: 60, bottom: 30, borderLeft: "1px solid rgba(0,0,0,0.3)", borderBottom: "1px solid rgba(0,0,0,0.3)", zIndex: 1 }}>
+        <svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" style={{ position: "absolute", left: 0, top: 0, overflow: "visible" }}>
+          <polyline points={points} fill="none" stroke="black" strokeWidth="2" strokeLinejoin="round" />
         </svg>
       </div>
 
-      <div
-        style={{
-          position: "absolute",
-          left: 2,
-          top: 40,
-          width: 48,
-          textAlign: "center",
-          fontSize: 10,
-          fontWeight: 500,
-          color: "black",
-          zIndex: 2,
-        }}
-      >
-        Extreme
+      <div style={{ position: "absolute", left: 5, top: 60, bottom: 30, width: 55 }}>
+        {uvRanges.map(range => (
+          <div key={range.label} style={{ position: "absolute", top: `${100 - (range.val/maxUV)*100}%`, right: 0, transform: "translateY(-50%)", fontSize: 10, fontWeight: 500, color: "black", lineHeight: 1 }}>
+            {range.label}
+          </div>
+        ))}
       </div>
 
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          top: 78,
-          width: 50,
-          textAlign: "center",
-          fontSize: 10,
-          fontWeight: 500,
-          color: "black",
-          zIndex: 2,
-        }}
-      >
-        Very High
+      <div style={{ position: "absolute", left: 65, right: 16, bottom: 12, height: 15 }}>
+        {["00", "06", "12", "18", "24"].map((t, i) => (
+          <div key={t} style={{ position: "absolute", left: `${i * 25}%`, transform: "translateX(-50%)", fontSize: 10, fontWeight: 500, color: "black" }}>
+            +{t}h
+          </div>
+        ))}
       </div>
-
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          top: 118,
-          width: 50,
-          textAlign: "center",
-          fontSize: 10,
-          fontWeight: 500,
-          color: "black",
-          zIndex: 2,
-        }}
-      >
-        Moderate
-      </div>
-
-      <div
-        style={{
-          position: "absolute",
-          left: 10,
-          top: 160,
-          width: 40,
-          textAlign: "center",
-          fontSize: 10,
-          fontWeight: 500,
-          color: "black",
-          zIndex: 2,
-        }}
-      >
-        Low
-      </div>
-
-      {["00", "06", "12", "18", "24"].map((t, i) => (
-        <div
-          key={t}
-          style={{
-            position: "absolute",
-            left: `${18 + i * 19}%`,
-            bottom: 12,
-            width: 22,
-            textAlign: "center",
-            fontSize: 10,
-            fontWeight: 500,
-            color: "black",
-            zIndex: 2,
-          }}
-        >
-          {t}
-        </div>
-      ))}
     </div>
   );
 }
