@@ -179,7 +179,7 @@
 .header-subtitle {
   position: absolute;
   left: 280px;
-  top: 110px;
+  top: 125px;
   align-items: left;
   font-family: Rubik, sans-serif;
   font-size: 42px;
@@ -190,7 +190,7 @@
 .header-activity-title {
   position: absolute;
   left: 280px;
-  top: 162px;
+  top: 177px;
   align-items: left;
   font-family: Rubik, sans-serif;
   font-size: 82px;
@@ -244,7 +244,7 @@
 .scores-box {
   width: 349px;
   height: 311px;
-  left: 299px;
+  left: 277px;
   top: 280px;
   position: absolute;
   background: rgba(255, 255, 255, 0.7);
@@ -311,37 +311,37 @@
 .activity-divider {
   width: 349px;
   height: 1px;
-  left: 299px;
+  left: 277px;
   position: absolute;
   background: rgba(0, 0, 0, 0.05);
 }
 
 /* Row 1 – Cycling */
-.activity-label--cycling  { left: 360px; top: 300px; }
-.activity-swatch--cycling { left: 320px; top: 300px; }
-.activity-icon--cycling   { top: 295px;  left: 505px; }
-.activity-score--cycling  { left: 570px; top: 300px; }
+.activity-label--cycling  { left: 338px; top: 300px; }
+.activity-swatch--cycling { left: 298px; top: 300px; }
+.activity-icon--cycling   { top: 295px;  left: 483px; }
+.activity-score--cycling  { left: 548px; top: 300px; }
 .activity-divider--1      { top: 340px; }
 
 /* Row 2 – Hiking */
-.activity-label--hiking   { left: 360px; top: 350px; }
-.activity-swatch--hiking  { left: 320px; top: 350px; }
-.activity-icon--hiking    { top: 345px;  left: 505px; }
-.activity-score--hiking   { left: 570px; top: 350px; }
+.activity-label--hiking   { left: 338px; top: 350px; }
+.activity-swatch--hiking  { left: 298px; top: 350px; }
+.activity-icon--hiking    { top: 345px;  left: 483px; }
+.activity-score--hiking   { left: 548px; top: 350px; }
 .activity-divider--2      { top: 390px; }
 
 /* Row 3 – Camping (active / current page) */
-.activity-label--camping  { left: 360px; top: 400px; }
-.activity-swatch--camping { left: 320px; top: 400px; }
-.activity-icon--camping   { top: 395px;  left: 505px; }
-.activity-score--camping  { left: 570px; top: 400px; }
+.activity-label--camping  { left: 338px; top: 400px; }
+.activity-swatch--camping { left: 298px; top: 400px; }
+.activity-icon--camping   { top: 395px;  left: 483px; }
+.activity-score--camping  { left: 548px; top: 400px; }
 .activity-divider--3      { top: 440px; }
 
 /* Row 4 – Running */
-.activity-label--running  { left: 360px; top: 450px; }
-.activity-swatch--running { left: 320px; top: 450px; }
-.activity-icon--running   { top: 445px;  left: 505px; }
-.activity-score--running  { left: 570px; top: 450px; }
+.activity-label--running  { left: 338px; top: 450px; }
+.activity-swatch--running { left: 298px; top: 450px; }
+.activity-icon--running   { top: 445px;  left: 483px; }
+.activity-score--running  { left: 548px; top: 450px; }
 .activity-divider--4      { top: 490px; }
 
 /* ============================================================
@@ -350,7 +350,7 @@
 .map-box {
   width: 349px;
   height: 311px;
-  left: 299px;
+  left: 277px;
   top: 600px;
   position: absolute;
   background: rgba(255, 255, 255, 0.7);
@@ -564,7 +564,7 @@
 .precip-today-label {
   position: absolute;
   top: 430px;
-  left: 670px;
+  left: 650px;
   width: 174px;
   text-align: center;
   justify-content: center;
@@ -615,7 +615,7 @@
 .precip-prev-label {
   position: absolute;
   top: 430px;
-  left: 844px;
+  left: 824px;
   width: 175px;
   text-align: center;
   justify-content: center;
@@ -1022,7 +1022,7 @@
 .wind-box {
   width: 175px;
   height: 311px;
-  left: 1416px;
+  left: 1450px;
   top: 280px;
   position: absolute;
   background: rgba(255, 255, 255, 0.7);
@@ -1033,7 +1033,7 @@
 .wind-score-swatch {
   width: 33px;
   height: 33px;
-  left: 1437px;
+  left: 1471px;
   top: 300px;
   position: absolute;
   border-radius: 10px;
@@ -1042,7 +1042,7 @@
 .wind-title {
   position: absolute;
   top: 295px;
-  left: 1460px;
+  left: 1494px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -1058,14 +1058,14 @@
   width: 168px;
   height: 168px;
   top: 372px;
-  left: 1425px;
+  left: 1459px;
 }
 
 .wind-speed-value {
   color: black;
   position: absolute;
   top: 445px;
-  left: 1465px;
+  left: 1499px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -1079,7 +1079,7 @@
   color: black;
   position: absolute;
   top: 535px;
-  left: 1465px;
+  left: 1499px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -1095,7 +1095,7 @@
 .uv-box {
   width: 175px;
   height: 311px;
-  left: 1416px;
+  left: 1450px;
   top: 600px;
   position: absolute;
   background: rgba(255, 255, 255, 0.7);
@@ -1106,7 +1106,7 @@
 .uv-score-swatch {
   width: 33px;
   height: 33px;
-  left: 1455px;
+  left: 1489px;
   top: 620px;
   position: absolute;
   border-radius: 10px;
@@ -1115,7 +1115,7 @@
 .uv-title {
   position: absolute;
   top: 615px;
-  left: 1490px;
+  left: 1524px;
   width: 101px;
   text-align: left;
   display: flex;
@@ -1131,7 +1131,7 @@
 .uv-daily-label {
   position: absolute;
   top: 695px;
-  left: 1416px;
+  left: 1450px;
   width: 175px;
   text-align: center;
   display: flex;
@@ -1147,7 +1147,7 @@
 .uv-daily-value {
   position: absolute;
   top: 835px;
-  left: 1416px;
+  left: 1450px;
   width: 175px;
   text-align: center;
   display: flex;
