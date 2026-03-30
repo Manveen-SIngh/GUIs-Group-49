@@ -227,6 +227,7 @@ const buildWeatherPayload = (lat, lon, name, data) => {
     temp:      Math.round(convertTemp(h.temp, settings.Temperature)),
     rain:      `${Math.round((h.pop || 0) * 100)}%`,
     wind:      Math.round(convertWind(h.wind_speed, settings["Wind Speed"])),
+    windDeg:   h.wind_deg ?? 0,
     condition: h.weather[0].main,
   }));
 

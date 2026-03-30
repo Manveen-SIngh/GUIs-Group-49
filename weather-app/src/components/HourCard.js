@@ -2,7 +2,7 @@ import React from "react";
 import "./HourCard.css";
 import precipitation from "../assets/precipitation.svg";
 
-function HourCard({ time, icon, temp, rain, wind })
+function HourCard({ time, icon, temp, rain, wind, windDeg = 0 })
 {
 
   const hour = parseInt(time);
@@ -52,7 +52,13 @@ function HourCard({ time, icon, temp, rain, wind })
         <span>{rain}</span>
       </div>
 
-      <div className="hour-card__wind">{wind}mph</div>
+      <div className="hour-card__wind-group">
+        <div
+          className="hour-card__wind-arrow"
+          style={{ transform: `rotate(${windDeg}deg)` }}
+        >↑</div>
+        <div className="hour-card__wind">{wind}mph</div>
+      </div>
     </div>
   );
 }

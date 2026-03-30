@@ -77,7 +77,7 @@ function WeatherPage()
         feels_like: item.feels_like
       },
       weather: item.weather,
-      wind: { speed: item.wind_speed },
+      wind: { speed: item.wind_speed, deg: item.wind_deg ?? 0 },
       pop: item.pop || 0
     };
   };
@@ -118,10 +118,10 @@ function WeatherPage()
         hourly: dayHourly,
         feelsLike: Math.round(day.feels_like.day),
         periods: [
-          { label: "Morning",   temp: Math.round(day.temp.morn),  condition: day.weather[0].main, rain: rainStr, wind: windNum },
-          { label: "Afternoon", temp: Math.round(day.temp.day),   condition: day.weather[0].main, rain: rainStr, wind: windNum },
-          { label: "Evening",   temp: Math.round(day.temp.eve),   condition: day.weather[0].main, rain: rainStr, wind: windNum },
-          { label: "Night",     temp: Math.round(day.temp.night), condition: day.weather[0].main, rain: rainStr, wind: windNum },
+          { label: "Morning",   temp: Math.round(day.temp.morn),  condition: day.weather[0].main, rain: rainStr, wind: windNum, windDeg: day.wind_deg ?? 0 },
+          { label: "Afternoon", temp: Math.round(day.temp.day),   condition: day.weather[0].main, rain: rainStr, wind: windNum, windDeg: day.wind_deg ?? 0 },
+          { label: "Evening",   temp: Math.round(day.temp.eve),   condition: day.weather[0].main, rain: rainStr, wind: windNum, windDeg: day.wind_deg ?? 0 },
+          { label: "Night",     temp: Math.round(day.temp.night), condition: day.weather[0].main, rain: rainStr, wind: windNum, windDeg: day.wind_deg ?? 0 },
         ],
       };
     });
@@ -143,7 +143,7 @@ function WeatherPage()
       setWeeklyData(builtWeeklyData);
       setSelectedDayIndex(0);
       if (builtWeeklyData.length > 0) {
-        setHourlyData(builtWeeklyData[0].hourly.slice(0, 6));
+        setHourlyData(builtWeeklyData[0].hourly.slice(0, 5));
         setSelectedPeriods(builtWeeklyData[0].periods || []);
       }
     } catch (err) {
@@ -199,7 +199,7 @@ function WeatherPage()
 
       if (builtWeeklyData.length > 0)
       {
-        setHourlyData(builtWeeklyData[0].hourly.slice(0, 6));
+        setHourlyData(builtWeeklyData[0].hourly.slice(0, 5));
         setSelectedPeriods(builtWeeklyData[0].periods || []);
       }
 
@@ -218,7 +218,7 @@ function WeatherPage()
 
     if (weeklyData[index])
     {
-      setHourlyData(weeklyData[index].hourly.slice(0, 6));
+      setHourlyData(weeklyData[index].hourly.slice(0, 5));
       setSelectedPeriods(weeklyData[index].periods || []);
     }
   };

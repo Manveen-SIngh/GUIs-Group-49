@@ -42,6 +42,7 @@ function HourlyV2({ hourly = [] }) {
           temp={h.temp}
           rain={h.rain}
           wind={h.wind}
+          windDeg={h.windDeg ?? 0}
         />
       ))}
     </div>
