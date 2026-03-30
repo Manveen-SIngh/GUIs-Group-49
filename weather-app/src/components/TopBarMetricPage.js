@@ -22,11 +22,12 @@ export default function TopBarMetricPage() {
         alt="back"
         onClick={() => navigate('/WeatherPage')}
         style={{
-          width: 64,
-          height: 64,
+          width: 91,
+          height: 91,
+          objectFit: "contain",
           position: "absolute",
-          left: 8,
-          top: 8,
+          left: 0,
+          top: 0,
           cursor: "pointer",
         }}
       />
@@ -99,8 +100,8 @@ export default function TopBarMetricPage() {
       <div
         style={{
           position: "absolute",
-          right: 18,
-          top: 6,
+          right: 0,
+          top: 0,
         }}
       >
         <Clock />

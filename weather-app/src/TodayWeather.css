@@ -1,17 +1,28 @@
 
 .dashboard-container {
   height: 100vh;
-  background-attachment: fixed; 
+  background-attachment: fixed;
   background-size: cover;
   background-position: center;
   display: flex;
   flex-direction: column;
-  padding: 30px 240px 40px 240px;
+  align-items: center;
+  padding: 32px 0;
   box-sizing: border-box;
-  color: black; 
+  color: black;
   font-family: 'Rubik', sans-serif;
-  overflow-y: auto; 
+  overflow-y: auto;
   overflow-x: hidden;
+}
+
+.dashboard-inner {
+  width: 1400px;
+  max-width: 100%;
+  padding: 0 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 /*TOP*/

@@ -87,6 +87,7 @@ function TodayWeather() {
 
   return (
     <div className="dashboard-container" style={{ backgroundImage: `url(${bg})` }}>
+      <div className="dashboard-inner">
 
       {/* TOP */}
       <nav className="top-nav">
@@ -94,7 +95,13 @@ function TodayWeather() {
           src={backBtn}
           alt="Back"
           onClick={() => navigate('/WeatherPage')}
-          style={{ width: 64, height: 64, cursor: "pointer" }}
+          style={{
+            width: 91,
+            height: 91,
+            objectFit: "contain",
+            cursor: "pointer",
+            flexShrink: 0,
+          }}
         />
 
         <div className="toggle-pill toggle-shift">
@@ -186,6 +193,7 @@ function TodayWeather() {
         <HourlyV2 hourly={w ? w.hourly : []} />
       </div>
 
+      </div>
     </div>
   );
 }
