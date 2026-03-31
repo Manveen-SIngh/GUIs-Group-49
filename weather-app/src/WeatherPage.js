@@ -9,18 +9,22 @@ import "./WeatherPage.css";
 
 import WeeklyForecast from "./components/WeeklyForecast";
 import TodayCard from "./components/TodayCard";
-import SearchBar from "./components/SearchBar";
 import HourlyForecast from "./components/HourlyForecast";
-import Clock from "./components/Clock";
-import menuIcon from "./assets/menu.svg";
 import MapCard from "./components/MapCard";
-import { useSidebar } from "./Sidebar";
+import TopBar from "./components/TopBar";
 import ActivityScoresWidget from "./components/ActivityScoresWidget";
 import CustomWidget from "./components/CustomWidget";
 
 function WeatherPage() {
-  const { open } = useSidebar();
   const [query, setQuery] = useState("");
+  const [tempUnit, setTempUnit] = useState(() => {
+    const s = getUnitSettings();
+    return s.Temperature === "Fahrenheit (F)" ? "F" : "C";
+  });
+  const [distUnit, setDistUnit] = useState(() => {
+    const s = getUnitSettings();
+    return s.Distance && s.Distance.includes("mi") ? "mi" : "km";
+  });
   const [weatherData, setWeatherData] = useState(null);
   const [hourlyData, setHourlyData] = useState([]);
   const [selectedPeriods, setSelectedPeriods] = useState([]);
@@ -29,6 +33,27 @@ function WeatherPage() {
   const [error, setError] = useState("");
   const [locationName, setLocationName] = useState("");
   const [coords, setCoords] = useState(null);
+
+  const handleTempToggle = (unit) => {
+    setTempUnit(unit);
+    const saved = localStorage.getItem("unitSettings");
+    const parsed = saved ? JSON.parse(saved) : {};
+    localStorage.setItem("unitSettings", JSON.stringify({
+      ...parsed,
+      Temperature: unit === "F" ? "Fahrenheit (F)" : "Celsius (C)",
+    }));
+  };
+
+  const handleDistToggle = (unit) => {
+    setDistUnit(unit);
+    const saved = localStorage.getItem("unitSettings");
+    const parsed = saved ? JSON.parse(saved) : {};
+    localStorage.setItem("unitSettings", JSON.stringify({
+      ...parsed,
+      Distance: unit === "mi" ? "Miles (mi)" : "Kilometers (km)",
+      "Wind Speed": unit === "mi" ? "Miles per hour (mph)" : "Kilometers per hour (km/h)",
+    }));
+  };
 
   const apiKey = process.env.REACT_APP_OPENWEATHER_KEY;
   const queryRef = React.useRef(query);
@@ -265,17 +290,15 @@ function WeatherPage() {
       style={{ backgroundImage: `url(${currentBg})`, transition: "background-image 0.5s ease-in-out" }}
     >
       <div className="weather-page-container">
-        <div className="weather-top-bar">
-          <div className="top-left">
-            <div className="top-button-box">
-              <img src={menuIcon} alt="Menu" className="weather-page-menu-button" onClick={open} style={{ cursor: 'pointer' }} />
-            </div>
-          </div>
-          <div className="top-center">
-            <SearchBar query={query} onQueryChange={setQuery} onSearch={() => handleSearch()} />
-          </div>
-          <div className="top-right"><div className="top-time-box"><Clock /></div></div>
-        </div>
+        <TopBar
+          query={query}
+          onQueryChange={setQuery}
+          onSearch={() => handleSearch()}
+          tempUnit={tempUnit}
+          onTempToggle={handleTempToggle}
+          distUnit={distUnit}
+          onDistToggle={handleDistToggle}
+        />
 
         {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
 

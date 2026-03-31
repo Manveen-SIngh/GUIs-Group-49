@@ -1,0 +1,69 @@
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 28px;
+  font-family: "Rubik", sans-serif;
+}
+
+/* ── Menu button ─────────────────────────────────────────────── */
+.top-bar__menu-btn {
+  width: 91px;
+  height: 91px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.70);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.top-bar__menu-icon {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  display: block;
+}
+
+/* ── Conversion pills ────────────────────────────────────────── */
+.top-bar__pill {
+  width: 123px;
+  height: 53px;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 43px;
+  padding: 4px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.top-bar__pill-opt {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 43px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.top-bar__pill-opt--active {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+/* ── Search bar override (ensure full width inside TopBar) ───── */
+.top-bar .search-bar {
+  width: 720px;
+  max-width: 720px;
+  flex-shrink: 1;
+}
