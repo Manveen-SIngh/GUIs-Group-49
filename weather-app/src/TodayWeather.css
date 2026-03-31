@@ -191,7 +191,7 @@
 
 .metrics-header h2 {
   margin: 0;
-  font-size: 1.3rem;
+  font-size: 2.0rem;
   font-weight: 500;
 }
 
@@ -257,9 +257,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 6px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  flex-shrink: 0;
 }
 
 .metrics-nav-btn {

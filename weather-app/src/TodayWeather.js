@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchWeatherByCity, fetchWeatherByCoords, getBackgroundImage, scoreColor, activityMessage } from "./services/weatherApi";
+import { fetchWeatherByCity, fetchWeatherByCoords, getBackgroundImage, scoreColor } from "./services/weatherApi";
 import fallbackBg from "./assets/PartlyCloudy.png";
 
 import "./TodayWeather.css";
@@ -192,7 +192,6 @@ function TodayWeather() {
             const act = ACTIVITIES[activityIndex];
             const actScore = scores ? scores[act.key] : null;
             const actColor = actScore != null ? scoreColor(actScore) : "#FFAB1C";
-            const actMsg   = actScore != null ? activityMessage(act.key, actScore) : "Loading…";
             return (
               <>
                 <div className="metrics-header">
@@ -201,12 +200,6 @@ function TodayWeather() {
                     <h2>{act.label}</h2>
                   </div>
                   <h2>{actScore != null ? `${actScore}/10` : "—"}</h2>
-                </div>
-                <p className="metrics-activity-msg">{actMsg}</p>
-                <div className="metrics-nav">
-                  <button className="metrics-nav-btn" onClick={prevActivity}>&#8592;</button>
-                  <span className="metrics-nav-label">{activityIndex + 1} / {ACTIVITIES.length}</span>
-                  <button className="metrics-nav-btn" onClick={nextActivity}>&#8594;</button>
                 </div>
               </>
             );
@@ -240,6 +233,11 @@ function TodayWeather() {
             <span className="metric-swatch" style={{ background: tod ? visColor(tod.visibilityHigh) : "#FFAB1C" }} />
             <span className="metric-label">Visibility</span>
             <span className="metric-value">{cur ? fmtVis(cur.visibility) : "—"}</span>
+          </div>
+          <div className="metrics-nav">
+            <button className="metrics-nav-btn" onClick={prevActivity}>&#8592;</button>
+            <span className="metrics-nav-label">{activityIndex + 1} / {ACTIVITIES.length}</span>
+            <button className="metrics-nav-btn" onClick={nextActivity}>&#8594;</button>
           </div>
         </div>
       </main>
