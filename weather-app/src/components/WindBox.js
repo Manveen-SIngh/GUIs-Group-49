@@ -96,9 +96,10 @@ export default function WindBox({
       width: "100%", 
       height: 190, 
       position: "relative", 
-      background: "rgba(255,255,255,0.70)", 
-      borderRadius: 28, 
-      boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.18)", 
+      background: "rgba(255, 255, 255, 0.7)",
+      backdropFilter: "blur(10px)",
+      borderRadius: 28,
+      boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.18)",
       fontFamily: "Rubik, sans-serif",
       // These two lines ensure the box floats over others when 'i' is clicked:
       overflow: "visible", 

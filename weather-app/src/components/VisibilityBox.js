@@ -113,10 +113,11 @@ export default function VisibilityBox({ visibility = 0, nowTime = "", unitDist =
       width: "100%", 
       height: 220, 
       position: "relative", 
-      background: "rgba(255, 255, 255, 0.70)", 
-      boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.18)", 
-      borderRadius: 28, 
-      fontFamily: "Rubik, sans-serif" 
+      background: "rgba(255, 255, 255, 0.7)",
+      backdropFilter: "blur(10px)",
+      boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.18)",
+      borderRadius: 28,
+      fontFamily: "Rubik, sans-serif"
     }}>
       
       <InfoButton title="Visibility Guide">

@@ -94,8 +94,9 @@ export default function UVBox({ uvi = 0, label = "Low" }) {
     <div style={{
       width: "100%", 
       height: 160, 
-      background: "rgba(255, 255, 255, 0.7)", 
-      borderRadius: 28, 
+      background: "rgba(255, 255, 255, 0.7)",
+      backdropFilter: "blur(10px)",
+      borderRadius: 28,
       padding: 20,
       position: "relative",
       fontFamily: "Rubik, sans-serif",
