@@ -103,7 +103,7 @@
 .main-content-area {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   flex-grow: 1;
   width: 100%;
   margin-bottom: 20px;
@@ -121,14 +121,27 @@
   margin: 0 0 20px 0;
 }
 
+.current-weather-box {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 30px;
+  padding: 30px 34px;
+  display: flex;
+  align-items: center;
+  width: 508px;
+  height: 380px;
+  box-sizing: border-box;
+  box-shadow: 0px 10px 30px rgba(0,0,0,0.1);
+}
+
 .weather-primary-row {
   display: flex;
-  align-items: center; 
-  gap: 20px;
+  align-items: center;
+  gap: 36px;
 }
 
 .main-weather-icon {
-  width: 150px;
+  width: 210px;
   height: auto;
 }
 
@@ -138,44 +151,47 @@
 }
 
 .huge-temp {
-  font-size: 4.5rem; 
+  font-size: 6rem;
   font-weight: 500;
   margin: 0;
   line-height: 1;
 }
 
 .weather-desc p {
-  font-size: 1.2rem;
-  margin: 5px 0;
+  font-size: 1.5rem;
+  margin: 9px 0;
   color: #333;
 }
 
 /*Metrics card*/
 .metrics-card {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.7);
   border-radius: 30px;
-  padding: 16px 24px;
-  width: 481px;
-  height: 440px;
+  padding: 16px 22px;
+  width: 550px;
+  height: 380px;
   box-sizing: border-box;
   overflow: hidden;
   box-shadow: 0px 10px 30px rgba(0,0,0,0.1);
   backdrop-filter: blur(10px);
-  margin-top: 0px;
+  margin-top: 58px;
+  display: flex;
+  flex-direction: column;
 }
 
 .metrics-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
-  padding-bottom: 8px;
+  margin-bottom: 4px;
+  padding-bottom: 4px;
   border-bottom: 1px solid rgba(0,0,0,0.08);
+  flex-shrink: 0;
 }
 
 .metrics-header h2 {
   margin: 0;
-  font-size: 50px;
+  font-size: 1.3rem;
   font-weight: 500;
 }
 
@@ -183,7 +199,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 5px 0;
+  flex: 1;
   border-bottom: 1px solid rgba(0,0,0,0.06);
 }
 
@@ -192,22 +208,22 @@
 }
 
 .metric-swatch {
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
   flex-shrink: 0;
   display: inline-block;
 }
 
 .metric-label {
   flex: 1;
-  font-size: 26px;
+  font-size: 1.05rem;
   color: #555;
   font-weight: 500;
 }
 
 .metric-value {
-  font-size: 26px;
+  font-size: 1.05rem;
   font-weight: 600;
   color: #222;
   text-align: right;
@@ -223,44 +239,57 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
   flex-shrink: 0;
 }
 
 .metrics-activity-msg {
-  font-size: 26px;
+  font-size: 0.9rem;
   color: #444;
-  margin: 0 0 4px 0;
+  margin: 0 0 2px 0;
   font-style: italic;
+  flex-shrink: 0;
 }
 
-.metrics-dots {
+.metrics-nav {
   display: flex;
-  gap: 6px;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 6px;
   padding-bottom: 6px;
   border-bottom: 1px solid rgba(0,0,0,0.08);
 }
 
-.metrics-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.2);
+.metrics-nav-btn {
+  background: rgba(0,0,0,0.08);
+  border: none;
+  border-radius: 8px;
+  width: 36px;
+  height: 30px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
 }
 
-.metrics-dot--active {
-  background: rgba(0,0,0,0.6);
+.metrics-nav-btn:hover {
+  background: rgba(0,0,0,0.16);
+}
+
+.metrics-nav-label {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
 }
 
 .bottom-forecast-area {
   width: 100%;
   margin-top: auto;
   padding-bottom: 30px;
-  flex-shrink: 0; 
+  flex-shrink: 0;
+  margin-top: 20px;
 }
