@@ -106,11 +106,12 @@ export default function HumidityBox({ humidity = 0, humidityAvg = 0, nowTime = "
       width: "100%", 
       height: 220, 
       position: "relative", 
-      background: "rgba(255, 255, 255, 0.70)", 
-      boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.18)", 
-      borderRadius: 28, 
+      background: "rgba(255, 255, 255, 0.7)",
+      backdropFilter: "blur(10px)",
+      boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.18)",
+      borderRadius: 28,
       // REMOVED overflow: "hidden" so the popover isn't clipped
-      fontFamily: "Rubik, sans-serif" 
+      fontFamily: "Rubik, sans-serif"
     }}>
       
       {/* --- UPGRADED DETAILED INFO BUTTON --- */}
