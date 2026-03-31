@@ -180,7 +180,7 @@ function TodayWeather() {
               <div className="weather-desc">
                 <p>Feels like: {cur ? fmtTemp(cur.feelsLike) : "—"}</p>
                 <p>{cur ? cur.condition : "—"}</p>
-                <p>Rain: {cur ? `${cur.pop}%` : "—"}</p>
+                <p>Rain: {tod ? `${tod.pop}%` : "—"}</p>
               </div>
             </div>
           </div>
