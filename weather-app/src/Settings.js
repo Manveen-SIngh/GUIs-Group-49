@@ -172,7 +172,7 @@ const UNIT_OPTIONS = {
   Temperature:   ["Celsius (C)", "Fahrenheit (F)"], 
   "Wind Speed":  ["Kilometers per hour (km/h)", "Miles per hour (mph)", "Meters per second (m/s)", "Knots (kn)"],
   Precipitation: ["Millimeters (mm)", "Inches (in)", "Centimeters (cm)"],
-  Distance:      ["Kilometers (km)", "Miles (mi)", "Meters (m)"],
+  Distance:      ["Kilometers (km)", "Miles (mi)"],
 };
 
 const UnitsPanel = () => {
