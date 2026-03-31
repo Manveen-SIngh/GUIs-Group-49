@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 // Dynamic background helper and fallback
-import { getBackgroundImage, getUnitSettings, convertTemp, convertWind, convertDist, calculateActivityScore } from "./services/weatherApi";
+import { getBackgroundImage, getUnitSettings, convertTemp, convertWind, convertDist, computeScore } from "./services/weatherApi";
 import fallbackBg from "./assets/backgrounds/weather-partly-cloudy.svg";
 
 import "./WeatherPage.css";
@@ -163,11 +163,19 @@ function WeatherPage() {
       localStorage.setItem("lastCity", searchTerm);
       setWeeklyData(builtWeeklyData);
       setSelectedDayIndex(0);
+      const todayForScore = {
+        pop:           Math.round((daily[0].pop || 0) * 100),
+        tempHigh:      daily[0].temp.max,
+        humidityHigh:  daily[0].humidity,
+        visibilityHigh: (current.visibility || 10000) / 1000,
+        windSpeedMs:   daily[0].wind_speed,
+        uvi:           daily[0].uvi,
+      };
       setScores({
-        cycling: calculateActivityScore(daily[0], "cycling"),
-        hiking:  calculateActivityScore(daily[0], "hiking"),
-        running: calculateActivityScore(daily[0], "running"),
-        camping: calculateActivityScore(daily[0], "camping"),
+        cycling: computeScore("cycling", todayForScore, { temp: "°C", dist: "km" }),
+        hiking:  computeScore("hiking",  todayForScore, { temp: "°C", dist: "km" }),
+        running: computeScore("running", todayForScore, { temp: "°C", dist: "km" }),
+        camping: computeScore("camping", todayForScore, { temp: "°C", dist: "km" }),
       });
 
       if (builtWeeklyData.length > 0) {
@@ -195,11 +203,19 @@ function WeatherPage() {
       setWeatherData(current);
       setWeeklyData(builtWeeklyData);
       setSelectedDayIndex(0);
+      const todayForScore = {
+        pop:           Math.round((daily[0].pop || 0) * 100),
+        tempHigh:      daily[0].temp.max,
+        humidityHigh:  daily[0].humidity,
+        visibilityHigh: (current.visibility || 10000) / 1000,
+        windSpeedMs:   daily[0].wind_speed,
+        uvi:           daily[0].uvi,
+      };
       setScores({
-        cycling: calculateActivityScore(daily[0], "cycling"),
-        hiking:  calculateActivityScore(daily[0], "hiking"),
-        running: calculateActivityScore(daily[0], "running"),
-        camping: calculateActivityScore(daily[0], "camping"),
+        cycling: computeScore("cycling", todayForScore, { temp: "°C", dist: "km" }),
+        hiking:  computeScore("hiking",  todayForScore, { temp: "°C", dist: "km" }),
+        running: computeScore("running", todayForScore, { temp: "°C", dist: "km" }),
+        camping: computeScore("camping", todayForScore, { temp: "°C", dist: "km" }),
       });
       if (builtWeeklyData.length > 0) {
         setHourlyData(builtWeeklyData[0].hourly.slice(0, 5));

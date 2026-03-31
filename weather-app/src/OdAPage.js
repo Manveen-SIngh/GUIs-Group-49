@@ -11,6 +11,7 @@ import {
   activityMessage,
   getBackgroundImage,
   getUnitSettings,
+  computeScore,
 } from "./services/weatherApi";
 import fallbackBg from "./assets/PartlyCloudy.png";
 
@@ -137,113 +138,6 @@ const toKilometers = (distance, distLabel) => {
   return distance;
 };
 
-// ─── Score computation ────────────────────────────────────────────────────────
-// Piecewise-linear interpolation over [[value, score], ...] control points
-const lerp = (val, pts) => {
-  if (val <= pts[0][0]) return pts[0][1];
-  if (val >= pts[pts.length - 1][0]) return pts[pts.length - 1][1];
-  for (let i = 0; i < pts.length - 1; i++) {
-    if (val <= pts[i + 1][0]) {
-      const t = (val - pts[i][0]) / (pts[i + 1][0] - pts[i][0]);
-      return pts[i][1] + t * (pts[i + 1][1] - pts[i][1]);
-    }
-  }
-  return pts[pts.length - 1][1];
-};
-
-// Per-metric, per-activity scoring curves.
-// All values are in metric units: pop %, temp °C, humidity %, vis km, wind km/h, uv index.
-const METRIC_CURVES = {
-  rain: {
-    // Cycling: roads get slippery quickly; even moderate rain is risky
-    cycling: [[0,10],[15,9],[30,6],[50,3],[70,1],[100,1]],
-    // Hiking:  gear helps; light rain is manageable
-    hiking:  [[0,10],[25,9],[45,6],[65,3],[90,1],[100,1]],
-    // Camping: sleeping outside — any significant rain ruins it
-    camping: [[0,10],[10,9],[25,5],[40,2],[70,1],[100,1]],
-    // Running: light rain is refreshing; only heavy rain hurts
-    running: [[0,10],[30,9],[55,7],[75,4],[90,2],[100,1]],
-  },
-  temp: {
-    // Cycling: wide comfort zone; heat manageable at speed; cold with layers
-    cycling: [[-10,2],[0,5],[10,9],[18,10],[25,10],[30,7],[35,4],[40,1]],
-    // Hiking:  exertion generates heat; hot days with pack = danger
-    hiking:  [[-10,2],[0,4],[8,8],[15,10],[22,9],[28,5],[33,2],[40,1]],
-    // Camping: needs comfortable sleeping temp; cold nights are bad
-    camping: [[-5,2],[5,5],[10,8],[15,10],[22,10],[27,7],[32,4],[40,1]],
-    // Running: narrowest comfort zone; heat-stroke risk is real
-    running: [[-10,2],[0,4],[8,9],[12,10],[18,9],[24,5],[28,2],[35,1]],
-  },
-  humidity: {
-    // Cycling: moderate sensitivity; high humidity causes discomfort
-    cycling: [[0,10],[55,10],[70,7],[80,5],[90,3],[100,1]],
-    // Hiking:  breathing harder; endurance drops in high humidity
-    hiking:  [[0,10],[50,10],[65,7],[75,5],[85,3],[100,1]],
-    // Camping: affects comfort and sleep quality
-    camping: [[0,10],[60,10],[75,7],[85,5],[95,2],[100,1]],
-    // Running: most sensitive — body cooling is impaired most
-    running: [[0,10],[45,10],[60,7],[70,4],[80,2],[90,1],[100,1]],
-  },
-  visibility: {
-    // Cycling: safety-critical on roads — most sensitive
-    cycling: [[0,1],[2,2],[5,5],[8,8],[10,10],[16,10]],
-    // Hiking:  needed for navigation and enjoyment
-    hiking:  [[0,1],[1,3],[3,6],[6,9],[8,10],[16,10]],
-    // Camping: least critical — mainly needed for setting up camp
-    camping: [[0,2],[1,5],[2,8],[3,10],[16,10]],
-    // Running: matters for safety, less than cycling
-    running: [[0,1],[1,3],[3,7],[5,9],[7,10],[16,10]],
-  },
-  wind: {
-    // Cycling: most sensitive — headwind massively increases effort; crosswind is dangerous
-    cycling: [[0,10],[10,10],[15,8],[20,5],[30,2],[50,1]],
-    // Hiking:  some breeze is pleasant cooling; strong wind on exposed terrain is bad
-    hiking:  [[0,9],[8,10],[20,9],[30,7],[45,4],[60,2],[80,1]],
-    // Camping: light breeze is nice; strong wind risks tent; dead calm = muggy
-    camping: [[0,8],[5,10],[15,9],[25,6],[40,3],[60,1]],
-    // Running: headwind increases effort; tailwind helps; moderate sensitivity
-    running: [[0,10],[10,10],[18,8],[25,5],[35,2],[50,1]],
-  },
-  uv: {
-    // Cycling: significant exposure; speed aids cooling slightly
-    cycling: [[0,10],[2,10],[4,8],[6,5],[8,3],[10,2],[11,1]],
-    // Hiking:  worst exposure — long hours, often at altitude, hard to escape
-    hiking:  [[0,10],[2,10],[3,8],[5,5],[7,2],[9,1],[11,1]],
-    // Camping: can seek shade; less continuous direct exposure
-    camping: [[0,10],[3,10],[5,9],[7,6],[9,3],[11,1]],
-    // Running: significant; shorter duration helps slightly
-    running: [[0,10],[2,10],[4,8],[6,5],[8,2],[10,1],[11,1]],
-  },
-};
-
-// Per-activity weights across all six metrics (must sum to 1.0)
-const ACTIVITY_WEIGHTS = {
-  cycling: { rain: 0.25, temp: 0.20, wind: 0.25, humidity: 0.10, visibility: 0.10, uv: 0.10 },
-  hiking:  { rain: 0.20, temp: 0.20, wind: 0.15, humidity: 0.15, visibility: 0.10, uv: 0.20 },
-  running: { rain: 0.20, temp: 0.25, wind: 0.15, humidity: 0.20, visibility: 0.05, uv: 0.15 },
-  camping: { rain: 0.30, temp: 0.20, wind: 0.20, humidity: 0.15, visibility: 0.05, uv: 0.10 },
-};
-
-const computeScore = (actKey, today, labels) => {
-  const w = ACTIVITY_WEIGHTS[actKey];
-  const c = METRIC_CURVES;
-  // Normalise to metric units for scoring
-  const tempC  = labels.temp === "°F" ? (today.tempHigh - 32) * 5 / 9 : today.tempHigh;
-  const visKm  = labels.dist === "mi" ? today.visibilityHigh * 1.60934
-               : labels.dist === "m"  ? today.visibilityHigh / 1000
-               : today.visibilityHigh;
-  const windKmh = today.windSpeedMs * 3.6;
-
-  const weighted =
-    lerp(today.pop,           c.rain[actKey])       * w.rain +
-    lerp(tempC,               c.temp[actKey])       * w.temp +
-    lerp(today.humidityHigh,  c.humidity[actKey])   * w.humidity +
-    lerp(visKm,               c.visibility[actKey]) * w.visibility +
-    lerp(windKmh,             c.wind[actKey])       * w.wind +
-    lerp(today.uvi,           c.uv[actKey])         * w.uv;
-
-  return Math.max(1, Math.min(10, Math.round(weighted)));
-};
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
