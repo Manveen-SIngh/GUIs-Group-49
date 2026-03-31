@@ -3,7 +3,6 @@ import TopBar from "./components/TopBar";
 
 import "./OdAPage.css";
 
-// 1. Updated Background Imports
 import {
   fetchWeatherByCity,
   fetchWeatherByCoords,
@@ -13,7 +12,7 @@ import {
   getBackgroundImage,
   getUnitSettings,
 } from "./services/weatherApi";
-import fallbackBg from "./assets/PartlyCloudy.png"; // Renamed for clarity
+import fallbackBg from "./assets/PartlyCloudy.png";
 
 import ActivityScoresBox, { ACTIVITIES } from "./components/ActivityScoresBox";
 import MapCard from "./components/MapCard";
@@ -38,8 +37,7 @@ const getConditionIcon = (condition) => {
   return partlySunnyIcon;
 };
 
-const rainColor   = (pop)      => pop < 30  ? "#3BC50F" : pop < 60  ? "#FFAB1C" : "#FF4A3A";
-
+const rainColor     = (pop)           => pop < 30  ? "#3BC50F" : pop < 60  ? "#FFAB1C" : "#FF4A3A";
 const prevRainColor = ({ condition, rainMm }) => {
   if (condition === "Thunderstorm" || rainMm >= 7.5) return "#FF4A3A";
   if (condition === "Rain" || condition === "Drizzle" || rainMm > 0) return "#FFAB1C";
@@ -70,7 +68,6 @@ function OdAPage({ activityKey }) {
   const [weather, setWeather]       = useState(null);
   const [prevPrecip, setPrevPrecip] = useState(null);
 
-  // Local unit toggles — initialized from global settings, page-local only
   const [tempUnit, setTempUnit] = useState(() => {
     const s = getUnitSettings();
     return s.Temperature === "Fahrenheit (F)" ? "F" : "C";
@@ -80,7 +77,6 @@ function OdAPage({ activityKey }) {
     return s.Distance && s.Distance.includes("mi") ? "mi" : "km";
   });
 
-  // Re-fetch with a settings override (page-local, no cache update)
   const reloadWithSettings = (settingsOverride) => {
     const city = localStorage.getItem("lastCity");
     if (city) {
@@ -111,7 +107,6 @@ function OdAPage({ activityKey }) {
     reloadWithSettings(buildLocalOverride(tempUnit, unit));
   };
 
-  // Weather data
   useEffect(() => {
     const cached = localStorage.getItem("cachedWeather");
     if (cached) {
@@ -135,7 +130,6 @@ function OdAPage({ activityKey }) {
     }
   }, []);
 
-  // Fetch yesterday's precipitation
   useEffect(() => {
     if (!weather?.lat || !weather?.lon) return;
     const cached = localStorage.getItem("cachedPrevPrecip");
@@ -151,7 +145,7 @@ function OdAPage({ activityKey }) {
   }, [weather?.lat, weather?.lon]);
 
   const pageLabel = ACTIVITIES.find((a) => a.key === activityKey)?.label ?? activityKey;
-  const D = "—"; 
+  const D = "—";
 
   const score   = weather ? weather.scores[activityKey] : null;
   const today   = weather ? weather.today   : null;
@@ -161,7 +155,6 @@ function OdAPage({ activityKey }) {
   const mainColor = score != null ? scoreColor(score) : "#FFAB1C";
   const mainMsg   = score != null ? activityMessage(activityKey, score) : "Loading…";
 
-  // 2. Dynamic Background Logic
   let currentBg = fallbackBg;
   if (current) {
     const isNight = current.nowHour < current.sunriseHour || current.nowHour >= current.sunsetHour;
@@ -169,134 +162,183 @@ function OdAPage({ activityKey }) {
   }
 
   return (
-    // 3. Updated styles to use dynamic background
     <div
-      className="page-wrapper"
+      className="oda-page-wrapper"
       style={{
         backgroundImage: `url(${currentBg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-        transition: "background-image 0.5s ease-in-out"
+        transition: "background-image 0.5s ease-in-out",
       }}
     >
-      {/* ── Top bar ─────────────────────────────────────────────── */}
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 200, padding: "20px 24px 0" }}>
+      <div className="oda-container">
         <TopBar
           tempUnit={tempUnit}
           onTempToggle={handleTempToggle}
           distUnit={distUnit}
           onDistToggle={handleDistToggle}
         />
-      </div>
 
-      <div className="layer">
-        <div className="header-subtitle">Outdoor Activity Summary</div>
-        <div className="header-activity-title">{pageLabel}:</div>
-      </div>
+        {/* ── Header ─────────────────────────────────────────────── */}
+        <div className="oda-header">
+          <div className="oda-header-left">
+            <div className="oda-subtitle">Outdoor Activity Summary</div>
+            <div className="oda-activity-title">{pageLabel}:</div>
+          </div>
+          <div className="oda-header-right">
+            <div className="oda-score-row">
+              <div className="oda-score-swatch" style={{ background: mainColor }} />
+              <div className="oda-score-value">{score != null ? `${score}/10` : D}</div>
+            </div>
+            <div className="oda-score-message">{mainMsg}</div>
+          </div>
+        </div>
 
-      <div className="layer layer--shadow">
-        <div className="main-score-swatch" style={{ background: mainColor }} />
-        <div className="main-score-value">{score != null ? `${score}/10` : D}</div>
-        <div className="main-score-message">{mainMsg}</div>
-      </div>
+        {/* ── Grid ───────────────────────────────────────────────── */}
+        <div className="oda-grid">
 
-      <ActivityScoresBox activeKey={activityKey} scores={weather?.scores} />
+          {/* Column 1: Scores + Map */}
+          <div className="oda-col">
+            <ActivityScoresBox activeKey={activityKey} scores={weather?.scores} />
+            <div className="oda-box oda-box--map">
+              <MapCard
+                lat={weather?.lat ?? 51.5072}
+                lon={weather?.lon ?? -0.1276}
+                locationName={weather?.locationName ?? "—"}
+              />
+            </div>
+          </div>
 
-      <div className="layer layer--shadow" style={{ position: "absolute", left: 277, top: 600, width: 349, height: 311, borderRadius: 43, overflow: "hidden", zIndex: 10 }}>
-        <MapCard
-          lat={weather?.lat ?? 51.5072}
-          lon={weather?.lon ?? -0.1276}
-          locationName={weather?.locationName ?? "—"}
-        />
-      </div>
+          {/* Column 2: Precipitation + Temperature */}
+          <div className="oda-col">
 
-      <div className="layer layer--shadow">
-        <div className="temp-box" />
-        <div className="temp-score-swatch" style={{ background: today ? tempColor(today.tempHigh) : "#FFAB1C" }} />
-        <div className="temp-title">Temperature</div>
-        <div className="temp-today-label">Today:</div>
-        <div className="temp-hi-value">{today ? `${today.tempHigh}${labels.temp}` : D}</div>
-        <img className="temp-hi-arrow" src={hiArrow} alt="High" />
-        <div className="temp-lo-value">{today ? `${today.tempLow}${labels.temp}` : D}</div>
-        <img className="temp-lo-arrow" src={loArrow} alt="Low" />
-        <div className="temp-now-label">Right Now:</div>
-        <div className="temp-now-value">{current ? `${current.temp}${labels.temp}` : D}</div>
-      </div>
+            {/* Precipitation */}
+            <div className="oda-box">
+              <div className="oda-box-header">
+                <div className="oda-swatch" style={{ background: today ? rainColor(today.pop) : "#FFAB1C" }} />
+                <span className="oda-box-title">Precipitation</span>
+              </div>
+              <div className="oda-precip-row">
+                <div className="oda-precip-col">
+                  <img className="oda-precip-icon" src={today ? getConditionIcon(today.condition) : partlySunnyIcon} alt="Today weather" />
+                  <span className="oda-precip-label">Today</span>
+                  <div className="oda-precip-score-row">
+                    <div className="oda-swatch oda-swatch--sm" style={{ background: today ? rainColor(today.pop) : "#FFAB1C" }} />
+                    <span className="oda-precip-value">{today ? `${today.pop}%` : D}</span>
+                  </div>
+                </div>
+                <div className="oda-precip-col">
+                  <img className="oda-precip-icon" src={prevPrecip ? getConditionIcon(prevPrecip.condition) : partlySunnyIcon} alt="Previous weather" />
+                  <span className="oda-precip-label">Prev.</span>
+                  <div className="oda-precip-score-row">
+                    <div className="oda-swatch oda-swatch--sm" style={{ background: prevPrecip ? prevRainColor(prevPrecip) : "#FFAB1C" }} />
+                    <span className="oda-precip-value">{prevPrecip ? prevRainLabel(prevPrecip) : D}<br />rain</span>
+                  </div>
+                </div>
+              </div>
+              <div className="oda-precip-message">
+                {today ? (today.pop < 30 ? "Dry Conditions" : today.pop < 60 ? "Some Rain" : "Wet Ground") : D}
+              </div>
+            </div>
 
-      <div className="layer layer--shadow">
-        <div className="precip-box" />
-        <div className="precip-score-swatch" style={{ background: today ? rainColor(today.pop) : "#FFAB1C" }} />
-        <div className="precip-title">Precipitation</div>
+            {/* Temperature */}
+            <div className="oda-box">
+              <div className="oda-box-header">
+                <div className="oda-swatch" style={{ background: today ? tempColor(today.tempHigh) : "#FFAB1C" }} />
+                <span className="oda-box-title">Temperature</span>
+              </div>
+              <div className="oda-section-label">Today:</div>
+              <div className="oda-hi-lo-row">
+                <div className="oda-hi-lo">
+                  <img className="oda-arrow" src={hiArrow} alt="High" />
+                  <span className="oda-hi-lo-value">{today ? `${today.tempHigh}${labels.temp}` : D}</span>
+                </div>
+                <div className="oda-hi-lo">
+                  <img className="oda-arrow" src={loArrow} alt="Low" />
+                  <span className="oda-hi-lo-value">{today ? `${today.tempLow}${labels.temp}` : D}</span>
+                </div>
+              </div>
+              <div className="oda-section-label oda-section-label--spaced">Right Now:</div>
+              <div className="oda-center-value">{current ? `${current.temp}${labels.temp}` : D}</div>
+            </div>
 
-        <img className="precip-icon-today" src={today ? getConditionIcon(today.condition) : partlySunnyIcon} alt="Today weather" />
-        <div className="precip-today-label">Today</div>
-        <div className="precip-today-score-swatch" style={{ background: today ? rainColor(today.pop) : "#FFAB1C" }} />
-        <div className="precip-today-value">{today ? `${today.pop}%` : D}</div>
+          </div>
 
-        <img className="precip-icon-prev" src={prevPrecip ? getConditionIcon(prevPrecip.condition) : partlySunnyIcon} alt="Previous weather" />
-        <div className="precip-prev-label">Prev.</div>
-        <div className="precip-prev-score-swatch" style={{ background: prevPrecip ? prevRainColor(prevPrecip) : "#FFAB1C" }} />
-        <div className="precip-prev-value">{prevPrecip ? prevRainLabel(prevPrecip) : D}<br />rain</div>
+          {/* Column 3: Humidity + Visibility */}
+          <div className="oda-col">
 
-        <div className="precip-message">
-          {today ? (today.pop < 30 ? "Dry Conditions" : today.pop < 60 ? "Some Rain" : "Wet Ground") : D}
+            {/* Humidity */}
+            <div className="oda-box">
+              <div className="oda-box-header">
+                <div className="oda-swatch" style={{ background: today ? humidColor(today.humidityHigh) : "#FFAB1C" }} />
+                <span className="oda-box-title">Humidity</span>
+              </div>
+              <div className="oda-section-label">Today:</div>
+              <div className="oda-hi-lo-row">
+                <span className="oda-hi-label">Hi</span>
+                <span className="oda-hi-lo-value">{today ? `${today.humidityHigh}%` : D}</span>
+                <span className="oda-lo-label">Lo</span>
+                <span className="oda-hi-lo-value">{today ? `${today.humidityLow}%` : D}</span>
+              </div>
+              <div className="oda-section-label oda-section-label--spaced">Currently:</div>
+              <div className="oda-hi-lo-row">
+                <span className="oda-hi-label">Hi</span>
+                <span className="oda-hi-lo-value">{current ? `${current.humidity}%` : D}</span>
+                <span className="oda-lo-label">Lo</span>
+                <span className="oda-hi-lo-value">{current ? `${current.humidity}%` : D}</span>
+              </div>
+            </div>
+
+            {/* Visibility */}
+            <div className="oda-box">
+              <div className="oda-box-header">
+                <div className="oda-swatch" style={{ background: today ? visColor(today.visibilityHigh) : "#FFAB1C" }} />
+                <span className="oda-box-title">Visibility</span>
+              </div>
+              <div className="oda-section-label">Today:</div>
+              <div className="oda-hi-lo-row">
+                <span className="oda-hi-label">Hi</span>
+                <span className="oda-hi-lo-value">{today ? `${today.visibilityHigh}${labels.dist}` : D}</span>
+                <span className="oda-lo-label">Lo</span>
+                <span className="oda-hi-lo-value">{today ? `${today.visibilityLow}${labels.dist}` : D}</span>
+              </div>
+              <div className="oda-section-label oda-section-label--spaced">Right Now:</div>
+              <div className="oda-center-value">{current ? `${current.visibility}${labels.dist}` : D}</div>
+            </div>
+
+          </div>
+
+          {/* Column 4: Wind + UV (slim) */}
+          <div className="oda-col">
+
+            {/* Wind */}
+            <div className="oda-box oda-box--slim">
+              <div className="oda-box-header">
+                <div className="oda-swatch" style={{ background: today ? windColorFn(today.windSpeed, labels.wind) : "#FFAB1C" }} />
+                <span className="oda-box-title">Wind<br />Speed</span>
+              </div>
+              <img
+                className="oda-compass"
+                src={windDirection}
+                alt="Wind direction"
+                style={{ transform: `rotate(${today ? today.windDeg : 0}deg)` }}
+              />
+              <div className="oda-wind-value">{today ? `${today.windSpeed} ${labels.wind}` : D}</div>
+              <div className="oda-wind-avg">Daily<br />Average</div>
+            </div>
+
+            {/* UV */}
+            <div className="oda-box oda-box--slim">
+              <div className="oda-box-header">
+                <div className="oda-swatch" style={{ background: today ? uvColorFn(today.uvi) : "#FFAB1C" }} />
+                <span className="oda-box-title">UV</span>
+              </div>
+              <div className="oda-uv-label">Daily<br />Highest<br />Level:</div>
+              <div className="oda-uv-value">{today ? today.uvLabel : D}</div>
+            </div>
+
+          </div>
+
         </div>
       </div>
-
-      <div className="layer layer--shadow">
-        <div className="humidity-box" />
-        <div className="humidity-score-swatch" style={{ background: today ? humidColor(today.humidityHigh) : "#FFAB1C" }} />
-        <div className="humidity-title">Humidity</div>
-        <div className="humidity-today-label">Today:</div>
-
-        <div className="humidity-today-hi-label humidity-hi-label">Hi</div>
-        <div className="humidity-today-hi-value humidity-value">{today ? `${today.humidityHigh}%` : D}</div>
-        <div className="humidity-today-lo-label humidity-lo-label">Lo</div>
-        <div className="humidity-today-lo-value humidity-value">{today ? `${today.humidityLow}%` : D}</div>
-
-        <div className="humidity-prev-label">Currently:</div>
-        <div className="humidity-prev-hi-label humidity-hi-label">Hi</div>
-        <div className="humidity-prev-hi-value humidity-value">{current ? `${current.humidity}%` : D}</div>
-        <div className="humidity-prev-lo-label humidity-lo-label">Lo</div>
-        <div className="humidity-prev-lo-value humidity-value">{current ? `${current.humidity}%` : D}</div>
-      </div>
-
-      <div className="layer layer--shadow">
-        <div className="visibility-box" />
-        <div className="visibility-score-swatch" style={{ background: today ? visColor(today.visibilityHigh) : "#FFAB1C" }} />
-        <div className="visibility-title">Visibility</div>
-        <div className="visibility-today-label">Today:</div>
-        <div className="visibility-hi-label">Hi</div>
-        <div className="visibility-hi-value">{today ? `${today.visibilityHigh}${labels.dist}` : D}</div>
-        <div className="visibility-lo-label">Lo</div>
-        <div className="visibility-lo-value">{today ? `${today.visibilityLow}${labels.dist}` : D}</div>
-        <div className="visibility-now-label">Right Now:</div>
-        <div className="visibility-now-value">{current ? `${current.visibility}${labels.dist}` : D}</div>
-      </div>
-
-      <div className="layer layer--shadow">
-        <div className="wind-box" />
-        <div className="wind-score-swatch" style={{ background: today ? windColorFn(today.windSpeed, labels.wind) : "#FFAB1C" }} />
-        <div className="wind-title">Wind<br />Speed</div>
-        <img
-          className="wind-compass"
-          src={windDirection}
-          alt="Wind direction"
-          style={{ transform: `rotate(${today ? today.windDeg : 0}deg)` }}
-        />
-        <div className="wind-speed-value">{today ? `${today.windSpeed} ${labels.wind}` : D}</div>
-        <div className="wind-avg-label">Daily<br /> Average</div>
-      </div>
-
-      <div className="layer layer--shadow">
-        <div className="uv-box" />
-        <div className="uv-score-swatch" style={{ background: today ? uvColorFn(today.uvi) : "#FFAB1C" }} />
-        <div className="uv-title">UV</div>
-        <div className="uv-daily-label">Daily <br /> Highest <br /> Level:</div>
-        <div className="uv-daily-value">{today ? today.uvLabel : D}</div>
-      </div>
-
     </div>
   );
 }
