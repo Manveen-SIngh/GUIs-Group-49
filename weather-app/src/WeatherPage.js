@@ -31,6 +31,8 @@ function WeatherPage() {
   const [coords, setCoords] = useState(null);
 
   const apiKey = process.env.REACT_APP_OPENWEATHER_KEY;
+  const queryRef = React.useRef(query);
+  useEffect(() => { queryRef.current = query; }, [query]);
 
   // ─── Helper Functions ──────────────────────────────────────────────────────
 
@@ -111,7 +113,7 @@ function WeatherPage() {
   // ─── Weather Loading Logic ──────────────────────────────────────────────────
 
   const handleSearch = useCallback(async (overrideQuery) => {
-    const searchTerm = overrideQuery || query;
+    const searchTerm = overrideQuery !== undefined ? overrideQuery : queryRef.current;
     if (!searchTerm) return;
     try {
       setError("");
@@ -143,7 +145,7 @@ function WeatherPage() {
     } catch (err) {
       setError(err.message);
     }
-  }, [query, apiKey, buildWeeklyData]);
+  }, [apiKey, buildWeeklyData]);
 
   const loadByCoords = useCallback(async (lat, lon) => {
     try {
