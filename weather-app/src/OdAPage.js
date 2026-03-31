@@ -112,11 +112,8 @@ const uvColorFn = (uvi, activityKey) => {
   const [g, y] = ACTIVITY_THRESHOLDS.uv[activityKey] ?? [3, 6];
   return uvi < g ? "#3BC50F" : uvi < y ? "#FFAB1C" : "#FF4A3A";
 };
-const windColorFn = (spd, lbl, activityKey) => {
-  const kmh = lbl === "mph" ? spd * 1.60934
-            : lbl === "m/s" ? spd * 3.6
-            : lbl === "kn"  ? spd * 1.852
-            : spd;
+const windColorFn = (speedMs, activityKey) => {
+  const kmh = speedMs * 3.6;
   const [g, y] = ACTIVITY_THRESHOLDS.wind[activityKey] ?? [20, 40];
   return kmh < g ? "#3BC50F" : kmh < y ? "#FFAB1C" : "#FF4A3A";
 };
@@ -146,7 +143,7 @@ const computeScore = (actKey, today, labels) => {
     colorScore(tempColor(today.tempHigh, labels.temp, actKey))      * w.temp +
     colorScore(humidColor(today.humidityHigh, actKey))              * w.humidity +
     colorScore(visColor(today.visibilityHigh, labels.dist, actKey)) * w.visibility +
-    colorScore(windColorFn(today.windSpeed, labels.wind, actKey))   * w.wind +
+    colorScore(windColorFn(today.windSpeedMs, actKey))              * w.wind +
     colorScore(uvColorFn(today.uvi, actKey))                        * w.uv;
   return Math.max(1, Math.min(10, Math.round(weighted)));
 };
@@ -427,7 +424,7 @@ function OdAPage({ activityKey }) {
             {/* Wind */}
             <div className="oda-box oda-box--slim">
               <div className="oda-box-header">
-                <div className="oda-swatch" style={{ background: today ? windColorFn(today.windSpeed, labels.wind, activityKey) : "#FFAB1C" }} />
+                <div className="oda-swatch" style={{ background: today ? windColorFn(today.windSpeedMs, activityKey) : "#FFAB1C" }} />
                 <span className="oda-box-title">Wind<br />Speed</span>
               </div>
               <img

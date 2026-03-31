@@ -211,6 +211,7 @@ const buildWeatherPayload = (lat, lon, name, data, settingsOverride = null) => {
     humidityHigh:    humidities.length ? Math.max(...humidities) : today.humidity,
     humidityLow:     humidities.length ? Math.min(...humidities) : today.humidity,
     windSpeed:       Math.round(convertWind(today.wind_speed, settings["Wind Speed"])),
+    windSpeedMs:     today.wind_speed,
     windGust:        today.wind_gust ? Math.round(convertWind(today.wind_gust, settings["Wind Speed"])) : Math.round(convertWind(today.wind_speed, settings["Wind Speed"])),
     windDeg:         today.wind_deg,
     pop:             Math.round((today.pop || 0) * 100),
