@@ -37,7 +37,51 @@ const getConditionIcon = (condition) => {
   return partlySunnyIcon;
 };
 
-const rainColor     = (pop)           => pop < 30  ? "#3BC50F" : pop < 60  ? "#FFAB1C" : "#FF4A3A";
+// Per-activity thresholds — [green cutoff, yellow cutoff]
+// temp: [idealMin °C, idealMax °C, okMax °C]   vis/wind: metric units
+const ACTIVITY_THRESHOLDS = {
+  rain: {                       // pop %
+    cycling: [20, 50],
+    hiking:  [30, 60],
+    camping: [20, 40],
+    running: [30, 60],
+  },
+  temp: {                       // °C [idealMin, idealMax, okMax]
+    cycling: [10, 25, 30],
+    hiking:  [8,  22, 28],
+    camping: [10, 25, 30],
+    running: [8,  20, 25],
+  },
+  humidity: {                   // %
+    cycling: [60, 80],
+    hiking:  [70, 85],
+    camping: [60, 80],
+    running: [55, 75],
+  },
+  visibility: {                 // km [greenMin, yellowMin]
+    cycling: [10, 5],
+    hiking:  [5,  2],
+    camping: [3,  1],
+    running: [3,  1],
+  },
+  wind: {                       // km/h
+    cycling: [15, 30],
+    hiking:  [25, 50],
+    camping: [20, 40],
+    running: [20, 35],
+  },
+  uv: {                         // index
+    cycling: [3, 6],
+    hiking:  [5, 8],
+    camping: [5, 8],
+    running: [3, 6],
+  },
+};
+
+const rainColor = (pop, activityKey) => {
+  const [g, y] = ACTIVITY_THRESHOLDS.rain[activityKey] ?? [30, 60];
+  return pop < g ? "#3BC50F" : pop < y ? "#FFAB1C" : "#FF4A3A";
+};
 const prevRainColor = ({ condition, rainMm }) => {
   if (condition === "Thunderstorm" || rainMm >= 7.5) return "#FF4A3A";
   if (condition === "Rain" || condition === "Drizzle" || rainMm > 0) return "#FFAB1C";
@@ -50,13 +94,28 @@ const prevRainLabel = ({ condition, rainMm }) => {
   if (rainMm > 0 || condition === "Rain" || condition === "Drizzle") return "Light";
   return "None";
 };
-const tempColor   = (hi)       => hi >= 5 && hi <= 28 ? "#3BC50F" : hi <= 34 ? "#FFAB1C" : "#FF4A3A";
-const humidColor  = (hi)       => hi < 60   ? "#3BC50F" : hi < 80   ? "#FFAB1C" : "#FF4A3A";
-const visColor    = (vis)      => vis > 8   ? "#3BC50F" : vis > 3   ? "#FFAB1C" : "#FF4A3A";
-const uvColorFn   = (uvi)      => uvi < 3   ? "#3BC50F" : uvi < 6   ? "#FFAB1C" : "#FF4A3A";
-const windColorFn = (spd, lbl) => {
+const tempColor = (hi, tempLabel, activityKey) => {
+  const c = tempLabel === "°F" ? (hi - 32) * (5 / 9) : hi;
+  const [min, ideal, ok] = ACTIVITY_THRESHOLDS.temp[activityKey] ?? [5, 28, 34];
+  return (c >= min && c <= ideal) ? "#3BC50F" : c <= ok ? "#FFAB1C" : "#FF4A3A";
+};
+const humidColor = (hi, activityKey) => {
+  const [g, y] = ACTIVITY_THRESHOLDS.humidity[activityKey] ?? [60, 80];
+  return hi < g ? "#3BC50F" : hi < y ? "#FFAB1C" : "#FF4A3A";
+};
+const visColor = (vis, distLabel, activityKey) => {
+  const km = distLabel === "mi" ? vis * 1.60934 : distLabel === "m" ? vis / 1000 : vis;
+  const [g, y] = ACTIVITY_THRESHOLDS.visibility[activityKey] ?? [8, 3];
+  return km > g ? "#3BC50F" : km > y ? "#FFAB1C" : "#FF4A3A";
+};
+const uvColorFn = (uvi, activityKey) => {
+  const [g, y] = ACTIVITY_THRESHOLDS.uv[activityKey] ?? [3, 6];
+  return uvi < g ? "#3BC50F" : uvi < y ? "#FFAB1C" : "#FF4A3A";
+};
+const windColorFn = (spd, lbl, activityKey) => {
   const kmh = lbl === "mph" ? spd * 1.60934 : lbl === "m/s" ? spd * 3.6 : spd;
-  return kmh < 20 ? "#3BC50F" : kmh < 40 ? "#FFAB1C" : "#FF4A3A";
+  const [g, y] = ACTIVITY_THRESHOLDS.wind[activityKey] ?? [20, 40];
+  return kmh < g ? "#3BC50F" : kmh < y ? "#FFAB1C" : "#FF4A3A";
 };
 const toCelsius = (temp, tempLabel) => tempLabel === "°F" ? (temp - 32) * (5 / 9) : temp;
 const toKilometers = (distance, distLabel) => {
@@ -170,9 +229,6 @@ function OdAPage({ activityKey }) {
   const today   = weather ? weather.today   : null;
   const current = weather ? weather.current : null;
   const labels  = weather ? weather.unitLabels : { temp: "°C", wind: "km/h", dist: "km" };
-  const tempHighForRating = today ? toCelsius(today.tempHigh, labels.temp) : null;
-  const visibilityHighForRating = today ? toKilometers(today.visibilityHigh, labels.dist) : null;
-
   const mainColor = score != null ? scoreColor(score) : "#FFAB1C";
   const mainMsg   = score != null ? activityMessage(activityKey, score) : "Loading…";
 
@@ -237,7 +293,7 @@ function OdAPage({ activityKey }) {
             {/* Precipitation */}
             <div className="oda-box">
               <div className="oda-box-header">
-                <div className="oda-swatch" style={{ background: today ? rainColor(today.pop) : "#FFAB1C" }} />
+                <div className="oda-swatch" style={{ background: today ? rainColor(today.pop, activityKey) : "#FFAB1C" }} />
                 <span className="oda-box-title">Precipitation</span>
               </div>
               <div className="oda-precip-row">
@@ -245,7 +301,7 @@ function OdAPage({ activityKey }) {
                   <img className="oda-precip-icon" src={today ? getConditionIcon(today.condition) : partlySunnyIcon} alt="Today weather" />
                   <span className="oda-precip-label">Today</span>
                   <div className="oda-precip-score-row">
-                    <div className="oda-swatch oda-swatch--sm" style={{ background: today ? rainColor(today.pop) : "#FFAB1C" }} />
+                    <div className="oda-swatch oda-swatch--sm" style={{ background: today ? rainColor(today.pop, activityKey) : "#FFAB1C" }} />
                     <span className="oda-precip-value">{today ? `${today.pop}%` : D}</span>
                   </div>
                 </div>
@@ -266,7 +322,7 @@ function OdAPage({ activityKey }) {
             {/* Temperature */}
             <div className="oda-box">
               <div className="oda-box-header">
-                <div className="oda-swatch" style={{ background: tempHighForRating != null ? tempColor(tempHighForRating) : "#FFAB1C" }} />
+                <div className="oda-swatch" style={{ background: today ? tempColor(today.tempHigh, labels.temp, activityKey) : "#FFAB1C" }} />
                 <span className="oda-box-title">Temperature</span>
               </div>
               <div className="oda-section-label">Today:</div>
@@ -292,7 +348,7 @@ function OdAPage({ activityKey }) {
             {/* Humidity */}
             <div className="oda-box">
               <div className="oda-box-header">
-                <div className="oda-swatch" style={{ background: today ? humidColor(today.humidityHigh) : "#FFAB1C" }} />
+                <div className="oda-swatch" style={{ background: today ? humidColor(today.humidityHigh, activityKey) : "#FFAB1C" }} />
                 <span className="oda-box-title">Humidity</span>
               </div>
               <div className="oda-section-label">Today:</div>
@@ -314,7 +370,7 @@ function OdAPage({ activityKey }) {
             {/* Visibility */}
             <div className="oda-box">
               <div className="oda-box-header">
-                <div className="oda-swatch" style={{ background: visibilityHighForRating != null ? visColor(visibilityHighForRating) : "#FFAB1C" }} />
+                <div className="oda-swatch" style={{ background: today ? visColor(today.visibilityHigh, labels.dist, activityKey) : "#FFAB1C" }} />
                 <span className="oda-box-title">Visibility</span>
               </div>
               <div className="oda-section-label">Today:</div>
@@ -336,7 +392,7 @@ function OdAPage({ activityKey }) {
             {/* Wind */}
             <div className="oda-box oda-box--slim">
               <div className="oda-box-header">
-                <div className="oda-swatch" style={{ background: today ? windColorFn(today.windSpeed, labels.wind) : "#FFAB1C" }} />
+                <div className="oda-swatch" style={{ background: today ? windColorFn(today.windSpeed, labels.wind, activityKey) : "#FFAB1C" }} />
                 <span className="oda-box-title">Wind<br />Speed</span>
               </div>
               <img
@@ -352,7 +408,7 @@ function OdAPage({ activityKey }) {
             {/* UV */}
             <div className="oda-box oda-box--slim">
               <div className="oda-box-header">
-                <div className="oda-swatch" style={{ background: today ? uvColorFn(today.uvi) : "#FFAB1C" }} />
+                <div className="oda-swatch" style={{ background: today ? uvColorFn(today.uvi, activityKey) : "#FFAB1C" }} />
                 <span className="oda-box-title">UV</span>
               </div>
               <div className="oda-uv-label">Daily<br />Highest<br />Level:</div>
