@@ -52,24 +52,29 @@ function TodayWeather() {
     return "mi";
   });
 
-  // Toggles save to localStorage and trigger a re-fetch so the API does the math
+  // Toggles only affect this page — no localStorage write, re-fetch with override
   const handleTempToggle = (unit) => {
     setTempUnit(unit);
-    const saved = localStorage.getItem("unitSettings");
-    const parsed = saved ? JSON.parse(saved) : {};
-    parsed.Temperature = unit === "F" ? "Fahrenheit (F)" : "Celsius (C)";
-    localStorage.setItem("unitSettings", JSON.stringify(parsed));
-    if (weather) loadWeather(weather.locationName);
+    if (weather) {
+      const saved = localStorage.getItem("unitSettings");
+      const parsed = saved ? JSON.parse(saved) : {};
+      const override = { ...parsed, Temperature: unit === "F" ? "Fahrenheit (F)" : "Celsius (C)" };
+      loadWeather(weather.locationName, override);
+    }
   };
 
   const handleDistToggle = (unit) => {
     setDistUnit(unit);
-    const saved = localStorage.getItem("unitSettings");
-    const parsed = saved ? JSON.parse(saved) : {};
-    parsed.Distance = unit === "mi" ? "Miles (mi)" : "Kilometers (km)";
-    parsed["Wind Speed"] = unit === "mi" ? "Miles per hour (mph)" : "Kilometers per hour (km/h)";
-    localStorage.setItem("unitSettings", JSON.stringify(parsed));
-    if (weather) loadWeather(weather.locationName);
+    if (weather) {
+      const saved = localStorage.getItem("unitSettings");
+      const parsed = saved ? JSON.parse(saved) : {};
+      const override = {
+        ...parsed,
+        Distance: unit === "mi" ? "Miles (mi)" : "Kilometers (km)",
+        "Wind Speed": unit === "mi" ? "Miles per hour (mph)" : "Kilometers per hour (km/h)",
+      };
+      loadWeather(weather.locationName, override);
+    }
   };
 
   // Helper functions: API provides the number, we provide the label
@@ -77,10 +82,10 @@ function TodayWeather() {
   const fmtWind = (val) => val == null ? "—" : `${Math.round(val)}${distUnit === "mi" ? "mph" : "km/h"}`;
   const fmtVis  = (val) => val == null ? "—" : `${val} ${w?.unitLabels?.dist ?? distUnit}`;
 
-  const loadWeather = async (city) => {
+  const loadWeather = async (city, settingsOverride = null) => {
     try {
       setError("");
-      const data = await fetchWeatherByCity(city);
+      const data = await fetchWeatherByCity(city, settingsOverride);
       setWeather(data);
       localStorage.setItem("lastCity", city);
     } catch (err) {

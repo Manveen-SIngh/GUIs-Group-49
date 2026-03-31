@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 // Dynamic background helper and fallback
-import { getBackgroundImage } from "./services/weatherApi";
+import { getBackgroundImage, getUnitSettings, convertTemp, convertWind, convertDist } from "./services/weatherApi";
 import fallbackBg from "./assets/backgrounds/weather-partly-cloudy.svg";
 
 import "./WeatherPage.css";
@@ -84,25 +84,25 @@ function WeatherPage() {
       const dayHourly = normalizedHourly.filter((h) => h.dt_txt.slice(0, 10) === dateKey);
       const labels = formatDayLabel(dateKey);
       const rainStr = `${Math.round((day.pop || 0) * 100)}%`;
-      const windNum = Math.round(day.wind_speed);
+      const windRaw = day.wind_speed; // raw m/s, converted at render time
 
       return {
         day: labels.day,
         date: labels.date,
         condition: day.weather[0].main,
-        low: Math.round(day.temp.min),
-        high: Math.round(day.temp.max),
+        low: Math.round(day.temp.min),    // raw °C, converted at render time
+        high: Math.round(day.temp.max),   // raw °C, converted at render time
         humidity: `${day.humidity}%`,
         rain: rainStr,
-        wind: `${windNum}mph`,
+        windRaw,
         hourly: dayHourly,
-        feelsLike: Math.round(day.feels_like.day),
+        feelsLike: Math.round(day.feels_like.day), // raw °C
         // Merged: Keep time periods AND teammate's windDeg
         periods: [
-          { label: "Morning",   temp: Math.round(day.temp.morn),  condition: day.weather[0].main, rain: rainStr, wind: windNum, windDeg: day.wind_deg ?? 0 },
-          { label: "Afternoon", temp: Math.round(day.temp.day),   condition: day.weather[0].main, rain: rainStr, wind: windNum, windDeg: day.wind_deg ?? 0 },
-          { label: "Evening",   temp: Math.round(day.temp.eve),   condition: day.weather[0].main, rain: rainStr, wind: windNum, windDeg: day.wind_deg ?? 0 },
-          { label: "Night",     temp: Math.round(day.temp.night), condition: day.weather[0].main, rain: rainStr, wind: windNum, windDeg: day.wind_deg ?? 0 },
+          { label: "Morning",   temp: Math.round(day.temp.morn),  condition: day.weather[0].main, rain: rainStr, wind: windRaw, windDeg: day.wind_deg ?? 0 },
+          { label: "Afternoon", temp: Math.round(day.temp.day),   condition: day.weather[0].main, rain: rainStr, wind: windRaw, windDeg: day.wind_deg ?? 0 },
+          { label: "Evening",   temp: Math.round(day.temp.eve),   condition: day.weather[0].main, rain: rainStr, wind: windRaw, windDeg: day.wind_deg ?? 0 },
+          { label: "Night",     temp: Math.round(day.temp.night), condition: day.weather[0].main, rain: rainStr, wind: windRaw, windDeg: day.wind_deg ?? 0 },
         ],
       };
     });
@@ -208,12 +208,53 @@ function WeatherPage() {
     return "Extreme";
   };
 
+  // ─── Unit settings (read from global preferences) ─────────────────────────
+  const unitSettings = getUnitSettings();
+  const tempLabel = unitSettings.Temperature === "Fahrenheit (F)" ? "°F" : "°C";
+  const tempUnitStr = unitSettings.Temperature === "Fahrenheit (F)" ? "F" : "C";
+  const windLabel = unitSettings["Wind Speed"] === "Miles per hour (mph)" ? "mph"
+    : unitSettings["Wind Speed"] === "Meters per second (m/s)" ? "m/s"
+    : unitSettings["Wind Speed"] === "Knots (kn)" ? "kn" : "km/h";
+  const distLabel = unitSettings.Distance === "Miles (mi)" ? "mi"
+    : unitSettings.Distance === "Meters (m)" ? "m" : "km";
+
+  // Convert weekly data at render time
+  const convertedWeeklyData = weeklyData.map(d => ({
+    ...d,
+    low: Math.round(convertTemp(d.low, unitSettings.Temperature)),
+    high: Math.round(convertTemp(d.high, unitSettings.Temperature)),
+    wind: `${Math.round(convertWind(d.windRaw, unitSettings["Wind Speed"]))} ${windLabel}`,
+    feelsLike: Math.round(convertTemp(d.feelsLike, unitSettings.Temperature)),
+  }));
+
+  // Convert hourly data at render time
+  const convertedHourlyData = hourlyData.map(h => ({
+    ...h,
+    main: { ...h.main, temp: convertTemp(h.main.temp, unitSettings.Temperature) },
+    wind: { ...h.wind, speed: convertWind(h.wind.speed, unitSettings["Wind Speed"]) },
+  }));
+
+  // Convert period data at render time
+  const convertedPeriods = selectedPeriods.map(p => ({
+    ...p,
+    temp: Math.round(convertTemp(p.temp, unitSettings.Temperature)),
+    wind: Math.round(convertWind(p.wind, unitSettings["Wind Speed"])),
+  }));
+
+  const todayTemp = selectedDayIndex === 0 && weatherData
+    ? Math.round(convertTemp(weatherData.temp, unitSettings.Temperature))
+    : (convertedWeeklyData[selectedDayIndex]?.high || 0);
+
+  const todayFeelsLike = selectedDayIndex === 0 && weatherData
+    ? Math.round(convertTemp(weatherData.feels_like, unitSettings.Temperature))
+    : (convertedWeeklyData[selectedDayIndex]?.feelsLike || 0);
+
   const widgetValues = {
-    wind: weatherData ? `${Math.round(weatherData.wind_speed * 3.6)} km/h` : "—",
+    wind: weatherData ? `${Math.round(convertWind(weatherData.wind_speed, unitSettings["Wind Speed"]))} ${windLabel}` : "—",
     humidity: weatherData ? `${weatherData.humidity}%` : "—",
     rain: weeklyData[selectedDayIndex]?.rain || "—",
     uv: weatherData ? uvLabel(weatherData.uvi) : "—",
-    visibility: weatherData ? `${(weatherData.visibility / 1000).toFixed(1)} km` : "—",
+    visibility: weatherData ? `${convertDist(weatherData.visibility, unitSettings.Distance).toFixed(1)} ${distLabel}` : "—",
   };
 
   return (
@@ -238,19 +279,20 @@ function WeatherPage() {
 
         <div className="weather-layout">
           <div className="left-section">
-            <WeeklyForecast weeklyData={weeklyData} selectedDayIndex={selectedDayIndex} onSelectDay={handleSelectDay} locationName={locationName || "."} />
+            <WeeklyForecast weeklyData={convertedWeeklyData} selectedDayIndex={selectedDayIndex} onSelectDay={handleSelectDay} locationName={locationName || "."} tempUnit={tempLabel} />
           </div>
 
           <div className="center-section">
             <div className="center-top-section">
               <TodayCard
-                temperature={selectedDayIndex === 0 && weatherData ? Math.round(weatherData.temp) : weeklyData[selectedDayIndex]?.high || 0}
-                feelsLike={selectedDayIndex === 0 && weatherData ? Math.round(weatherData.feels_like) : weeklyData[selectedDayIndex]?.feelsLike || 0}
+                temperature={todayTemp}
+                unit={tempLabel}
+                feelsLike={todayFeelsLike}
                 day={selectedDayIndex === 0 ? "Today" : `${weeklyData[selectedDayIndex]?.day} ${weeklyData[selectedDayIndex]?.date}`}
               />
             </div>
             <div className="center-bottom-section">
-              <HourlyForecast hourlyData={hourlyData} periods={selectedPeriods} />
+              <HourlyForecast hourlyData={convertedHourlyData} periods={convertedPeriods} tempUnit={tempUnitStr} windUnit={windLabel} />
             </div>
             <div className="center-widgets-row">
               <CustomWidget values={widgetValues} />

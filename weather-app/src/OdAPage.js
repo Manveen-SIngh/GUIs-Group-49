@@ -4,13 +4,14 @@ import { useSidebar } from "./Sidebar";
 import "./OdAPage.css";
 
 // 1. Updated Background Imports
-import { 
-  fetchWeatherByCity, 
-  fetchWeatherByCoords, 
-  fetchYesterdayPrecip, 
-  scoreColor, 
+import {
+  fetchWeatherByCity,
+  fetchWeatherByCoords,
+  fetchYesterdayPrecip,
+  scoreColor,
   activityMessage,
-  getBackgroundImage // Added this
+  getBackgroundImage,
+  getUnitSettings,
 } from "./services/weatherApi";
 import fallbackBg from "./assets/PartlyCloudy.png"; // Renamed for clarity
 
@@ -68,9 +69,19 @@ const windColorFn = (spd, lbl) => {
  */
 function OdAPage({ activityKey }) {
   const { open } = useSidebar();
-  const [time, setTime]           = useState("");
-  const [weather, setWeather]     = useState(null);
+  const [time, setTime]             = useState("");
+  const [weather, setWeather]       = useState(null);
   const [prevPrecip, setPrevPrecip] = useState(null);
+
+  // Local unit toggles — initialized from global settings, page-local only
+  const [tempUnit, setTempUnit] = useState(() => {
+    const s = getUnitSettings();
+    return s.Temperature === "Fahrenheit (F)" ? "F" : "C";
+  });
+  const [distUnit, setDistUnit] = useState(() => {
+    const s = getUnitSettings();
+    return s.Distance && s.Distance.includes("mi") ? "mi" : "km";
+  });
 
   // Clock
   useEffect(() => {
@@ -79,6 +90,34 @@ function OdAPage({ activityKey }) {
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, []);
+
+  // Re-fetch with a settings override (page-local, no cache update)
+  const reloadWithSettings = (settingsOverride) => {
+    const city = localStorage.getItem("lastCity");
+    if (city) {
+      fetchWeatherByCity(city, settingsOverride).then(setWeather).catch(console.error);
+    } else if (weather?.lat && weather?.lon) {
+      fetchWeatherByCoords(weather.lat, weather.lon, settingsOverride).then(setWeather).catch(console.error);
+    }
+  };
+
+  const handleTempToggle = (unit) => {
+    setTempUnit(unit);
+    const saved = localStorage.getItem("unitSettings");
+    const parsed = saved ? JSON.parse(saved) : {};
+    reloadWithSettings({ ...parsed, Temperature: unit === "F" ? "Fahrenheit (F)" : "Celsius (C)" });
+  };
+
+  const handleDistToggle = (unit) => {
+    setDistUnit(unit);
+    const saved = localStorage.getItem("unitSettings");
+    const parsed = saved ? JSON.parse(saved) : {};
+    reloadWithSettings({
+      ...parsed,
+      Distance: unit === "mi" ? "Miles (mi)" : "Kilometers (km)",
+      "Wind Speed": unit === "mi" ? "Miles per hour (mph)" : "Kilometers per hour (km/h)",
+    });
+  };
 
   // Weather data
   useEffect(() => {
@@ -158,16 +197,16 @@ function OdAPage({ activityKey }) {
       {/* ... (rest of the component remains the same) ... */}
       <div className="layer">
         <div className="unit-distance-bg" />
-        <div className="unit-distance-active" />
-        <div className="unit-distance-mi">mi</div>
-        <div className="unit-distance-km">km</div>
+        <div className="unit-distance-active" style={{ left: distUnit === "mi" ? 591 : 651 }} />
+        <div className="unit-distance-mi" style={{ cursor: "pointer" }} onClick={() => handleDistToggle("mi")}>mi</div>
+        <div className="unit-distance-km" style={{ cursor: "pointer" }} onClick={() => handleDistToggle("km")}>km</div>
       </div>
 
       <div className="layer">
         <div className="unit-temp-bg" />
-        <div className="unit-temp-active" />
-        <div className="unit-temp-c">°C</div>
-        <div className="unit-temp-f">°F</div>
+        <div className="unit-temp-active" style={{ left: tempUnit === "C" ? 418 : 471 }} />
+        <div className="unit-temp-c" style={{ cursor: "pointer" }} onClick={() => handleTempToggle("C")}>°C</div>
+        <div className="unit-temp-f" style={{ cursor: "pointer" }} onClick={() => handleTempToggle("F")}>°F</div>
       </div>
 
       <div className="layer" style={{ zIndex: 100 }}>

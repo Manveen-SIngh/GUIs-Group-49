@@ -2,8 +2,9 @@ import React from "react";
 import "./HourCard.css";
 import precipitation from "../assets/precipitation.svg";
 
-// 1. Added tempUnit and distUnit to the destructured props
-function HourCard({ time, icon, temp, rain, wind, windDeg = 0, tempUnit = "C", distUnit = "mi" }) {
+// windUnit overrides distUnit-based label when provided
+function HourCard({ time, icon, temp, rain, wind, windDeg = 0, tempUnit = "C", distUnit = "mi", windUnit = null }) {
+  const windLabel = windUnit != null ? windUnit : (distUnit === "mi" ? "mph" : "km/h");
 
   const hour = parseInt(time);
   let newtime;
@@ -50,9 +51,8 @@ function HourCard({ time, icon, temp, rain, wind, windDeg = 0, tempUnit = "C", d
         >
           ↑
         </div>
-        {/* 3. Dynamically show mph or km/h label */}
         <div className="hour-card__wind">
-          {Math.round(wind)}{distUnit === "mi" ? "mph" : "km/h"}
+          {Math.round(wind)}{windLabel}
         </div>
       </div>
     </div>

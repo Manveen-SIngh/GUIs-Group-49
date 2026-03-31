@@ -1,11 +1,9 @@
-import { useState } from "react";
 import menuIcon from "../assets/menu.svg";
 import { useSidebar } from "../Sidebar";
 import Clock from "./Clock";
 
-export default function TopBarMetricPage() {
+export default function TopBarMetricPage({ unit = "C", onUnitChange }) {
   const { open } = useSidebar();
-  const [unit, setUnit] = useState("C");
 
   return (
     <div
@@ -61,7 +59,7 @@ export default function TopBarMetricPage() {
         />
 
         <button
-          onClick={() => setUnit("C")}
+          onClick={() => onUnitChange && onUnitChange("C")}
           style={{
             width: 64,
             height: 48,
@@ -78,7 +76,7 @@ export default function TopBarMetricPage() {
         </button>
 
         <button
-          onClick={() => setUnit("F")}
+          onClick={() => onUnitChange && onUnitChange("F")}
           style={{
             width: 64,
             height: 48,

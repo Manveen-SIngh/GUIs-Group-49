@@ -1,7 +1,7 @@
 import React from "react";
 import "./WeeklyDayCard.css";
 
-function WeeklyDayCard({ data, expanded, onClick })
+function WeeklyDayCard({ data, expanded, onClick, tempUnit = "°C" })
 {
   if (expanded)
   {
@@ -31,8 +31,8 @@ function WeeklyDayCard({ data, expanded, onClick })
               </div>
 
               <div className="weekly-day-card__temps">
-                <span className="weekly-day-card__low">{data.low}°C ↓</span>
-                <span className="weekly-day-card__high">{data.high}°C ↑</span>
+                <span className="weekly-day-card__low">{data.low}{tempUnit} ↓</span>
+                <span className="weekly-day-card__high">{data.high}{tempUnit} ↑</span>
               </div>
             </div>
 

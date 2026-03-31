@@ -9,7 +9,7 @@ import VisibilityBox from "./components/VisibilityBox";
 import HumidityBox from "./components/HumidityBox";
 
 // 1. Import dynamic background helper and a fallback image
-import { fetchWeatherByCity, fetchWeatherByCoords, getBackgroundImage } from "./services/weatherApi";
+import { fetchWeatherByCity, fetchWeatherByCoords, getBackgroundImage, getUnitSettings } from "./services/weatherApi";
 import fallbackBg from "./assets/backgrounds/weather-partly-cloudy.svg";
 import SearchBar from "./components/SearchBar";
 
@@ -18,15 +18,30 @@ function Metrics() {
   const [searchInput, setSearchInput] = useState("");
   const [error, setError] = useState("");
 
-  const loadWeather = async (city) => {
+  // Local temp unit — initialized from global settings, changes stay on this page only
+  const [tempUnit, setTempUnit] = useState(() => {
+    const s = getUnitSettings();
+    return s.Temperature === "Fahrenheit (F)" ? "F" : "C";
+  });
+
+  const loadWeather = async (city, settingsOverride = null) => {
     try {
       setError("");
-      const data = await fetchWeatherByCity(city);
+      const data = await fetchWeatherByCity(city, settingsOverride);
       setWeather(data);
       localStorage.setItem("lastCity", city);
     } catch (err) {
       setError(err.message);
     }
+  };
+
+  const handleTempChange = (unit) => {
+    setTempUnit(unit);
+    const saved = localStorage.getItem("unitSettings");
+    const parsed = saved ? JSON.parse(saved) : {};
+    const override = { ...parsed, Temperature: unit === "F" ? "Fahrenheit (F)" : "Celsius (C)" };
+    const city = localStorage.getItem("lastCity");
+    if (city) fetchWeatherByCity(city, override).then(setWeather).catch(console.error);
   };
 
   useEffect(() => {
@@ -96,7 +111,7 @@ function Metrics() {
           boxSizing: "border-box",
         }}
       >
-        <TopBarMetricPage />
+        <TopBarMetricPage unit={tempUnit} onUnitChange={handleTempChange} />
 
         {/* Search bar */}
         <div style={{ marginBottom: 10 }}>

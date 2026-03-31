@@ -39,7 +39,8 @@ function WeeklyForecast({
   weeklyData = [],
   selectedDayIndex = 0,
   onSelectDay,
-  locationName = "Greater London"
+  locationName = "Greater London",
+  tempUnit = "°C",
 })
 {
   return (
@@ -62,6 +63,7 @@ function WeeklyForecast({
                 icon: getIcon(day.condition)
               }}
               expanded={index === selectedDayIndex}
+              tempUnit={tempUnit}
               onClick={() =>
               {
                 if (onSelectDay)

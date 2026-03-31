@@ -32,7 +32,7 @@ const isNightHour = (hour) => hour < 6 || hour >= 20;
 
 const formatTime = (dt_txt) => dt_txt.slice(11, 16);
 
-function HourlyForecast({ hourlyData, periods = [] })
+function HourlyForecast({ hourlyData, periods = [], tempUnit = "C", windUnit = null })
 {
   // Days 3–8 have no hourly data — show morning/afternoon/evening/night instead
   if (hourlyData.length === 0 && periods.length > 0)
@@ -48,6 +48,8 @@ function HourlyForecast({ hourlyData, periods = [] })
             rain={p.rain}
             wind={p.wind}
             windDeg={p.windDeg ?? 0}
+            tempUnit={tempUnit}
+            windUnit={windUnit}
           />
         ))}
       </div>
@@ -68,6 +70,8 @@ function HourlyForecast({ hourlyData, periods = [] })
             rain={`${Math.round(hour.pop * 100)}%`}
             wind={Math.round(hour.wind.speed)}
             windDeg={hour.wind.deg ?? 0}
+            tempUnit={tempUnit}
+            windUnit={windUnit}
           />
         );
       })}

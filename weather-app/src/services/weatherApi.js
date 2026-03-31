@@ -36,7 +36,7 @@ export const fetchOneCall = async (lat, lon) => {
 
 // ─── Unit Conversion Logic ────────────────────────────────────────────────────
 
-const getUnitSettings = () => {
+export const getUnitSettings = () => {
   const saved = localStorage.getItem("unitSettings");
   let settings = saved ? JSON.parse(saved) : {
     Temperature: "Celsius (C)",
@@ -52,19 +52,19 @@ const getUnitSettings = () => {
   return settings;
 };
 
-const convertTemp = (celsius, setting) => {
+export const convertTemp = (celsius, setting) => {
   if (setting === "Fahrenheit (F)") return (celsius * 9/5) + 32;
   return celsius;
 };
 
-const convertWind = (ms, setting) => {
+export const convertWind = (ms, setting) => {
   if (setting === "Miles per hour (mph)") return ms * 2.237;
   if (setting === "Meters per second (m/s)") return ms;
   if (setting === "Knots (kn)") return ms * 1.94384;
   return ms * 3.6; 
 };
 
-const convertDist = (m, setting) => {
+export const convertDist = (m, setting) => {
   if (setting === "Miles (mi)") return m / 1609.34;
   if (setting === "Meters (m)") return m;
   return m / 1000; 
@@ -190,10 +190,10 @@ export const reverseGeocode = async (lat, lon) => {
   return res.data.length ? res.data[0].name : "Your Location";
 };
 
-const buildWeatherPayload = (lat, lon, name, data) => {
+const buildWeatherPayload = (lat, lon, name, data, settingsOverride = null) => {
   const { current, daily, hourly, timezone_offset: tz } = data;
-  
-  const settings = getUnitSettings();
+
+  const settings = settingsOverride || getUnitSettings();
   const unitLabels = getUnitLabels(settings);
 
   const today    = daily[0];
@@ -291,16 +291,16 @@ export const fetchYesterdayPrecip = async (lat, lon) => {
   return { condition, rainMm };
 };
 
-export const fetchWeatherByCity = async (city) => {
+export const fetchWeatherByCity = async (city, settingsOverride = null) => {
   const { lat, lon, name } = await geocodeCity(city);
   const data = await fetchOneCall(lat, lon);
-  return buildWeatherPayload(lat, lon, name, data);
+  return buildWeatherPayload(lat, lon, name, data, settingsOverride);
 };
 
-export const fetchWeatherByCoords = async (lat, lon) => {
+export const fetchWeatherByCoords = async (lat, lon, settingsOverride = null) => {
   const [name, data] = await Promise.all([
     reverseGeocode(lat, lon),
     fetchOneCall(lat, lon),
   ]);
-  return buildWeatherPayload(lat, lon, name, data);
+  return buildWeatherPayload(lat, lon, name, data, settingsOverride);
 };
