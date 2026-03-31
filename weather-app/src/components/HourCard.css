@@ -13,6 +13,7 @@
   padding: 12px 6px;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
+  margin-left:-5px;
 }
 
 .hour-card:last-child
