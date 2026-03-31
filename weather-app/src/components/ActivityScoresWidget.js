@@ -1,9 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ACTIVITIES } from "./ActivityScoresBox";
+import { scoreColor } from "../services/weatherApi";
 import "./ActivityScoresWidget.css";
 
-function ActivityScoresWidget({ activeKey }) {
+function ActivityScoresWidget({ activeKey, scores }) {
   const navigate = useNavigate();
 
   return (
@@ -18,7 +19,7 @@ function ActivityScoresWidget({ activeKey }) {
             >
               <div
                 className="activity-scores-widget__swatch"
-                style={{ background: activity.colour }}
+                style={{ background: scores?.[activity.key] ? scoreColor(scores[activity.key]) : activity.colour }}
               />
               <img
                 className="activity-scores-widget__icon"
@@ -26,7 +27,7 @@ function ActivityScoresWidget({ activeKey }) {
                 alt={activity.label}
               />
               <span className="activity-scores-widget__label">{activity.label}</span>
-              <span className="activity-scores-widget__score">{activity.score}/10</span>
+              <span className="activity-scores-widget__score">{(scores?.[activity.key] ?? activity.score)}/10</span>
             </div>
             {i < ACTIVITIES.length - 1 && (
               <div className="activity-scores-widget__divider" />

@@ -13,8 +13,8 @@ import windyBg from '../assets/backgrounds/weather-windy.svg';
 import windyNightBg from '../assets/backgrounds/weather-windyNight.svg';
 
 // 1. New Rainy Imports
-import rainyBg from '../assets/backgrounds/Weather- rainy.svg';
-import rainyNightBg from '../assets/backgrounds/Weather- rainyNight.svg';
+import rainyBg from '../assets/backgrounds/weather-rainy.svg';
+import rainyNightBg from '../assets/backgrounds/weather-rainyNight.svg';
 
 const apiKey = process.env.REACT_APP_OPENWEATHER_KEY;
 
