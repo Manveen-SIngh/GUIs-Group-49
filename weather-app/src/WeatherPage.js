@@ -31,6 +31,8 @@ function WeatherPage() {
   const [coords, setCoords] = useState(null);
 
   const apiKey = process.env.REACT_APP_OPENWEATHER_KEY;
+  const queryRef = React.useRef(query);
+  useEffect(() => { queryRef.current = query; }, [query]);
 
   // ─── Helper Functions ──────────────────────────────────────────────────────
 
@@ -73,7 +75,7 @@ function WeatherPage() {
   const buildWeeklyData = useCallback((daily, hourlyList, timezoneOffset) => {
     const normalizedHourly = hourlyList.map((h) => normalizeHourlyItem(h, timezoneOffset));
 
-    return daily.slice(0, 6).map((day) => {
+    return daily.slice(0, 5).map((day) => {
       const localMs = (day.dt + timezoneOffset) * 1000;
       const d = new Date(localMs);
       const yy = d.getUTCFullYear();
@@ -111,7 +113,7 @@ function WeatherPage() {
   // ─── Weather Loading Logic ──────────────────────────────────────────────────
 
   const handleSearch = useCallback(async (overrideQuery) => {
-    const searchTerm = overrideQuery || query;
+    const searchTerm = overrideQuery !== undefined ? overrideQuery : queryRef.current;
     if (!searchTerm) return;
     try {
       setError("");
@@ -137,13 +139,13 @@ function WeatherPage() {
       setSelectedDayIndex(0);
 
       if (builtWeeklyData.length > 0) {
-        setHourlyData(builtWeeklyData[0].hourly.slice(0, 6));
+        setHourlyData(builtWeeklyData[0].hourly.slice(0, 5));
         setSelectedPeriods(builtWeeklyData[0].periods || []);
       }
     } catch (err) {
       setError(err.message);
     }
-  }, [query, apiKey, buildWeeklyData]);
+  }, [apiKey, buildWeeklyData]);
 
   const loadByCoords = useCallback(async (lat, lon) => {
     try {
@@ -162,7 +164,7 @@ function WeatherPage() {
       setWeeklyData(builtWeeklyData);
       setSelectedDayIndex(0);
       if (builtWeeklyData.length > 0) {
-        setHourlyData(builtWeeklyData[0].hourly.slice(0, 6));
+        setHourlyData(builtWeeklyData[0].hourly.slice(0, 5));
         setSelectedPeriods(builtWeeklyData[0].periods || []);
       }
     } catch (err) {
@@ -186,7 +188,7 @@ function WeatherPage() {
   const handleSelectDay = (index) => {
     setSelectedDayIndex(index);
     if (weeklyData[index]) {
-      setHourlyData(weeklyData[index].hourly.slice(0, 6));
+      setHourlyData(weeklyData[index].hourly.slice(0, 5));
       setSelectedPeriods(weeklyData[index].periods || []);
     }
   };
