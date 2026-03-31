@@ -198,18 +198,18 @@ function OdAPage({ activityKey }) {
       </div>
 
       {/* ... (rest of the component remains the same) ... */}
-      <div className="layer" style={{ zIndex: 50 }}>
-        <div className="unit-distance-bg" style={{ pointerEvents: "none" }} />
-        <div className="unit-distance-active" style={{ left: distUnit === "mi" ? 591 : 651, pointerEvents: "none" }} />
-        <div className="unit-distance-mi" style={{ cursor: "pointer", zIndex: 1, position: "absolute" }} onClick={() => handleDistToggle("mi")}>mi</div>
-        <div className="unit-distance-km" style={{ cursor: "pointer", zIndex: 1, position: "absolute" }} onClick={() => handleDistToggle("km")}>km</div>
+      <div className="layer" style={{ zIndex: 50, pointerEvents: "none" }}>
+        <div className="unit-distance-bg" />
+        <div className="unit-distance-active" style={{ left: distUnit === "mi" ? 591 : 651 }} />
+        <div className="unit-distance-mi" style={{ cursor: "pointer", pointerEvents: "auto" }} onClick={() => handleDistToggle("mi")}>mi</div>
+        <div className="unit-distance-km" style={{ cursor: "pointer", pointerEvents: "auto" }} onClick={() => handleDistToggle("km")}>km</div>
       </div>
 
-      <div className="layer" style={{ zIndex: 50 }}>
-        <div className="unit-temp-bg" style={{ pointerEvents: "none" }} />
-        <div className="unit-temp-active" style={{ left: tempUnit === "C" ? 418 : 471, pointerEvents: "none" }} />
-        <div className="unit-temp-c" style={{ cursor: "pointer", zIndex: 1, position: "absolute" }} onClick={() => handleTempToggle("C")}>°C</div>
-        <div className="unit-temp-f" style={{ cursor: "pointer", zIndex: 1, position: "absolute" }} onClick={() => handleTempToggle("F")}>°F</div>
+      <div className="layer" style={{ zIndex: 50, pointerEvents: "none" }}>
+        <div className="unit-temp-bg" />
+        <div className="unit-temp-active" style={{ left: tempUnit === "C" ? 418 : 471 }} />
+        <div className="unit-temp-c" style={{ cursor: "pointer", pointerEvents: "auto" }} onClick={() => handleTempToggle("C")}>°C</div>
+        <div className="unit-temp-f" style={{ cursor: "pointer", pointerEvents: "auto" }} onClick={() => handleTempToggle("F")}>°F</div>
       </div>
 
       <div className="layer" style={{ zIndex: 100, pointerEvents: "none" }}>
