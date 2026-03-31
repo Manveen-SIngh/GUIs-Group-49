@@ -149,7 +149,7 @@
 
 /*Metrics card*/
 .metrics-card {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.7);
   border-radius: 30px;
   padding: 16px 24px;
   width: 481px;
@@ -233,26 +233,37 @@
   font-style: italic;
 }
 
-.metrics-dots {
+.metrics-nav {
   display: flex;
-  gap: 6px;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 6px;
   padding-bottom: 6px;
   border-bottom: 1px solid rgba(0,0,0,0.08);
 }
 
-.metrics-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.2);
+.metrics-nav-btn {
+  background: rgba(0,0,0,0.08);
+  border: none;
+  border-radius: 8px;
+  width: 36px;
+  height: 30px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
 }
 
-.metrics-dot--active {
-  background: rgba(0,0,0,0.6);
+.metrics-nav-btn:hover {
+  background: rgba(0,0,0,0.16);
+}
+
+.metrics-nav-label {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
 }
 
 .bottom-forecast-area {

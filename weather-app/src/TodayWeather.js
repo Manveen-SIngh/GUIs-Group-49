@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { fetchWeatherByCity, fetchWeatherByCoords, getBackgroundImage, scoreColor, activityMessage } from "./services/weatherApi";
 import fallbackBg from "./assets/PartlyCloudy.png";
 
@@ -48,18 +48,8 @@ function TodayWeather() {
     { key: "running", label: "Running", icon: runningIcon },
   ];
   const [activityIndex, setActivityIndex] = useState(0);
-  const touchStartX = useRef(null);
-
-  const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
-  const handleTouchEnd = (e) => {
-    if (touchStartX.current === null) return;
-    const diff = touchStartX.current - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 40) {
-      if (diff > 0) setActivityIndex((i) => (i + 1) % ACTIVITIES.length);
-      else          setActivityIndex((i) => (i - 1 + ACTIVITIES.length) % ACTIVITIES.length);
-    }
-    touchStartX.current = null;
-  };
+  const prevActivity = () => setActivityIndex((i) => (i - 1 + ACTIVITIES.length) % ACTIVITIES.length);
+  const nextActivity = () => setActivityIndex((i) => (i + 1) % ACTIVITIES.length);
 
   const [tempUnit, setTempUnit] = useState(() => {
     const saved = localStorage.getItem("unitSettings");
@@ -195,11 +185,7 @@ function TodayWeather() {
           </div>
         </div>
 
-        <div
-          className="metrics-card"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
+        <div className="metrics-card">
           {(() => {
             const act = ACTIVITIES[activityIndex];
             const actScore = scores ? scores[act.key] : null;
@@ -215,14 +201,10 @@ function TodayWeather() {
                   <h2>{actScore != null ? `${actScore}/10` : "—"}</h2>
                 </div>
                 <p className="metrics-activity-msg">{actMsg}</p>
-                <div className="metrics-dots">
-                  {ACTIVITIES.map((_, i) => (
-                    <span
-                      key={i}
-                      className={`metrics-dot${i === activityIndex ? " metrics-dot--active" : ""}`}
-                      onClick={() => setActivityIndex(i)}
-                    />
-                  ))}
+                <div className="metrics-nav">
+                  <button className="metrics-nav-btn" onClick={prevActivity}>&#8592;</button>
+                  <span className="metrics-nav-label">{activityIndex + 1} / {ACTIVITIES.length}</span>
+                  <button className="metrics-nav-btn" onClick={nextActivity}>&#8594;</button>
                 </div>
               </>
             );
