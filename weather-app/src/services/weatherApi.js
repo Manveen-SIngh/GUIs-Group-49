@@ -271,7 +271,7 @@ export const reverseGeocode = async (lat, lon) => {
   return res.data.length ? res.data[0].name : "Your Location";
 };
 
-const buildWeatherPayload = (lat, lon, name, data, settingsOverride = null) => {
+export const buildWeatherPayload = (lat, lon, name, data, settingsOverride = null) => {
   const { current, daily, hourly, timezone_offset: tz } = data;
 
   const settings = settingsOverride || getUnitSettings();

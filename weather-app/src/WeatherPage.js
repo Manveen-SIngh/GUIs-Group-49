@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 // Dynamic background helper and fallback
-import { getBackgroundImage, getUnitSettings, convertTemp, convertWind, convertDist, computeScore } from "./services/weatherApi";
+import { getBackgroundImage, getUnitSettings, convertTemp, convertWind, convertDist, buildWeatherPayload } from "./services/weatherApi";
 import fallbackBg from "./assets/backgrounds/weather-partly-cloudy.svg";
 
 import "./WeatherPage.css";
@@ -156,6 +156,7 @@ function WeatherPage() {
       );
       const { current, hourly, daily, timezone_offset } = oneCallResponse.data;
       const builtWeeklyData = buildWeeklyData(daily, hourly, timezone_offset);
+      const payload = buildWeatherPayload(lat, lon, name, oneCallResponse.data);
 
       setLocationName(name);
       setCoords({ lat, lon });
@@ -163,20 +164,7 @@ function WeatherPage() {
       localStorage.setItem("lastCity", searchTerm);
       setWeeklyData(builtWeeklyData);
       setSelectedDayIndex(0);
-      const todayForScore = {
-        pop:           Math.round((daily[0].pop || 0) * 100),
-        tempHigh:      daily[0].temp.max,
-        humidityHigh:  daily[0].humidity,
-        visibilityHigh: (current.visibility || 10000) / 1000,
-        windSpeedMs:   daily[0].wind_speed,
-        uvi:           daily[0].uvi,
-      };
-      setScores({
-        cycling: computeScore("cycling", todayForScore, { temp: "°C", dist: "km" }),
-        hiking:  computeScore("hiking",  todayForScore, { temp: "°C", dist: "km" }),
-        running: computeScore("running", todayForScore, { temp: "°C", dist: "km" }),
-        camping: computeScore("camping", todayForScore, { temp: "°C", dist: "km" }),
-      });
+      setScores(payload.scores);
 
       if (builtWeeklyData.length > 0) {
         setHourlyData(builtWeeklyData[0].hourly.slice(0, 5));
@@ -197,26 +185,14 @@ function WeatherPage() {
       const name = geoRes.data.length ? geoRes.data[0].name : "Your Location";
       const { current, hourly, daily, timezone_offset } = oneCallRes.data;
       const builtWeeklyData = buildWeeklyData(daily, hourly, timezone_offset);
-      
+      const payload = buildWeatherPayload(lat, lon, name, oneCallRes.data);
+
       setLocationName(name);
       setCoords({ lat, lon });
       setWeatherData(current);
       setWeeklyData(builtWeeklyData);
       setSelectedDayIndex(0);
-      const todayForScore = {
-        pop:           Math.round((daily[0].pop || 0) * 100),
-        tempHigh:      daily[0].temp.max,
-        humidityHigh:  daily[0].humidity,
-        visibilityHigh: (current.visibility || 10000) / 1000,
-        windSpeedMs:   daily[0].wind_speed,
-        uvi:           daily[0].uvi,
-      };
-      setScores({
-        cycling: computeScore("cycling", todayForScore, { temp: "°C", dist: "km" }),
-        hiking:  computeScore("hiking",  todayForScore, { temp: "°C", dist: "km" }),
-        running: computeScore("running", todayForScore, { temp: "°C", dist: "km" }),
-        camping: computeScore("camping", todayForScore, { temp: "°C", dist: "km" }),
-      });
+      setScores(payload.scores);
       if (builtWeeklyData.length > 0) {
         setHourlyData(builtWeeklyData[0].hourly.slice(0, 5));
         setSelectedPeriods(builtWeeklyData[0].periods || []);
