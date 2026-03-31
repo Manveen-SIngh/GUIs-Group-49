@@ -6,7 +6,6 @@ import './Sidebar.css';
 export const SidebarContext = createContext(null);
 export function useSidebar() { return useContext(SidebarContext); }
 
-// ── Provider (wrap around Router in App.js) ────────────────────────────────
 export function SidebarProvider({ children }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -16,23 +15,24 @@ export function SidebarProvider({ children }) {
   );
 }
 
-// ── Nav items ──────────────────────────────────────────────────────────────
+// ── Nav items (No emojis, just text) ───────────────────────────────────────
 const navItems = [
   { section: 'Weather' },
-  { to: '/TodayWeather', label: "Today's Weather", icon: '🌤️' },
-  { to: '/WeatherPage',  label: 'Weekly Forecast',  icon: '📅' },
-  { to: '/Metrics',      label: 'Metrics',           icon: '📊' },
-  { to: '/FullMap',      label: 'Map',               icon: '🗺️' },
+  { to: '/TodayWeather', label: "Today's Weather" },
+  { to: '/WeatherPage',  label: 'Weekly Forecast' },
+  { to: '/Metrics',      label: 'Metrics' },
+  { to: '/FullMap',      label: 'Map' },
   { section: 'Activities' },
-  { to: '/OdACycling',  label: 'Cycling',  icon: '🚴' },
-  { to: '/OdAHiking',   label: 'Hiking',   icon: '🥾' },
-  { to: '/OdARunning',  label: 'Running',  icon: '🏃' },
-  { to: '/OdACamping',  label: 'Camping',  icon: '⛺' },
+  { to: '/OdACycling',  label: 'Cycling' },
+  { to: '/OdAHiking',   label: 'Hiking' },
+  { to: '/OdARunning',  label: 'Running' },
+  { to: '/OdACamping',  label: 'Camping' },
   { section: 'App' },
-  { to: '/Settings',    label: 'Settings', icon: '⚙️' },
+  { to: '/Settings',    label: 'Settings' },
+  { to: '/Help',        label: 'Help' }, 
 ];
 
-// ── Sidebar panel (no hamburger button — pages supply their own) ───────────
+// ── Sidebar panel ──────────────────────────────────────────────────────────
 function Sidebar() {
   const { isOpen, close } = useSidebar();
   const location = useLocation();
@@ -50,7 +50,9 @@ function Sidebar() {
         <div className="sidebar-nav">
           {navItems.map((item, i) =>
             item.section ? (
-              <div key={i} className="sidebar-section-label">{item.section}</div>
+              <div key={i} className="sidebar-section-label">
+                {item.section}
+              </div>
             ) : (
               <Link
                 key={item.to}
@@ -58,6 +60,7 @@ function Sidebar() {
                 className={`sidebar-link${location.pathname === item.to ? ' active' : ''}`}
                 onClick={close}
               >
+                {/* Just the label, no icon span, so it uses your 1.4rem font size */}
                 {item.label}
               </Link>
             )

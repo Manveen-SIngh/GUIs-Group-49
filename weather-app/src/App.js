@@ -10,6 +10,7 @@ import Sidebar, { SidebarProvider } from "./Sidebar";
 import WeatherPage from "./WeatherPage";
 import TodayWeather from "./TodayWeather";
 import Settings from "./Settings";
+import Help from "./Help";
 import FullMapPage from "./FullMapPage";
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path="/WeatherPage" element={<WeatherPage />} />
           <Route path="/TodayWeather" element={<TodayWeather />} />
           <Route path="/Settings" element={<Settings />} />
+          <Route path="/Help" element={<Help /> } />
           <Route path="/FullMap" element={<FullMapPage />} />
           <Route path="*" element={<Navigate to="/WeatherPage" replace />} />
         </Routes>
