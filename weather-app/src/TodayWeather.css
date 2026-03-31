@@ -147,7 +147,7 @@
   color: #333;
 }
 
-/*Metrics Card*/
+/*Metrics card*/
 .metrics-card {
   background: rgba(255, 255, 255, 0.85);
   border-radius: 30px;
@@ -186,18 +186,12 @@
   border-bottom: none;
 }
 
-.metric-icon {
-  font-size: 1.4rem;
-  width: 28px;
-  text-align: center;
-  flex-shrink: 0;
-}
-
-.metric-icon-img {
+.metric-swatch {
   width: 28px;
   height: 28px;
-  object-fit: contain;
+  border-radius: 8px;
   flex-shrink: 0;
+  display: inline-block;
 }
 
 .metric-label {
@@ -214,6 +208,52 @@
   text-align: right;
 }
 
+
+.metrics-activity-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.metrics-activity-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+
+.metrics-activity-msg {
+  font-size: 0.95rem;
+  color: #444;
+  margin: 0 0 10px 0;
+  font-style: italic;
+}
+
+.metrics-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.metrics-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.metrics-dot--active {
+  background: rgba(0,0,0,0.6);
+}
 
 .bottom-forecast-area {
   width: 100%;

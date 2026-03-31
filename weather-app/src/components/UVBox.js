@@ -1,16 +1,29 @@
 import React from 'react';
 
+// Reusable InfoButton Component
 function InfoButton({ message }) {
   return (
     <button
       onClick={() => alert(message)}
       style={{
-        position: "absolute", top: 12, right: 12, width: 28, height: 28,
-        borderRadius: "50%", border: "none", background: "#CBD2D0",
-        boxShadow: "0px 2px 4px rgba(0,0,0,0.18)", display: "flex",
-        alignItems: "center", justifyContent: "center", fontSize: 18,
-        fontWeight: 700, fontFamily: "Rubik, sans-serif", cursor: "pointer",
-        color: "black", zIndex: 20,
+        position: "absolute",
+        top: 12,
+        right: 12,
+        width: 28,
+        height: 28,
+        borderRadius: "50%",
+        border: "none",
+        background: "#CBD2D0",
+        boxShadow: "0px 2px 4px rgba(0,0,0,0.18)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: 18,
+        fontWeight: 700,
+        fontFamily: "Rubik, sans-serif",
+        cursor: "pointer",
+        color: "black",
+        zIndex: 20,
       }}
     >
       i
@@ -18,58 +31,60 @@ function InfoButton({ message }) {
   );
 }
 
-export default function UVBox({ uvLabel = "Low", uvi = 0, nowTime = "", hourlyData = [] }) {
-  const data = (Array.isArray(hourlyData) && hourlyData.length >= 5)
-    ? hourlyData.slice(0, 5)
-    : [uvi, uvi, uvi, uvi, uvi];
+const getUVColor = (uvi) => {
+  if (uvi < 3) return "#3BC50F"; // Low
+  if (uvi < 6) return "#F8D448"; // Moderate
+  if (uvi < 8) return "#FFAB1C"; // High
+  if (uvi < 11) return "#FF4A3A"; // Very High
+  return "#D82DE2"; // Extreme
+};
 
-  const maxUV = 11;
-  const width = 255;
-  const height = 130;
-  const points = data.map((val, i) => {
-    const safeVal = isNaN(Number(val)) ? uvi : Number(val);
-    const clampedVal = Math.max(0, Math.min(safeVal, maxUV));
-    return `${i * (width / 4)},${height - (clampedVal / maxUV) * height}`;
-  }).join(" ");
-
-  const uvRanges = [
-    { label: "Extreme", val: 11 },
-    { label: "Very High", val: 8 },
-    { label: "High", val: 6 },
-    { label: "Moderate", val: 3 },
-    { label: "Low", val: 0 }
-  ];
+export default function UVBox({ uvi = 0, label = "Low" }) {
+  // Calculate percentage for a visual bar (based on standard max of 11+)
+  const percentage = Math.min((uvi / 11) * 100, 100);
 
   return (
-    <div style={{ width: "100%", height: 220, position: "relative", background: "rgba(255, 255, 255, 0.70)", boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.18)", borderRadius: 28, overflow: "hidden", fontFamily: "Rubik, sans-serif" }}>
-      <div style={{ position: "absolute", left: 16, top: 16, right: 46, fontSize: 14, fontWeight: 500, color: "black", zIndex: 2, lineHeight: 1.4 }}>
-        {nowTime ? `Now, ${nowTime}` : "Now"}<br />
-        UV Index: {uvi} ({uvLabel})
+    <div style={{
+      width: "100%", 
+      height: 160, 
+      background: "rgba(255, 255, 255, 0.7)", 
+      borderRadius: 28, 
+      padding: 20,
+      position: "relative",
+      fontFamily: "Rubik, sans-serif",
+      boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.18)"
+    }}>
+      {/* Information Button */}
+      <InfoButton message={`Current UV Index is ${Math.round(uvi)} (${label}). ${uvi >= 3 ? "Sun protection is recommended." : ""}`} />
+
+      <div style={{ fontSize: 14, fontWeight: 500, color: "rgba(0,0,0,0.6)" }}>
+        UV INDEX
+      </div>
+      
+      <div style={{ marginTop: 10 }}>
+        <span style={{ fontSize: 32, fontWeight: 600 }}>{Math.round(uvi)}</span>
+        <span style={{ fontSize: 18, fontWeight: 500, marginLeft: 10 }}>{label}</span>
       </div>
 
-      <InfoButton message={`Current UV Index is ${uvi} (${uvLabel}).`} />
-
-      {/* Expanded left margin to 65 to fit "Very High" text cleanly */}
-      <div style={{ position: "absolute", left: 65, right: 16, top: 60, bottom: 30, borderLeft: "1px solid rgba(0,0,0,0.3)", borderBottom: "1px solid rgba(0,0,0,0.3)", zIndex: 1 }}>
-        <svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" style={{ position: "absolute", left: 0, top: 0, overflow: "visible" }}>
-          <polyline points={points} fill="none" stroke="black" strokeWidth="2" strokeLinejoin="round" />
-        </svg>
+      {/* Visual Progress Bar */}
+      <div style={{ 
+        width: "100%", 
+        height: 8, 
+        background: "rgba(0,0,0,0.1)", 
+        borderRadius: 4, 
+        marginTop: 20,
+        overflow: "hidden" 
+      }}>
+        <div style={{ 
+          width: `${percentage}%`, 
+          height: "100%", 
+          background: getUVColor(uvi),
+          transition: "width 0.5s ease-in-out"
+        }} />
       </div>
 
-      <div style={{ position: "absolute", left: 5, top: 60, bottom: 30, width: 55 }}>
-        {uvRanges.map(range => (
-          <div key={range.label} style={{ position: "absolute", top: `${100 - (range.val/maxUV)*100}%`, right: 0, transform: "translateY(-50%)", fontSize: 10, fontWeight: 500, color: "black", lineHeight: 1 }}>
-            {range.label}
-          </div>
-        ))}
-      </div>
-
-      <div style={{ position: "absolute", left: 65, right: 16, bottom: 12, height: 15 }}>
-        {["00", "06", "12", "18", "24"].map((t, i) => (
-          <div key={t} style={{ position: "absolute", left: `${i * 25}%`, transform: "translateX(-50%)", fontSize: 10, fontWeight: 500, color: "black" }}>
-            +{t}h
-          </div>
-        ))}
+      <div style={{ marginTop: 12, fontSize: 12, color: "rgba(0,0,0,0.5)", lineHeight: "1.4" }}>
+        {uvi >= 3 ? "Use sun protection 11am-4pm." : "Low levels for the rest of the day."}
       </div>
     </div>
   );
