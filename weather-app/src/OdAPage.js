@@ -307,23 +307,13 @@ function OdAPage({ activityKey }) {
   };
 
   useEffect(() => {
-    const cached = localStorage.getItem("cachedWeather");
-    if (cached) {
-      try { setWeather(JSON.parse(cached)); } catch (_) {}
-    }
-
-    const save = (data) => {
-      setWeather(data);
-      localStorage.setItem("cachedWeather", JSON.stringify(data));
-    };
-
     const saved = localStorage.getItem("lastCity");
     if (saved) {
-      fetchWeatherByCity(saved).then(save).catch(console.error);
+      fetchWeatherByCity(saved).then(setWeather).catch(console.error);
     } else if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => fetchWeatherByCoords(pos.coords.latitude, pos.coords.longitude)
-                   .then(save).catch(console.error),
+                   .then(setWeather).catch(console.error),
         () => {}
       );
     }
