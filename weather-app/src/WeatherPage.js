@@ -73,7 +73,7 @@ function WeatherPage() {
   const buildWeeklyData = useCallback((daily, hourlyList, timezoneOffset) => {
     const normalizedHourly = hourlyList.map((h) => normalizeHourlyItem(h, timezoneOffset));
 
-    return daily.slice(0, 6).map((day) => {
+    return daily.slice(0, 5).map((day) => {
       const localMs = (day.dt + timezoneOffset) * 1000;
       const d = new Date(localMs);
       const yy = d.getUTCFullYear();
@@ -137,7 +137,7 @@ function WeatherPage() {
       setSelectedDayIndex(0);
 
       if (builtWeeklyData.length > 0) {
-        setHourlyData(builtWeeklyData[0].hourly.slice(0, 6));
+        setHourlyData(builtWeeklyData[0].hourly.slice(0, 5));
         setSelectedPeriods(builtWeeklyData[0].periods || []);
       }
     } catch (err) {
@@ -162,7 +162,7 @@ function WeatherPage() {
       setWeeklyData(builtWeeklyData);
       setSelectedDayIndex(0);
       if (builtWeeklyData.length > 0) {
-        setHourlyData(builtWeeklyData[0].hourly.slice(0, 6));
+        setHourlyData(builtWeeklyData[0].hourly.slice(0, 5));
         setSelectedPeriods(builtWeeklyData[0].periods || []);
       }
     } catch (err) {
@@ -186,7 +186,7 @@ function WeatherPage() {
   const handleSelectDay = (index) => {
     setSelectedDayIndex(index);
     if (weeklyData[index]) {
-      setHourlyData(weeklyData[index].hourly.slice(0, 6));
+      setHourlyData(weeklyData[index].hourly.slice(0, 5));
       setSelectedPeriods(weeklyData[index].periods || []);
     }
   };
