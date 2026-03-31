@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import TopBarMetricPage from "./components/TopBarMetricPage";
+import TopBar from "./components/TopBar";
 import WeatherBox from "./components/WeatherBox";
 import WindBox from "./components/WindBox";
 import SunriseSunsetBox from "./components/SunriseSunsetBox";
@@ -11,7 +11,6 @@ import HumidityBox from "./components/HumidityBox";
 // 1. Import dynamic background helper and a fallback image
 import { fetchWeatherByCity, fetchWeatherByCoords, getBackgroundImage, getUnitSettings } from "./services/weatherApi";
 import fallbackBg from "./assets/backgrounds/weather-partly-cloudy.svg";
-import SearchBar from "./components/SearchBar";
 
 function Metrics() {
   const [weather, setWeather] = useState(null);
@@ -22,6 +21,10 @@ function Metrics() {
   const [tempUnit, setTempUnit] = useState(() => {
     const s = getUnitSettings();
     return s.Temperature === "Fahrenheit (F)" ? "F" : "C";
+  });
+  const [distUnit, setDistUnit] = useState(() => {
+    const s = getUnitSettings();
+    return s.Distance === "Miles (mi)" ? "mi" : "km";
   });
 
   const loadWeather = async (city, settingsOverride = null) => {
@@ -35,13 +38,39 @@ function Metrics() {
     }
   };
 
+  const refreshWeatherWithUnits = (override) => {
+    const city = localStorage.getItem("lastCity");
+    if (city) {
+      fetchWeatherByCity(city, override).then(setWeather).catch(console.error);
+      return;
+    }
+    if (weather?.lat && weather?.lon) {
+      fetchWeatherByCoords(weather.lat, weather.lon, override).then(setWeather).catch(console.error);
+    }
+  };
+
   const handleTempChange = (unit) => {
+    const nextUnit = unit === "F" ? "Fahrenheit (F)" : "Celsius (C)";
     setTempUnit(unit);
     const saved = localStorage.getItem("unitSettings");
     const parsed = saved ? JSON.parse(saved) : {};
-    const override = { ...parsed, Temperature: unit === "F" ? "Fahrenheit (F)" : "Celsius (C)" };
-    const city = localStorage.getItem("lastCity");
-    if (city) fetchWeatherByCity(city, override).then(setWeather).catch(console.error);
+    const override = { ...parsed, Temperature: nextUnit };
+    refreshWeatherWithUnits(override);
+  };
+
+  const handleDistChange = (unit) => {
+    const isImperial = unit === "mi";
+    const nextDistUnit = isImperial ? "Miles (mi)" : "Kilometers (km)";
+    const nextWindUnit = isImperial ? "Miles per hour (mph)" : "Kilometers per hour (km/h)";
+    setDistUnit(unit);
+    const saved = localStorage.getItem("unitSettings");
+    const parsed = saved ? JSON.parse(saved) : {};
+    const override = {
+      ...parsed,
+      Distance: nextDistUnit,
+      "Wind Speed": nextWindUnit,
+    };
+    refreshWeatherWithUnits(override);
   };
 
   useEffect(() => {
@@ -111,16 +140,15 @@ function Metrics() {
           boxSizing: "border-box",
         }}
       >
-        <TopBarMetricPage unit={tempUnit} onUnitChange={handleTempChange} />
-
-        {/* Search bar */}
-        <div style={{ marginBottom: 10 }}>
-          <SearchBar
-            query={searchInput}
-            onQueryChange={setSearchInput}
-            onSearch={handleSearch}
-          />
-        </div>
+        <TopBar
+          query={searchInput}
+          onQueryChange={setSearchInput}
+          onSearch={handleSearch}
+          tempUnit={tempUnit}
+          onTempToggle={handleTempChange}
+          distUnit={distUnit}
+          onDistToggle={handleDistChange}
+        />
 
         {error && (
           <div style={{ color: "red", marginBottom: 8, fontFamily: "Rubik", fontWeight: "bold" }}>
