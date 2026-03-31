@@ -11,8 +11,8 @@
 
   display: flex;
   align-items: stretch;
-  grid-template-columns: repeat(5, 1fr);
   gap: 0px;
+  overflow: hidden;
 
   box-sizing: border-box;
 }

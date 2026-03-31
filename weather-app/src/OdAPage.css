@@ -78,20 +78,20 @@
 /* ─── Grid ──────────────────────────────────────────────────── */
 .oda-grid {
   display: flex;
-  gap: 32px;
+  gap: clamp(14px, 2.2vw, 32px);
   align-items: flex-start;
 }
 
 .oda-col {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: clamp(14px, 2.2vw, 32px);
 }
 
 /* ─── Box base ──────────────────────────────────────────────── */
 .oda-box {
-  width: 349px;
-  height: 311px;
+  width: clamp(270px, 24vw, 349px);
+  height: clamp(270px, 22vw, 311px);
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(10px);
   border-radius: 43px;
@@ -105,7 +105,7 @@
 }
 
 .oda-box--slim {
-  width: 175px;
+  width: clamp(130px, 12vw, 175px);
   padding: 16px;
 }
 
@@ -319,8 +319,8 @@
 
 /* ─── Scores box ────────────────────────────────────────────── */
 .scores-box {
-  width: 349px;
-  height: 311px;
+  width: clamp(270px, 24vw, 349px);
+  height: clamp(270px, 22vw, 311px);
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(10px);
   border-radius: 43px;
@@ -376,4 +376,124 @@
   width: 100%;
   height: 1px;
   background: rgba(0, 0, 0, 0.05);
+}
+
+/* ─── Responsive behavior (shrink, don't stack) ─────────────── */
+@media (max-width: 1400px) {
+  .oda-container {
+    padding: 0 16px 20px;
+    overflow-x: auto;
+  }
+
+  .oda-container .top-bar {
+    gap: 10px;
+  }
+
+  .oda-container .top-bar .search-bar {
+    width: clamp(300px, 44vw, 720px);
+    max-width: clamp(300px, 44vw, 720px);
+  }
+
+  .oda-header {
+    margin-bottom: clamp(18px, 2vw, 32px);
+    gap: clamp(12px, 1.6vw, 24px);
+  }
+
+  .oda-subtitle {
+    font-size: clamp(30px, 3vw, 42px);
+  }
+
+  .oda-activity-title {
+    font-size: clamp(56px, 6vw, 82px);
+  }
+
+  .oda-score-value {
+    font-size: clamp(62px, 6.5vw, 92px);
+  }
+
+  .oda-score-message {
+    font-size: clamp(24px, 2.8vw, 38px);
+  }
+
+  .oda-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(14px, 2vw, 32px);
+    min-width: 1060px;
+  }
+
+  .oda-col {
+    min-width: 0;
+    gap: clamp(14px, 2vw, 32px);
+  }
+
+  .oda-box,
+  .scores-box {
+    width: 100%;
+    max-width: 100%;
+    height: clamp(270px, 24vw, 311px);
+    border-radius: clamp(30px, 3vw, 43px);
+  }
+
+  .oda-box {
+    padding: clamp(14px, 1.6vw, 20px) clamp(14px, 1.9vw, 24px);
+  }
+
+  .oda-box--map {
+    padding: 0;
+  }
+
+  .oda-box--map .map-card {
+    border-radius: clamp(30px, 3vw, 43px);
+  }
+
+  .oda-box-title {
+    font-size: clamp(28px, 2.4vw, 35px);
+  }
+
+  .oda-section-label,
+  .oda-hi-label,
+  .oda-lo-label,
+  .oda-hi-lo-value {
+    font-size: clamp(28px, 2.5vw, 36px);
+  }
+
+  .oda-center-value,
+  .oda-uv-value {
+    font-size: clamp(30px, 2.6vw, 38px);
+  }
+
+  .oda-precip-label {
+    font-size: clamp(26px, 2.4vw, 34px);
+  }
+
+  .oda-precip-message {
+    font-size: clamp(22px, 2vw, 28px);
+  }
+
+  .activity-label,
+  .activity-score {
+    font-size: clamp(20px, 2vw, 26px);
+  }
+}
+
+@media (max-width: 1180px) {
+  .oda-grid {
+    min-width: 1000px;
+  }
+}
+
+@media (max-width: 980px) {
+  .oda-container {
+    padding: 0 12px 16px;
+  }
+
+  .oda-grid {
+    min-width: 940px;
+  }
+
+  .oda-container .top-bar .search-bar {
+    width: clamp(240px, 38vw, 520px);
+    max-width: clamp(240px, 38vw, 520px);
+  }
 }
