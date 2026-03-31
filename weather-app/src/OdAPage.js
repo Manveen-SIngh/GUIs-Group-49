@@ -101,22 +101,25 @@ function OdAPage({ activityKey }) {
     }
   };
 
-  const handleTempToggle = (unit) => {
-    setTempUnit(unit);
+  const buildLocalOverride = (newTemp, newDist) => {
     const saved = localStorage.getItem("unitSettings");
     const parsed = saved ? JSON.parse(saved) : {};
-    reloadWithSettings({ ...parsed, Temperature: unit === "F" ? "Fahrenheit (F)" : "Celsius (C)" });
+    return {
+      ...parsed,
+      Temperature: newTemp === "F" ? "Fahrenheit (F)" : "Celsius (C)",
+      Distance: newDist === "mi" ? "Miles (mi)" : "Kilometers (km)",
+      "Wind Speed": newDist === "mi" ? "Miles per hour (mph)" : "Kilometers per hour (km/h)",
+    };
+  };
+
+  const handleTempToggle = (unit) => {
+    setTempUnit(unit);
+    reloadWithSettings(buildLocalOverride(unit, distUnit));
   };
 
   const handleDistToggle = (unit) => {
     setDistUnit(unit);
-    const saved = localStorage.getItem("unitSettings");
-    const parsed = saved ? JSON.parse(saved) : {};
-    reloadWithSettings({
-      ...parsed,
-      Distance: unit === "mi" ? "Miles (mi)" : "Kilometers (km)",
-      "Wind Speed": unit === "mi" ? "Miles per hour (mph)" : "Kilometers per hour (km/h)",
-    });
+    reloadWithSettings(buildLocalOverride(tempUnit, unit));
   };
 
   // Weather data
