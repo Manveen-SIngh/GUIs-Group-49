@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { fetchWeatherByCity, fetchWeatherByCoords, getBackgroundImage } from "./services/weatherApi";
-import fallbackBg from "./assets/PartlyCloudy.png"; 
+import { useState, useEffect, useRef } from "react";
+import { fetchWeatherByCity, fetchWeatherByCoords, getBackgroundImage, scoreColor, activityMessage } from "./services/weatherApi";
+import fallbackBg from "./assets/PartlyCloudy.png";
 
 import "./TodayWeather.css";
 import menuIcon from './assets/menu.svg';
@@ -13,10 +13,20 @@ import windyIcon      from './assets/weather-icons/windy.svg';
 import partlyIcon     from './assets/weather-icons/sun-clouds.svg';
 import HourlyV2 from "./components/HourlyV2";
 import SearchBar from "./components/SearchBar";
-import precipIcon from './assets/precipitation.svg';
-import windIcon   from './assets/weather-icons/windy.svg';
-import uvIcon     from './assets/UV.png';
-import compassIcon from './assets/Compass.png';
+import hikingIcon  from './assets/Activity-icons/hiking.svg';
+import runningIcon from './assets/Activity-icons/running.svg';
+import cyclingIcon from './assets/Activity-icons/cycling.svg';
+import campingIcon from './assets/Activity-icons/camping.svg';
+
+const tempColor  = (hi)       => hi >= 5 && hi <= 28 ? "#3BC50F" : hi <= 34 ? "#FFAB1C" : "#FF4A3A";
+const humidColor = (hi)       => hi < 60   ? "#3BC50F" : hi < 80   ? "#FFAB1C" : "#FF4A3A";
+const rainColor  = (pop)      => pop < 30  ? "#3BC50F" : pop < 60  ? "#FFAB1C" : "#FF4A3A";
+const visColor   = (vis)      => vis > 8   ? "#3BC50F" : vis > 3   ? "#FFAB1C" : "#FF4A3A";
+const uvColorFn  = (uvi)      => uvi < 3   ? "#3BC50F" : uvi < 6   ? "#FFAB1C" : "#FF4A3A";
+const windColorFn = (spd, lbl) => {
+  const kmh = lbl === "mph" ? spd * 1.60934 : lbl === "m/s" ? spd * 3.6 : spd;
+  return kmh < 20 ? "#3BC50F" : kmh < 40 ? "#FFAB1C" : "#FF4A3A";
+};
 
 const getConditionIcon = (condition) => {
   if (condition === "Clear")                           return sunnyIcon;
@@ -34,6 +44,26 @@ function TodayWeather() {
   const [error, setError] = useState("");
 
   // Initialize state from localStorage to keep UI in sync with Settings
+  const ACTIVITIES = [
+    { key: "cycling", label: "Cycling", icon: cyclingIcon },
+    { key: "hiking",  label: "Hiking",  icon: hikingIcon  },
+    { key: "camping", label: "Camping", icon: campingIcon },
+    { key: "running", label: "Running", icon: runningIcon },
+  ];
+  const [activityIndex, setActivityIndex] = useState(0);
+  const touchStartX = useRef(null);
+
+  const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) setActivityIndex((i) => (i + 1) % ACTIVITIES.length);
+      else          setActivityIndex((i) => (i - 1 + ACTIVITIES.length) % ACTIVITIES.length);
+    }
+    touchStartX.current = null;
+  };
+
   const [tempUnit, setTempUnit] = useState(() => {
     const saved = localStorage.getItem("unitSettings");
     if (saved) {
@@ -121,9 +151,6 @@ function TodayWeather() {
   const cur = w ? w.current : null;
   const tod = w ? w.today : null;
   const scores = w ? w.scores : null;
-  const avgScore = scores
-    ? Math.round((scores.cycling + scores.hiking + scores.running + scores.camping) / 4)
-    : null;
 
   let currentBg = fallbackBg;
   if (cur) {
@@ -185,38 +212,65 @@ function TodayWeather() {
           </div>
         </div>
 
-        <div className="metrics-card">
-          <div className="metrics-header">
-            <h2>Overall</h2>
-            <h2>{avgScore !== null ? `${avgScore}/10` : "—"}</h2>
-          </div>
+        <div
+          className="metrics-card"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          {(() => {
+            const act = ACTIVITIES[activityIndex];
+            const actScore = scores ? scores[act.key] : null;
+            const actColor = actScore != null ? scoreColor(actScore) : "#FFAB1C";
+            const actMsg   = actScore != null ? activityMessage(act.key, actScore) : "Loading…";
+            return (
+              <>
+                <div className="metrics-header">
+                  <div className="metrics-activity-title">
+                    <span className="metrics-activity-icon-wrap" style={{ background: actColor }} />
+                    <h2>{act.label}</h2>
+                  </div>
+                  <h2>{actScore != null ? `${actScore}/10` : "—"}</h2>
+                </div>
+                <p className="metrics-activity-msg">{actMsg}</p>
+                <div className="metrics-dots">
+                  {ACTIVITIES.map((_, i) => (
+                    <span
+                      key={i}
+                      className={`metrics-dot${i === activityIndex ? " metrics-dot--active" : ""}`}
+                      onClick={() => setActivityIndex(i)}
+                    />
+                  ))}
+                </div>
+              </>
+            );
+          })()}
           <div className="metric-row">
-            <span className="metric-icon">🌡️</span>
+            <span className="metric-swatch" style={{ background: tod ? tempColor(tod.tempHigh) : "#FFAB1C" }} />
             <span className="metric-label">Temperature</span>
             <span className="metric-value">{tod ? `${fmtTemp(tod.tempHigh)} / ${fmtTemp(tod.tempLow)}` : "—"}</span>
           </div>
           <div className="metric-row">
-            <img src={windIcon} alt="Wind" className="metric-icon-img" />
+            <span className="metric-swatch" style={{ background: tod ? windColorFn(tod.windSpeed, w?.unitLabels?.wind) : "#FFAB1C" }} />
             <span className="metric-label">Wind</span>
             <span className="metric-value">{tod ? fmtWind(tod.windSpeed) : "—"}</span>
           </div>
           <div className="metric-row">
-            <span className="metric-icon">💧</span>
+            <span className="metric-swatch" style={{ background: tod ? humidColor(tod.humidityHigh) : "#FFAB1C" }} />
             <span className="metric-label">Humidity</span>
             <span className="metric-value">{tod ? `${tod.humidity}%` : "—"}</span>
           </div>
           <div className="metric-row">
-            <img src={precipIcon} alt="Rain" className="metric-icon-img" />
+            <span className="metric-swatch" style={{ background: tod ? rainColor(tod.pop) : "#FFAB1C" }} />
             <span className="metric-label">Rain</span>
             <span className="metric-value">{tod ? `${tod.pop}%` : "—"}</span>
           </div>
           <div className="metric-row">
-            <img src={uvIcon} alt="UV" className="metric-icon-img" />
+            <span className="metric-swatch" style={{ background: cur?.uvi != null ? uvColorFn(cur.uvi) : "#FFAB1C" }} />
             <span className="metric-label">UV Index</span>
             <span className="metric-value">{cur ? (cur.uvi ?? "—") : "—"}</span>
           </div>
           <div className="metric-row">
-            <img src={compassIcon} alt="Visibility" className="metric-icon-img" />
+            <span className="metric-swatch" style={{ background: tod ? visColor(tod.visibilityHigh) : "#FFAB1C" }} />
             <span className="metric-label">Visibility</span>
             <span className="metric-value">{cur ? fmtVis(cur.visibility) : "—"}</span>
           </div>
