@@ -58,6 +58,12 @@ const windColorFn = (spd, lbl) => {
   const kmh = lbl === "mph" ? spd * 1.60934 : lbl === "m/s" ? spd * 3.6 : spd;
   return kmh < 20 ? "#3BC50F" : kmh < 40 ? "#FFAB1C" : "#FF4A3A";
 };
+const toCelsius = (temp, tempLabel) => tempLabel === "°F" ? (temp - 32) * (5 / 9) : temp;
+const toKilometers = (distance, distLabel) => {
+  if (distLabel === "mi") return distance * 1.60934;
+  if (distLabel === "m") return distance / 1000;
+  return distance;
+};
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
@@ -164,6 +170,8 @@ function OdAPage({ activityKey }) {
   const today   = weather ? weather.today   : null;
   const current = weather ? weather.current : null;
   const labels  = weather ? weather.unitLabels : { temp: "°C", wind: "km/h", dist: "km" };
+  const tempHighForRating = today ? toCelsius(today.tempHigh, labels.temp) : null;
+  const visibilityHighForRating = today ? toKilometers(today.visibilityHigh, labels.dist) : null;
 
   const mainColor = score != null ? scoreColor(score) : "#FFAB1C";
   const mainMsg   = score != null ? activityMessage(activityKey, score) : "Loading…";
@@ -258,7 +266,7 @@ function OdAPage({ activityKey }) {
             {/* Temperature */}
             <div className="oda-box">
               <div className="oda-box-header">
-                <div className="oda-swatch" style={{ background: today ? tempColor(today.tempHigh) : "#FFAB1C" }} />
+                <div className="oda-swatch" style={{ background: tempHighForRating != null ? tempColor(tempHighForRating) : "#FFAB1C" }} />
                 <span className="oda-box-title">Temperature</span>
               </div>
               <div className="oda-section-label">Today:</div>
@@ -306,7 +314,7 @@ function OdAPage({ activityKey }) {
             {/* Visibility */}
             <div className="oda-box">
               <div className="oda-box-header">
-                <div className="oda-swatch" style={{ background: today ? visColor(today.visibilityHigh) : "#FFAB1C" }} />
+                <div className="oda-swatch" style={{ background: visibilityHighForRating != null ? visColor(visibilityHighForRating) : "#FFAB1C" }} />
                 <span className="oda-box-title">Visibility</span>
               </div>
               <div className="oda-section-label">Today:</div>
