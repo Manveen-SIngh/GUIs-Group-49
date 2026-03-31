@@ -171,7 +171,6 @@ const ProfilePanel = () => (
 const UNIT_OPTIONS = {
   Temperature:   ["Celsius (C)", "Fahrenheit (F)"], 
   "Wind Speed":  ["Kilometers per hour (km/h)", "Miles per hour (mph)", "Meters per second (m/s)", "Knots (kn)"],
-  Precipitation: ["Millimeters (mm)", "Inches (in)", "Centimeters (cm)"],
   Distance:      ["Kilometers (km)", "Miles (mi)"],
 };
 
@@ -181,7 +180,6 @@ const UnitsPanel = () => {
     const parsed = saved ? JSON.parse(saved) : {
       Temperature: "Celsius (C)", 
       "Wind Speed": "Kilometers per hour (km/h)",
-      Precipitation: "Millimeters (mm)", 
       Distance: "Kilometers (km)",
     };
 
@@ -201,7 +199,6 @@ const UnitsPanel = () => {
   const rows = [
     { icon: <IconThermometer />, label: "Temperature" },
     { icon: <IconWind />,        label: "Wind Speed" },
-    { icon: <IconCloud />,       label: "Precipitation" },
     { icon: <IconMap />,         label: "Distance" },
   ];
 
