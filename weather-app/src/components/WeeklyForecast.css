@@ -4,9 +4,10 @@
   height: 559px;
 
   border-radius: 43px;
-  overflow: hidden;    
+  overflow: hidden;
 
   background: rgba(255, 255, 255, 0.70);
+  backdrop-filter: blur(10px);
 
   display: flex;
   flex-direction: column;
