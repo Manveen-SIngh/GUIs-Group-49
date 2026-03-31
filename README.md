@@ -17,6 +17,6 @@ Run npm install in the terminal
 
 npm install axios?
 
-npm install flutter?
+npm install leaflet?
 
 then once the previous command is complete run npm start
