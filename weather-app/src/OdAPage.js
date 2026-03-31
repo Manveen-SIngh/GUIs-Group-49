@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSidebar } from "./Sidebar";
+import TopBar from "./components/TopBar";
 
 import "./OdAPage.css";
 
@@ -15,7 +15,6 @@ import {
 } from "./services/weatherApi";
 import fallbackBg from "./assets/PartlyCloudy.png"; // Renamed for clarity
 
-import menuIcon from "./assets/menu.svg";
 import ActivityScoresBox, { ACTIVITIES } from "./components/ActivityScoresBox";
 import MapCard from "./components/MapCard";
 import hiArrow         from "./assets/redArrowUp.svg";
@@ -68,8 +67,6 @@ const windColorFn = (spd, lbl) => {
  * @param {{ activityKey: "cycling"|"hiking"|"camping"|"running" }} props
  */
 function OdAPage({ activityKey }) {
-  const { open } = useSidebar();
-  const [time, setTime]             = useState("");
   const [weather, setWeather]       = useState(null);
   const [prevPrecip, setPrevPrecip] = useState(null);
 
@@ -82,14 +79,6 @@ function OdAPage({ activityKey }) {
     const s = getUnitSettings();
     return s.Distance && s.Distance.includes("mi") ? "mi" : "km";
   });
-
-  // Clock
-  useEffect(() => {
-    const tick = () => setTime(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, []);
 
   // Re-fetch with a settings override (page-local, no cache update)
   const reloadWithSettings = (settingsOverride) => {
@@ -191,34 +180,14 @@ function OdAPage({ activityKey }) {
         transition: "background-image 0.5s ease-in-out"
       }}
     >
-      {/* ── Clock ───────────────────────────────────────────────── */}
-      <div className="layer layer--shadow">
-        <div className="clock-bg" />
-        <div className="clock-display">{time}</div>
-      </div>
-
-      {/* ... (rest of the component remains the same) ... */}
-      <div className="layer" style={{ zIndex: 50, pointerEvents: "none" }}>
-        <div className="unit-distance-bg" />
-        <div className="unit-distance-active" style={{ left: distUnit === "mi" ? 591 : 651 }} />
-        <div className="unit-distance-mi" style={{ cursor: "pointer", pointerEvents: "auto" }} onClick={() => handleDistToggle("mi")}>mi</div>
-        <div className="unit-distance-km" style={{ cursor: "pointer", pointerEvents: "auto" }} onClick={() => handleDistToggle("km")}>km</div>
-      </div>
-
-      <div className="layer" style={{ zIndex: 50, pointerEvents: "none" }}>
-        <div className="unit-temp-bg" />
-        <div className="unit-temp-active" style={{ left: tempUnit === "C" ? 418 : 471 }} />
-        <div className="unit-temp-c" style={{ cursor: "pointer", pointerEvents: "auto" }} onClick={() => handleTempToggle("C")}>°C</div>
-        <div className="unit-temp-f" style={{ cursor: "pointer", pointerEvents: "auto" }} onClick={() => handleTempToggle("F")}>°F</div>
-      </div>
-
-      <div className="layer" style={{ zIndex: 100, pointerEvents: "none" }}>
-        <div className="menu-btn-bg" />
-        <div className="menu-btn-icon-wrap" onClick={open} style={{ cursor: "pointer", pointerEvents: "auto" }}>
-          <div className="menu-btn-icon-inner">
-            <img src={menuIcon} alt="Menu" />
-          </div>
-        </div>
+      {/* ── Top bar ─────────────────────────────────────────────── */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 200, padding: "20px 24px 0" }}>
+        <TopBar
+          tempUnit={tempUnit}
+          onTempToggle={handleTempToggle}
+          distUnit={distUnit}
+          onDistToggle={handleDistToggle}
+        />
       </div>
 
       <div className="layer">

@@ -3,8 +3,7 @@ import { fetchWeatherByCity, fetchWeatherByCoords, getBackgroundImage, scoreColo
 import fallbackBg from "./assets/PartlyCloudy.png";
 
 import "./TodayWeather.css";
-import menuIcon from './assets/menu.svg';
-import { useSidebar } from "./Sidebar";
+import TopBar from "./components/TopBar";
 import sunnyIcon      from './assets/weather-icons/Sunny.svg';
 import cloudsIcon     from './assets/weather-icons/clouds.svg';
 import rainyIcon      from './assets/weather-icons/rainy.svg';
@@ -12,7 +11,6 @@ import stormyIcon     from './assets/weather-icons/stormy.svg';
 import windyIcon      from './assets/weather-icons/windy.svg';
 import partlyIcon     from './assets/weather-icons/sun-clouds.svg';
 import HourlyV2 from "./components/HourlyV2";
-import SearchBar from "./components/SearchBar";
 import hikingIcon  from './assets/Activity-icons/hiking.svg';
 import runningIcon from './assets/Activity-icons/running.svg';
 import cyclingIcon from './assets/Activity-icons/cycling.svg';
@@ -38,7 +36,6 @@ const getConditionIcon = (condition) => {
 };
 
 function TodayWeather() {
-  const { open } = useSidebar();
   const [searchQuery, setSearchQuery] = useState("");
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState("");
@@ -170,29 +167,15 @@ function TodayWeather() {
         }}
     >
       <div className="dashboard-inner">
-      <nav className="top-nav">
-        <div className="top-button-box">
-          <img
-            src={menuIcon}
-            alt="menuIcon"
-            className="weather-page-menu-button"
-            onClick={open}
-            style={{ cursor: 'pointer' }}
-          />
-        </div>
-
-        <div className="toggle-pill toggle-shift">
-          <div className={`toggle-opt ${tempUnit === "C" ? "active" : ""}`} onClick={() => handleTempToggle("C")}>°C</div>
-          <div className={`toggle-opt ${tempUnit === "F" ? "active" : ""}`} onClick={() => handleTempToggle("F")}>°F</div>
-        </div>
-
-        <div className="toggle-pill">
-          <div className={`toggle-opt ${distUnit === "mi" ? "active" : ""}`} onClick={() => handleDistToggle("mi")}>mi</div>
-          <div className={`toggle-opt ${distUnit === "km" ? "active" : ""}`} onClick={() => handleDistToggle("km")}>km</div>
-        </div>
-
-        <SearchBar query={searchQuery} onQueryChange={setSearchQuery} onSearch={handleSearch} />
-      </nav>
+      <TopBar
+        query={searchQuery}
+        onQueryChange={setSearchQuery}
+        onSearch={handleSearch}
+        tempUnit={tempUnit}
+        onTempToggle={handleTempToggle}
+        distUnit={distUnit}
+        onDistToggle={handleDistToggle}
+      />
 
       {error && <div style={{ color: "red", padding: "4px 16px", fontFamily: "Rubik" }}>{error}</div>}
 

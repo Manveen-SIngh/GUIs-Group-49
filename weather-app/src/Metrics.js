@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import TopBarMetricPage from "./components/TopBarMetricPage";
+import TopBar from "./components/TopBar";
 import WeatherBox from "./components/WeatherBox";
 import WindBox from "./components/WindBox";
 import SunriseSunsetBox from "./components/SunriseSunsetBox";
@@ -11,17 +11,20 @@ import HumidityBox from "./components/HumidityBox";
 // 1. Import dynamic background helper and a fallback image
 import { fetchWeatherByCity, fetchWeatherByCoords, getBackgroundImage, getUnitSettings } from "./services/weatherApi";
 import fallbackBg from "./assets/backgrounds/weather-partly-cloudy.svg";
-import SearchBar from "./components/SearchBar";
 
 function Metrics() {
   const [weather, setWeather] = useState(null);
   const [searchInput, setSearchInput] = useState("");
   const [error, setError] = useState("");
 
-  // Local temp unit — initialized from global settings, changes stay on this page only
+  // Local unit toggles — initialized from global settings, changes stay on this page only
   const [tempUnit, setTempUnit] = useState(() => {
     const s = getUnitSettings();
     return s.Temperature === "Fahrenheit (F)" ? "F" : "C";
+  });
+  const [distUnit, setDistUnit] = useState(() => {
+    const s = getUnitSettings();
+    return s.Distance && s.Distance.includes("mi") ? "mi" : "km";
   });
 
   const loadWeather = async (city, settingsOverride = null) => {
@@ -40,6 +43,19 @@ function Metrics() {
     const saved = localStorage.getItem("unitSettings");
     const parsed = saved ? JSON.parse(saved) : {};
     const override = { ...parsed, Temperature: unit === "F" ? "Fahrenheit (F)" : "Celsius (C)" };
+    const city = localStorage.getItem("lastCity");
+    if (city) fetchWeatherByCity(city, override).then(setWeather).catch(console.error);
+  };
+
+  const handleDistChange = (unit) => {
+    setDistUnit(unit);
+    const saved = localStorage.getItem("unitSettings");
+    const parsed = saved ? JSON.parse(saved) : {};
+    const override = {
+      ...parsed,
+      Distance: unit === "mi" ? "Miles (mi)" : "Kilometers (km)",
+      "Wind Speed": unit === "mi" ? "Miles per hour (mph)" : "Kilometers per hour (km/h)",
+    };
     const city = localStorage.getItem("lastCity");
     if (city) fetchWeatherByCity(city, override).then(setWeather).catch(console.error);
   };
@@ -98,7 +114,7 @@ function Metrics() {
         display: "flex",
         justifyContent: "center",
         alignItems: "flex-start",
-        padding: "32px 0",
+        padding: "16px 0",
         boxSizing: "border-box",
         transition: "background-image 0.5s ease-in-out"
       }}
@@ -111,16 +127,15 @@ function Metrics() {
           boxSizing: "border-box",
         }}
       >
-        <TopBarMetricPage unit={tempUnit} onUnitChange={handleTempChange} />
-
-        {/* Search bar */}
-        <div style={{ marginBottom: 10 }}>
-          <SearchBar
-            query={searchInput}
-            onQueryChange={setSearchInput}
-            onSearch={handleSearch}
-          />
-        </div>
+        <TopBar
+          query={searchInput}
+          onQueryChange={setSearchInput}
+          onSearch={handleSearch}
+          tempUnit={tempUnit}
+          onTempToggle={handleTempChange}
+          distUnit={distUnit}
+          onDistToggle={handleDistChange}
+        />
 
         {error && (
           <div style={{ color: "red", marginBottom: 8, fontFamily: "Rubik", fontWeight: "bold" }}>
@@ -128,7 +143,7 @@ function Metrics() {
           </div>
         )}
 
-        <div style={{ marginTop: 20 }}>
+        <div style={{ marginTop: 8 }}>
           <WeatherBox
             hourly={w ? w.hourly : []}
             description={cur ? cur.description : ""}
@@ -142,10 +157,10 @@ function Metrics() {
         {/* Middle row */}
         <div
           style={{
-            marginTop: 20,
+            marginTop: 8,
             display: "grid",
             gridTemplateColumns: "1fr 2fr",
-            gap: 20,
+            gap: 12,
           }}
         >
           <WindBox
@@ -168,10 +183,10 @@ function Metrics() {
         {/* Bottom row */}
         <div
           style={{
-            marginTop: 20,
+            marginTop: 8,
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 20,
+            gap: 12,
           }}
         >
           <UVBox
