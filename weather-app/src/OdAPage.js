@@ -92,7 +92,7 @@ const prevRainLabel = ({ condition, rainMm }) => {
   if (rainMm >= 7.5)  return "Heavy";
   if (rainMm >= 2.5)  return "Moderate";
   if (rainMm > 0 || condition === "Rain" || condition === "Drizzle") return "Light";
-  return "None";
+  return "No";
 };
 const tempColor = (hi, tempLabel, activityKey) => {
   const c = tempLabel === "°F" ? (hi - 32) * (5 / 9) : hi;
@@ -113,7 +113,10 @@ const uvColorFn = (uvi, activityKey) => {
   return uvi < g ? "#3BC50F" : uvi < y ? "#FFAB1C" : "#FF4A3A";
 };
 const windColorFn = (spd, lbl, activityKey) => {
-  const kmh = lbl === "mph" ? spd * 1.60934 : lbl === "m/s" ? spd * 3.6 : spd;
+  const kmh = lbl === "mph" ? spd * 1.60934
+            : lbl === "m/s" ? spd * 3.6
+            : lbl === "kn"  ? spd * 1.852
+            : spd;
   const [g, y] = ACTIVITY_THRESHOLDS.wind[activityKey] ?? [20, 40];
   return kmh < g ? "#3BC50F" : kmh < y ? "#FFAB1C" : "#FF4A3A";
 };
@@ -122,6 +125,30 @@ const toKilometers = (distance, distLabel) => {
   if (distLabel === "mi") return distance * 1.60934;
   if (distLabel === "m") return distance / 1000;
   return distance;
+};
+
+// ─── Score computation from metric colours ────────────────────────────────────
+// Maps each metric's colour to a 1–10 sub-score
+const colorScore = (hex) => hex === "#3BC50F" ? 10 : hex === "#FFAB1C" ? 6 : 2;
+
+// Per-activity weights across all six displayed metrics (must sum to 1.0)
+const ACTIVITY_WEIGHTS = {
+  cycling: { rain: 0.25, temp: 0.20, wind: 0.25, humidity: 0.10, visibility: 0.10, uv: 0.10 },
+  hiking:  { rain: 0.20, temp: 0.20, wind: 0.15, humidity: 0.15, visibility: 0.10, uv: 0.20 },
+  running: { rain: 0.20, temp: 0.25, wind: 0.15, humidity: 0.20, visibility: 0.05, uv: 0.15 },
+  camping: { rain: 0.30, temp: 0.20, wind: 0.20, humidity: 0.15, visibility: 0.05, uv: 0.10 },
+};
+
+const computeScore = (actKey, today, labels) => {
+  const w = ACTIVITY_WEIGHTS[actKey];
+  const weighted =
+    colorScore(rainColor(today.pop, actKey))                        * w.rain +
+    colorScore(tempColor(today.tempHigh, labels.temp, actKey))      * w.temp +
+    colorScore(humidColor(today.humidityHigh, actKey))              * w.humidity +
+    colorScore(visColor(today.visibilityHigh, labels.dist, actKey)) * w.visibility +
+    colorScore(windColorFn(today.windSpeed, labels.wind, actKey))   * w.wind +
+    colorScore(uvColorFn(today.uvi, actKey))                        * w.uv;
+  return Math.max(1, Math.min(10, Math.round(weighted)));
 };
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -225,10 +252,18 @@ function OdAPage({ activityKey }) {
   const pageLabel = ACTIVITIES.find((a) => a.key === activityKey)?.label ?? activityKey;
   const D = "—";
 
-  const score   = weather ? weather.scores[activityKey] : null;
   const today   = weather ? weather.today   : null;
   const current = weather ? weather.current : null;
   const labels  = weather ? weather.unitLabels : { temp: "°C", wind: "km/h", dist: "km" };
+
+  const computedScores = today ? {
+    cycling: computeScore("cycling", today, labels),
+    hiking:  computeScore("hiking",  today, labels),
+    running: computeScore("running", today, labels),
+    camping: computeScore("camping", today, labels),
+  } : null;
+
+  const score     = computedScores ? computedScores[activityKey] : null;
   const mainColor = score != null ? scoreColor(score) : "#FFAB1C";
   const mainMsg   = score != null ? activityMessage(activityKey, score) : "Loading…";
 
@@ -277,7 +312,7 @@ function OdAPage({ activityKey }) {
 
           {/* Column 1: Scores + Map */}
           <div className="oda-col">
-            <ActivityScoresBox activeKey={activityKey} scores={weather?.scores} />
+            <ActivityScoresBox activeKey={activityKey} scores={computedScores ?? weather?.scores} />
             <div className="oda-box oda-box--map">
               <MapCard
                 lat={weather?.lat ?? 51.5072}
