@@ -8,8 +8,7 @@ import "./FullMapPage.css";
 
 import { getBackgroundImage } from "./services/weatherApi";
 import fallbackBg from "./assets/PartlyCloudy.png";
-import menuIcon   from "./assets/menu.svg";
-import { useSidebar } from "./Sidebar";
+import MenuButton from "./components/MenuButton";
 import SearchBar from "./components/SearchBar";
 import Clock from "./components/Clock";
 
@@ -33,8 +32,7 @@ function MapSetView({ lat, lon }) {
 }
 
 function FullMapPage() {
-  const { open } = useSidebar();
-  const [params] = useSearchParams();
+const [params] = useSearchParams();
 
   const [lat,  setLat]  = useState(parseFloat(params.get("lat"))  || 51.5072);
   const [lon,  setLon]  = useState(parseFloat(params.get("lon"))  || -0.1276);
@@ -84,9 +82,7 @@ function FullMapPage() {
         {/* ── Top bar (mirrors WeatherPage) ─────────────────────── */}
         <div className="weather-top-bar">
           <div className="top-left">
-            <div className="top-button-box">
-              <img src={menuIcon} alt="Menu" className="weather-page-menu-button" onClick={open} style={{ cursor: "pointer" }} />
-            </div>
+            <MenuButton />
           </div>
           <div className="top-center">
             <SearchBar query={query} onQueryChange={setQuery} onSearch={handleSearch} />

@@ -20,7 +20,7 @@
   width: 378px;
   height: 36px;
   color: #000;
-  font-size: 27px;
+  font-size: 30px;
   font-weight: 400;
   margin-left: 26px;
   margin-top: 10px;
@@ -31,6 +31,7 @@
 {
   width: 100%;
   height: calc(100% - 44px);
+  margin-top: 6px;
   display: flex;
   flex-direction: column;
 }

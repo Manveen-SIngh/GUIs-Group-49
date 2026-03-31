@@ -29,7 +29,8 @@
 
 .weekly-day-card__date-block
 {
-  min-width: 95px;
+  width: 130px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -46,14 +47,14 @@
 
 .weekly-day-card__day
 {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 500;
   color: #000;
 }
 
 .weekly-day-card__date
 {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 500;
   color: #000;
 }
@@ -63,6 +64,8 @@
   width: 45px;
   height: 42px;
   object-fit: contain;
+  display: block;
+  flex-shrink: 0;
 }
 
 .weekly-day-card__icon--expanded
@@ -71,20 +74,21 @@
   height: 56px;
   object-fit: contain;
   display: block;
+  margin: 0 auto;
 }
 
 .weekly-day-card__condition
 {
   flex: 1;
   margin-left: 16px;
-  font-size: 18px;
+  font-size: 22px;
   color: #000;
 }
 
 .weekly-day-card__condition--expanded
 {
   margin-left: 0;
-  font-size: 18px;
+  font-size: 22px;
   color: #000;
 }
 
@@ -92,7 +96,7 @@
 {
   display: flex;
   gap: 14px;
-  font-size: 18px;
+  font-size: 22px;
   white-space: nowrap;
 }
 
@@ -157,6 +161,6 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  font-size: 14px;
+  font-size: 18px;
   color: rgba(0, 0, 0, 0.55);
 }
