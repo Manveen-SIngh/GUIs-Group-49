@@ -172,6 +172,7 @@ function TodayWeather() {
       <main className="main-content-area">
         <div className="current-weather-col">
           <h2 className="location-header">{w ? w.locationName : "—"}</h2>
+          <div className="current-weather-box">
           <div className="weather-primary-row">
             <img src={getConditionIcon(cur?.condition)} alt={cur?.condition || "Weather"} className="main-weather-icon" />
             <div className="temperature-stack">
@@ -182,6 +183,7 @@ function TodayWeather() {
                 <p>Rain: {cur ? `${cur.pop}%` : "—"}</p>
               </div>
             </div>
+          </div>
           </div>
         </div>
 
