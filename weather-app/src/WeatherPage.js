@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 // Dynamic background helper and fallback
-import { getBackgroundImage, getUnitSettings, convertTemp, convertWind, convertDist } from "./services/weatherApi";
+import { getBackgroundImage, getUnitSettings, convertTemp, convertWind, convertDist, calculateActivityScore } from "./services/weatherApi";
 import fallbackBg from "./assets/backgrounds/weather-partly-cloudy.svg";
 
 import "./WeatherPage.css";
@@ -31,6 +31,7 @@ function WeatherPage() {
   const [weeklyData, setWeeklyData] = useState([]);
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
   const [error, setError] = useState("");
+  const [scores, setScores] = useState(null);
   const [locationName, setLocationName] = useState("");
   const [coords, setCoords] = useState(null);
 
@@ -162,6 +163,12 @@ function WeatherPage() {
       localStorage.setItem("lastCity", searchTerm);
       setWeeklyData(builtWeeklyData);
       setSelectedDayIndex(0);
+      setScores({
+        cycling: calculateActivityScore(daily[0], "cycling"),
+        hiking:  calculateActivityScore(daily[0], "hiking"),
+        running: calculateActivityScore(daily[0], "running"),
+        camping: calculateActivityScore(daily[0], "camping"),
+      });
 
       if (builtWeeklyData.length > 0) {
         setHourlyData(builtWeeklyData[0].hourly.slice(0, 5));
@@ -188,6 +195,12 @@ function WeatherPage() {
       setWeatherData(current);
       setWeeklyData(builtWeeklyData);
       setSelectedDayIndex(0);
+      setScores({
+        cycling: calculateActivityScore(daily[0], "cycling"),
+        hiking:  calculateActivityScore(daily[0], "hiking"),
+        running: calculateActivityScore(daily[0], "running"),
+        camping: calculateActivityScore(daily[0], "camping"),
+      });
       if (builtWeeklyData.length > 0) {
         setHourlyData(builtWeeklyData[0].hourly.slice(0, 5));
         setSelectedPeriods(builtWeeklyData[0].periods || []);
@@ -326,7 +339,7 @@ function WeatherPage() {
           </div>
 
           <div className="right-section">
-            <div className="right-top-section"><ActivityScoresWidget /></div>
+            <div className="right-top-section"><ActivityScoresWidget scores={scores} /></div>
             <div className="right-bottom-section">
               <MapCard lat={coords ? coords.lat : 51.5072} lon={coords ? coords.lon : -0.1276} locationName={locationName || "London"} />
             </div>

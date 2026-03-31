@@ -67,6 +67,7 @@ const windColorFn = (spd, lbl) => {
 function OdAPage({ activityKey }) {
   const [weather, setWeather]       = useState(null);
   const [prevPrecip, setPrevPrecip] = useState(null);
+  const [query, setQuery]           = useState("");
 
   const [tempUnit, setTempUnit] = useState(() => {
     const s = getUnitSettings();
@@ -95,6 +96,18 @@ function OdAPage({ activityKey }) {
       Distance: newDist === "mi" ? "Miles (mi)" : "Kilometers (km)",
       "Wind Speed": newDist === "mi" ? "Miles per hour (mph)" : "Kilometers per hour (km/h)",
     };
+  };
+
+  const handleSearch = () => {
+    const q = query.trim();
+    if (!q) return;
+    localStorage.setItem("lastCity", q);
+    fetchWeatherByCity(q)
+      .then((data) => {
+        setWeather(data);
+        localStorage.setItem("cachedWeather", JSON.stringify(data));
+      })
+      .catch(console.error);
   };
 
   const handleTempToggle = (unit) => {
@@ -171,6 +184,9 @@ function OdAPage({ activityKey }) {
     >
       <div className="oda-container">
         <TopBar
+          query={query}
+          onQueryChange={setQuery}
+          onSearch={handleSearch}
           tempUnit={tempUnit}
           onTempToggle={handleTempToggle}
           distUnit={distUnit}
