@@ -1,132 +1,210 @@
-/* --- Help.css --- */
-
+/* --- Help Page Background --- */
+/*
+  Full-page background container.
+  - Uses dynamic background image set from React
+  - Centers main content horizontally
+*/
 .help-page-bg {
   background-size: cover;
   background-position: center;
   min-height: 100vh;
+
   display: flex;
   justify-content: center;
 }
 
-.top-bar__menu-icon{
-          
-          cursor: pointer;
+/* Menu icon interaction (top-left button) */
+.top-bar__menu-icon {
+  cursor: pointer;
 }
 
+/*
+  Legacy/shared class used elsewhere in app
+  (kept for consistency with other pages)
+*/
 .weather-page-menu-button {
   width: 32px;
   height: 32px;
 }
 
-/* --- Layout --- */
+/* --- Top Bar Layout --- */
+/*
+  Container for header section
+  Acts as positioning context for menu + title
+*/
 .help-top-bar {
   width: 100%;
   height: 100px;
   position: relative;
 }
 
-.title-center { 
-  position: absolute; 
-  left: 50%; 
-  transform: translateX(-50%); 
-  top: 14px; 
+/*
+  Centers the title horizontally regardless of screen width
+  Uses translate trick instead of flex to avoid layout conflicts
+*/
+.title-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 14px;
 }
 
+/* Main page title */
 .oda-subtitle {
   font-size: 42px;
   font-weight: 500;
   color: #000;
-  white-space: nowrap;
+  white-space: nowrap; /* Prevents wrapping on smaller screens */
 }
 
-/* --- FAQ Box --- */
+/* --- Layout Grid --- */
+/*
+  Centers the FAQ box inside the main layout grid
+*/
 .help-grid-layout {
   justify-content: center;
   margin-top: 20px;
 }
 
+/* --- FAQ Container --- */
+/*
+  Main card holding all FAQ content
+  - Fixed width for consistent design
+  - Max-height prevents overflow on small screens
+  - Uses flex column so footer sticks to bottom
+*/
 .faq-hero-box {
-  width: 900px; 
-  height: 900px; 
+  width: 900px;
+  height: 900px;
   max-height: 80vh;
+
   padding: 40px;
-  background: rgba(255, 255, 255, 0.75); 
-  backdrop-filter: blur(10px);
-  border-radius: 43px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+
+  border-radius: 43px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
+/*
+  Scrollable section for FAQ items
+  - Takes remaining space between header and footer
+  - Allows long FAQ lists without stretching container
+*/
 .faq-scroll-section {
   flex: 1;
   overflow-y: auto;
+
   margin: 20px 0;
-  padding-right: 15px;
+  padding-right: 15px; /* Prevents scrollbar overlap */
 }
 
+/* --- FAQ Rows --- */
+/*
+  Individual FAQ item
+  - Clickable area toggles answer visibility
+*/
 .faq-row {
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   padding: 22px 5px;
+
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
+/*
+  Active (expanded) FAQ row
+  - Highlighted background
+  - Slight padding increase for visual emphasis
+*/
 .faq-row.active {
   background: rgba(203, 210, 208, 0.25);
   border-radius: 20px;
+
   padding: 22px 15px;
+
   border-bottom-color: transparent;
 }
 
+/* Question row (title + expand icon) */
 .faq-q {
   font-size: 26px;
   font-weight: 600;
+
   display: flex;
   justify-content: space-between;
+
   color: #000;
 }
 
+/* Answer text */
 .faq-a {
   font-size: 20px;
-  color: rgba(0, 0, 0, 0.7);
-  margin-top: 10px;
   line-height: 1.4;
+
+  margin-top: 10px;
+
+  color: rgba(0, 0, 0, 0.7);
 }
 
-/* --- Footer --- */
+/* --- Footer Section --- */
+/*
+  Anchored at bottom of the FAQ card
+  Uses margin-top: auto to push it down in flex layout
+*/
 .help-footer-area {
   margin-top: auto;
   padding-top: 20px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* Support email display */
 .email-text {
-  font-size: 30px !important;
+  font-size: 30px !important; /* Overrides inherited styles if needed */
   margin-bottom: 15px;
+
   text-align: center;
   color: #000;
+
   font-family: "Rubik", sans-serif;
 }
 
+/*
+  Contact button
+  - Large size for accessibility / touch targets
+  - Slight scale animation on press for feedback
+*/
 .oda-contact-btn {
   width: 100%;
   height: 80px;
-  background: #26b7ff;
+
   border: none;
   border-radius: 24px;
+
+  background: #26b7ff;
   color: #fff;
+
   font-size: 30px;
   font-weight: 600;
+
   cursor: pointer;
   transition: transform 0.1s ease;
 }
 
+/* Press feedback */
 .oda-contact-btn:active {
   transform: scale(0.98);
 }
 
-.swatch-blue { background: #26b7ff; }
+/* Reusable color swatch (used in header UI) */
+.swatch-blue {
+  background: #26b7ff;
+}
