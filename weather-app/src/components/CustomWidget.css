@@ -1,3 +1,8 @@
+/* ─── Custom widget card ────────────────────────────────────────────────────
+   A small square card on WeatherPage that the user can configure to show
+   whatever weather stat they want (humidity, UV index, etc.).
+   position: relative is needed so the picker dropdown and ellipsis menu can
+   be positioned absolutely relative to this card. */
 .custom-widget {
   position: relative;
   width: 186px;
@@ -14,8 +19,10 @@
   font-family: "Rubik", sans-serif;
 }
 
-/* ── Empty state ─────────────────────────────────── */
+/* ── Empty state ────────────────────────────────────────────────────────────
+   When no stat has been chosen yet, a "+" icon is shown in the centre. */
 
+/* The "+" add button image */
 .custom-widget__plus {
   width: 56px;
   height: 56px;
@@ -23,12 +30,15 @@
   cursor: pointer;
 }
 
+/* Dropdown that appears above the card when the user clicks "+" — lists the
+   available stats to choose from. bottom: calc(100% + 8px) positions it just
+   above the card. translateX(-50%) centres it horizontally over the card. */
 .custom-widget__picker {
   position: absolute;
   bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
-  z-index: 200;
+  z-index: 200; /* above other cards so it's not obscured */
   background: rgba(255, 255, 255, 0.97);
   border-radius: 16px;
   box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.18);
@@ -36,6 +46,7 @@
   min-width: 160px;
 }
 
+/* One selectable item in the stat picker list */
 .custom-widget__picker-item {
   padding: 12px 20px;
   font-size: 16px;
@@ -43,12 +54,16 @@
   cursor: pointer;
 }
 
+/* Highlight on hover so items look interactive */
 .custom-widget__picker-item:hover {
   background: rgba(0, 0, 0, 0.06);
 }
 
-/* ── Filled state ────────────────────────────────── */
+/* ── Filled state ───────────────────────────────────────────────────────────
+   Once a stat is selected, the card shows an icon + value and a small "⋯"
+   button in the top-right corner for editing or clearing. */
 
+/* Three-dot menu button pinned to the top-right corner of the card */
 .custom-widget__ellipsis {
   position: absolute;
   top: 14px;
@@ -59,6 +74,7 @@
   cursor: pointer;
 }
 
+/* Small context menu that opens below the "⋯" button when clicked */
 .custom-widget__menu {
   position: absolute;
   top: 38px;
@@ -71,6 +87,7 @@
   min-width: 110px;
 }
 
+/* "Remove" or "Change" option inside the context menu — red to signal deletion */
 .custom-widget__menu-item {
   padding: 10px 18px;
   font-size: 15px;
@@ -82,6 +99,7 @@
   background: rgba(0, 0, 0, 0.06);
 }
 
+/* Weather stat icon (e.g. humidity drop, UV sun) centred in the card */
 .custom-widget__icon {
   width: 70px;
   height: 70px;
@@ -89,6 +107,7 @@
   margin-bottom: 4px;
 }
 
+/* Small uppercase label below the icon, e.g. "HUMIDITY" */
 .custom-widget__condition-label {
   font-size: 13px;
   color: #555;
@@ -97,6 +116,7 @@
   letter-spacing: 0.5px;
 }
 
+/* The actual stat value shown in large text, e.g. "72%" */
 .custom-widget__value {
   font-size: 28px;
   font-weight: 500;

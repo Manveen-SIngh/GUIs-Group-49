@@ -1,5 +1,8 @@
 
-/* ─── Page wrapper ──────────────────────────────────────────── */
+/* ─── Page wrapper ──────────────────────────────────────────────────────────
+   The outermost div fills the whole screen height and centres everything
+   horizontally. background-attachment: fixed makes the background image stay
+   still while the user scrolls — gives a nice parallax-style effect. */
 .oda-page-wrapper {
   min-height: 100vh;
   background-size: cover;
@@ -12,6 +15,8 @@
   box-sizing: border-box;
 }
 
+/* The inner container caps the content at 1400px wide so it doesn't stretch
+   across ultra-wide screens — keeps it consistent with WeatherPage. */
 .oda-container {
   width: 1400px;
   max-width: 100%;
@@ -20,7 +25,9 @@
   font-family: Rubik, sans-serif;
 }
 
-/* ─── Header ────────────────────────────────────────────────── */
+/* ─── Header ────────────────────────────────────────────────────────────────
+   The header is split into two parts: activity name on the left, overall
+   score on the right. space-between pushes them to opposite ends. */
 .oda-header {
   display: flex;
   justify-content: space-between;
@@ -28,6 +35,8 @@
   margin-bottom: 32px;
 }
 
+/* Left pill — shows the activity name (e.g. "Today's forecast for Running").
+   The frosted-glass look (white + blur) matches all the other cards on the page. */
 .oda-header-left {
   display: flex;
   flex-direction: column;
@@ -42,19 +51,23 @@
   box-sizing: border-box;
 }
 
+/* "Today's forecast for" — smaller text above the activity name */
 .oda-subtitle {
   font-size: 42px;
   font-weight: 400;
   color: black;
 }
 
+/* The big activity name (e.g. "Running") */
 .oda-activity-title {
   font-size: 82px;
   font-weight: 500;
   color: black;
-  line-height: 1;
+  line-height: 1; /* tighter line-height so it doesn't add extra space below */
 }
 
+/* Right pill — shows the overall activity score and a short message.
+   translateX(-30px) nudges it left slightly to visually align with the grid. */
 .oda-header-right {
   display: flex;
   flex-direction: column;
@@ -71,18 +84,21 @@
   transform: translateX(-30px);
 }
 
+/* Row that puts the colour swatch next to the score number */
 .oda-score-row {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
+/* Colour swatch showing the score category colour (green / amber / red) */
 .oda-score-swatch {
   width: 92px;
   height: 86px;
   border-radius: 10px;
 }
 
+/* The big score number next to the swatch */
 .oda-score-value {
   font-size: 92px;
   font-weight: 500;
@@ -91,6 +107,7 @@
   line-height: 1;
 }
 
+/* Short message below the score, e.g. "Good conditions" */
 .oda-score-message {
   font-size: 38px;
   font-weight: 400;
@@ -99,20 +116,25 @@
   text-align: right;
 }
 
-/* ─── Grid ──────────────────────────────────────────────────── */
+/* ─── Grid ──────────────────────────────────────────────────────────────────
+   The main content area is a row of columns. clamp() means the gap shrinks
+   smoothly on smaller screens instead of jumping to a fixed value. */
 .oda-grid {
   display: flex;
   gap: clamp(14px, 2.2vw, 32px);
   align-items: flex-start;
 }
 
+/* Each column stacks its boxes vertically with the same responsive gap */
 .oda-col {
   display: flex;
   flex-direction: column;
   gap: clamp(14px, 2.2vw, 32px);
 }
 
-/* ─── Box base ──────────────────────────────────────────────── */
+/* ─── Box base ──────────────────────────────────────────────────────────────
+   Every info card shares this base style — frosted glass, rounded corners,
+   soft shadow. clamp() on width/height lets boxes shrink at smaller widths. */
 .oda-box {
   width: clamp(270px, 24vw, 349px);
   height: clamp(270px, 22vw, 311px);
@@ -128,15 +150,19 @@
   gap: 8px;
 }
 
+/* The slim boxes (wind, UV) are roughly half the width of the wide boxes */
 .oda-box--slim {
   width: clamp(130px, 12vw, 175px);
   padding: 16px;
 }
 
+/* The map box has no padding so the Leaflet map fills the entire card */
 .oda-box--map {
   padding: 0;
 }
 
+/* Make the MapCard component fill the whole box and inherit the border-radius.
+   box-shadow: none avoids a double shadow since the box itself already has one. */
 .oda-box--map .map-card {
   width: 100%;
   height: 100%;
@@ -144,14 +170,16 @@
   box-shadow: none;
 }
 
-/* ─── Box header ────────────────────────────────────────────── */
+/* ─── Box header ────────────────────────────────────────────────────────────
+   Each card has a small header row with a colour swatch and a title. */
 .oda-box-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-shrink: 0;
+  flex-shrink: 0; /* don't let the header compress if the box is tight on space */
 }
 
+/* Large score swatch (33×33) used next to box titles */
 .oda-swatch {
   width: 33px;
   height: 33px;
@@ -159,6 +187,7 @@
   flex-shrink: 0;
 }
 
+/* Smaller swatch variant used in tighter spaces */
 .oda-swatch--sm {
   width: 22px;
   height: 22px;
@@ -166,6 +195,7 @@
   flex-shrink: 0;
 }
 
+/* Box title text, e.g. "Rain", "Temperature" */
 .oda-box-title {
   font-size: 35px;
   font-weight: 400;
@@ -174,7 +204,8 @@
   line-height: 1.1;
 }
 
-/* ─── Section labels & values ───────────────────────────────── */
+/* ─── Section labels & values ───────────────────────────────────────────────
+   Labels like "Today" / "Prev." that appear inside boxes. */
 .oda-section-label {
   font-size: 35px;
   font-weight: 400;
@@ -184,21 +215,25 @@
   flex-shrink: 0;
 }
 
+/* Same label but with a bit of extra space above it to separate sections */
 .oda-section-label--spaced {
   margin-top: 12px;
 }
 
+/* Centred single value display, e.g. the current humidity percentage */
 .oda-center-value {
   font-size: 36px;
   font-weight: 400;
   color: black;
   text-align: center;
   letter-spacing: 0.5px;
-  white-space: nowrap;
+  white-space: nowrap; /* stops the value wrapping onto a new line */
   flex-shrink: 0;
 }
 
-/* ─── Hi / Lo row ───────────────────────────────────────────── */
+/* ─── Hi / Lo row ───────────────────────────────────────────────────────────
+   A small row inside the temperature box showing the high and low values
+   side by side, each with an arrow icon. */
 .oda-hi-lo-row {
   display: flex;
   align-items: center;
@@ -207,17 +242,20 @@
   flex-shrink: 0;
 }
 
+/* Wraps one arrow icon + one temperature value */
 .oda-hi-lo {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
+/* The up/down arrow icon next to the hi/lo value */
 .oda-arrow {
   width: 18px;
   height: auto;
 }
 
+/* The temperature number for the hi/lo — slightly faded so it's secondary */
 .oda-hi-lo-value {
   font-size: 36px;
   font-weight: 400;
@@ -225,26 +263,31 @@
   white-space: nowrap;
 }
 
+/* "H" label in red to indicate the high temperature */
 .oda-hi-label {
   font-size: 36px;
   font-weight: 400;
   color: #FF6B6B;
 }
 
+/* "L" label in blue to indicate the low temperature */
 .oda-lo-label {
   font-size: 36px;
   font-weight: 400;
   color: #0048FF;
 }
 
-/* ─── Precipitation ─────────────────────────────────────────── */
+/* ─── Precipitation ─────────────────────────────────────────────────────────
+   Two columns side by side — "Today" and "Prev." (previous day) — each with
+   a rain icon, a label, and a score swatch. */
 .oda-precip-row {
   display: flex;
-  flex: 1;
+  flex: 1;            /* fill remaining vertical space in the box */
   justify-content: space-around;
   align-items: center;
 }
 
+/* One column inside the precipitation row */
 .oda-precip-col {
   display: flex;
   flex-direction: column;
@@ -252,12 +295,14 @@
   gap: 4px;
 }
 
+/* The rain/precipitation icon image */
 .oda-precip-icon {
   width: 78px;
   height: 68px;
   object-fit: contain;
 }
 
+/* "Today" or "Prev." text label */
 .oda-precip-label {
   font-size: 34px;
   font-weight: 400;
@@ -265,12 +310,14 @@
   letter-spacing: 0.5px;
 }
 
+/* Row that puts the swatch next to the precip value */
 .oda-precip-score-row {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
+/* The numeric precipitation value (e.g. "2.4 mm") */
 .oda-precip-value {
   font-size: 26px;
   font-weight: 400;
@@ -278,6 +325,7 @@
   text-align: center;
 }
 
+/* Short descriptor text below the precipitation value, e.g. "Light rain" */
 .oda-precip-message {
   font-size: 28px;
   font-weight: 400;
@@ -288,7 +336,11 @@
   flex-shrink: 0;
 }
 
-/* ─── Wind ──────────────────────────────────────────────────── */
+/* ─── Wind ──────────────────────────────────────────────────────────────────
+   The wind box shows a compass rose image, the current wind speed, and the
+   average wind speed. */
+
+/* Compass rose image — constrained so it doesn't overflow the slim box */
 .oda-compass {
   max-width: 110px;
   max-height: 110px;
@@ -299,6 +351,7 @@
   flex-shrink: 0;
 }
 
+/* Current wind speed text (e.g. "14 km/h NW") */
 .oda-wind-value {
   font-size: 25px;
   font-weight: 400;
@@ -308,6 +361,7 @@
   flex-shrink: 0;
 }
 
+/* Average wind speed — slightly smaller than the current value */
 .oda-wind-avg {
   font-size: 22px;
   font-weight: 400;
@@ -317,7 +371,11 @@
   flex-shrink: 0;
 }
 
-/* ─── UV ────────────────────────────────────────────────────── */
+/* ─── UV ────────────────────────────────────────────────────────────────────
+   The UV box shows the UV index and a risk description. */
+
+/* UV risk description text, e.g. "Moderate — wear SPF".
+   flex: 1 makes it fill the space so it stays vertically centred. */
 .oda-uv-label {
   font-size: 25px;
   font-weight: 400;
@@ -331,6 +389,7 @@
   line-height: 1.4;
 }
 
+/* The numeric UV index value (e.g. "5") */
 .oda-uv-value {
   font-size: 26px;
   font-weight: 400;
@@ -340,7 +399,9 @@
   flex-shrink: 0;
 }
 
-/* ─── Scores box ────────────────────────────────────────────── */
+/* ─── Scores box ────────────────────────────────────────────────────────────
+   This card lists all four activities (Running, Cycling, etc.) with their
+   scores so the user can quickly compare. It's the same size as a wide box. */
 .scores-box {
   width: clamp(270px, 24vw, 349px);
   height: clamp(270px, 22vw, 311px);
@@ -351,22 +412,25 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-evenly; /* spreads activity rows out evenly */
   padding: 12px 20px;
 }
 
+/* One row in the scores list — swatch, activity name, icon, score */
 .activity-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  cursor: pointer;
+  cursor: pointer; /* hand cursor so it's clear these are clickable */
   padding: 2px 0;
 }
 
+/* The currently selected activity isn't clickable — it's already the page you're on */
 .activity-row--active {
   cursor: default;
 }
 
+/* Colour swatch indicating the score category for this activity */
 .activity-swatch {
   width: 32px;
   height: 30px;
@@ -374,6 +438,7 @@
   flex-shrink: 0;
 }
 
+/* Activity name text (e.g. "Running") — flex: 1 pushes the icon + score to the right */
 .activity-label {
   flex: 1;
   font-size: 26px;
@@ -382,12 +447,14 @@
   color: black;
 }
 
+/* Small activity icon (running shoe, bicycle, etc.) */
 .activity-icon {
   width: 28px;
   height: 28px;
   object-fit: contain;
 }
 
+/* Numeric score for this activity */
 .activity-score {
   font-size: 26px;
   font-family: Rubik, sans-serif;
@@ -395,33 +462,41 @@
   color: black;
 }
 
+/* Very faint horizontal rule between activity rows */
 .activity-divider {
   width: 100%;
   height: 1px;
   background: rgba(0, 0, 0, 0.05);
 }
 
-/* ─── Responsive behavior (shrink, don't stack) ─────────────── */
+/* ─── Responsive behavior (shrink, don't stack) ─────────────────────────────
+   Below 1400px the layout shrinks using clamp() values so that boxes get
+   smaller proportionally. We don't stack vertically — just scale down. */
 @media (max-width: 1400px) {
+  /* Allow horizontal scroll on very narrow viewports rather than breaking the layout */
   .oda-container {
     padding: 0 16px 20px;
     overflow-x: auto;
   }
 
+  /* Reduce gap between the menu button, search bar, and clock in the top bar */
   .oda-container .top-bar {
     gap: 10px;
   }
 
+  /* Search bar shrinks with the viewport instead of staying a fixed width */
   .oda-container .top-bar .search-bar {
     width: clamp(300px, 44vw, 720px);
     max-width: clamp(300px, 44vw, 720px);
   }
 
+  /* Header row gap and bottom margin shrink proportionally */
   .oda-header {
     margin-bottom: clamp(18px, 2vw, 32px);
     gap: clamp(12px, 1.6vw, 24px);
   }
 
+  /* Scale down the subtitle and activity name text */
   .oda-subtitle {
     font-size: clamp(30px, 3vw, 42px);
   }
@@ -430,6 +505,7 @@
     font-size: clamp(56px, 6vw, 82px);
   }
 
+  /* Scale down the big score number and its message */
   .oda-score-value {
     font-size: clamp(62px, 6.5vw, 92px);
   }
@@ -438,6 +514,8 @@
     font-size: clamp(24px, 2.8vw, 38px);
   }
 
+  /* Switch the flex grid to a CSS grid so columns stay equal-width below 1400px.
+     min-width stops the grid from collapsing too aggressively. */
   .oda-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -450,6 +528,7 @@
     gap: clamp(14px, 2vw, 32px);
   }
 
+  /* Boxes fill their grid cell width, but cap their height */
   .oda-box,
   .scores-box {
     width: 100%;
@@ -462,6 +541,7 @@
     padding: clamp(14px, 1.6vw, 20px) clamp(14px, 1.9vw, 24px);
   }
 
+  /* Map box always has no padding regardless of breakpoint */
   .oda-box--map {
     padding: 0;
   }
@@ -470,6 +550,7 @@
     border-radius: clamp(30px, 3vw, 43px);
   }
 
+  /* Scale down text sizes inside the boxes */
   .oda-box-title {
     font-size: clamp(28px, 2.4vw, 35px);
   }
@@ -500,12 +581,14 @@
   }
 }
 
+/* Reduce the minimum grid width slightly for medium-sized screens */
 @media (max-width: 1180px) {
   .oda-grid {
     min-width: 1000px;
   }
 }
 
+/* On smaller screens, reduce padding further and shrink the search bar more */
 @media (max-width: 980px) {
   .oda-container {
     padding: 0 12px 16px;

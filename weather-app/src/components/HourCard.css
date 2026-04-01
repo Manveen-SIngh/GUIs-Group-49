@@ -1,3 +1,8 @@
+/* Hour card
+   One column in the hourly forecast strip — shows the time, weather icon,
+   temperature, rainfall chance, and wind speed for a single hour.
+   flex: 1 makes each card share the strip width equally.
+   min-width: 0 is needed to prevent flex items overflowing their container. */
 .hour-card
 {
   flex: 1;
@@ -5,41 +10,46 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-evenly; /* spreads the data rows out vertically */
   height: 100%;
 
   font-family: "Rubik";
   color: #222;
 
   padding: 12px 6px;
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(0, 0, 0, 0.1); /* faint divider between columns */
   box-sizing: border-box;
 }
 
+/* Remove the right border from the last card so there's no border at the edge */
 .hour-card:last-child
 {
   border-right: none;
 }
 
+/* Hour label, e.g. "14:00" */
 .hour-card__time
 {
   font-size: 20px;
   font-weight: 500;
-  color:black;
+  color: black;
 }
 
+/* Weather condition icon (sun, cloud, rain, etc.) */
 .hour-card__icon
 {
   height: 40px;
-  width: auto;
+  width: auto; /* auto width keeps the icon's original aspect ratio */
 }
 
+/* Temperature value — slightly faded because the icon does the heavy lifting */
 .hour-card__temp
 {
   opacity: 0.7;
   font-size: 20px;
 }
 
+/* Rainfall probability row — drop icon + percentage side by side */
 .hour-card__rain
 {
   opacity: 0.7;
@@ -49,12 +59,14 @@
   font-size: 18px;
 }
 
+/* Small raindrop icon next to the rain percentage */
 .hour-card__rain-icon
 {
   width: 18px;
   height: 18px;
 }
 
+/* Wind direction arrow stacked above the wind speed text */
 .hour-card__wind-group
 {
   display: flex;
@@ -63,13 +75,15 @@
   gap: 2px;
 }
 
+/* Unicode arrow character rotated in JS to show wind direction */
 .hour-card__wind-arrow
 {
   font-size: 26px;
   line-height: 1;
-  display: inline-block;
+  display: inline-block; /* needed for CSS transforms like rotation to work */
 }
 
+/* Wind speed in km/h or mph — white-space: nowrap stops it line-breaking */
 .hour-card__wind
 {
   font-size: 18px;

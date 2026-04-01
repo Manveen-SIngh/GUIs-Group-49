@@ -1,3 +1,7 @@
+/* Top bar wrapper
+   The top bar is a full-width flex row containing the menu button, search bar,
+   unit pills, and clock. justify-content: center keeps everything centered on
+   the page */
 .top-bar {
   display: flex;
   align-items: center;
@@ -8,7 +12,8 @@
   font-family: "Rubik", sans-serif;
 }
 
-/* ── Menu button ─────────────────────────────────────────────── */
+/* Menu button
+   opens the sidebar navigation */
 .top-bar__menu-btn {
   width: 91px;
   height: 91px;
@@ -23,6 +28,7 @@
   box-sizing: border-box;
 }
 
+/* menu Icon inside of the menu button*/
 .top-bar__menu-icon {
   width: 60px;
   height: 60px;
@@ -30,7 +36,10 @@
   display: block;
 }
 
-/* ── Conversion pills ────────────────────────────────────────── */
+/* Conversion pills 
+   Small toggle buttons for switching units, e.g. °C / °F or km / mi.
+   The pill has two options - active unit is highlighted white and the
+   other unit is not.*/
 .top-bar__pill {
   width: 123px;
   height: 53px;
@@ -45,6 +54,7 @@
   flex-shrink: 0;
 }
 
+/* Each option takes up half the pill width */
 .top-bar__pill-opt {
   flex: 1;
   height: 100%;
@@ -55,15 +65,19 @@
   font-weight: 700;
   border-radius: 43px;
   cursor: pointer;
-  user-select: none;
+  user-select: none; /* stops the label text being accidentally highlighted on click */
 }
 
+/* The currently selected option gets a solid white background with a
+   shadow so it looks raised — like a physical toggle switch. */
 .top-bar__pill-opt--active {
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.12);
 }
 
-/* ── Search bar override (ensure full width inside TopBar) ───── */
+/* Search bar override
+   When SearchBar lives inside TopBar it should fill 720px but can shrink
+   if the screen is narrower */
 .top-bar .search-bar {
   width: 720px;
   max-width: 720px;

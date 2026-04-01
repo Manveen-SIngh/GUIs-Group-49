@@ -1,3 +1,7 @@
+/* Search bar container
+   The outer wrapper is a fixed-height pill shape that holds the text input
+   and the search button side by side. flex-shrink: 0 stops it from squishing
+   if there isn't enough space in the parent (TopBar). */
 .search-bar
 {
   width: 720px;
@@ -10,12 +14,13 @@
   flex-shrink: 0;
 
   border-radius: 28px;
-  background: rgba(255, 253, 253, 0.70);
+  background: rgba(255, 253, 253, 0.70); 
 
   box-sizing: border-box;
   padding: 0 16px;
 }
 
+/* Text input */
 .search-bar__input
 {
   flex: 1;
@@ -29,11 +34,15 @@
   color: #000;
 }
 
+/* Placeholder text is faded so it doesn't look like real content */
 .search-bar__input::placeholder
 {
   color: rgba(0, 0, 0, 0.45);
 }
 
+/* Search button 
+   The button is a circle — border-radius: 50% on a square gives a circle.
+   No background by default so it blends into the pill. */
 .search-bar__button
 {
   width: 40px;
@@ -50,6 +59,7 @@
   border-radius: 50%;
 }
 
+/* Subtle dark tint on hover so the user knows it's clickable */
 .search-bar__button:hover
 {
   background: rgba(0, 0, 0, 0.06);

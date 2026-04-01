@@ -1,3 +1,8 @@
+/* ─── Clock card ────────────────────────────────────────────────────────────
+   A small frosted-glass pill that shows the current time. The fixed width and
+   height keep it the same size as the menu button so the top bar stays aligned.
+   backdrop-filter: blur gives the frosted look — the background shows through
+   but is softened so the text stays readable. */
 .clock
 {
   border-radius: 28px;
@@ -5,7 +10,7 @@
   display: flex;
   width: 165px;
   height: 91px;
-  background: rgba(255, 255, 255,0.7);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(10px);
 
   font-family: "Rubik";

@@ -1,3 +1,7 @@
+/* ─── Activity scores widget ────────────────────────────────────────────────
+   A compact frosted-glass card on the WeatherPage that lists all four
+   outdoor activities (Running, Cycling, Hiking, Camping) with their scores.
+   Clicking a row navigates to that activity's OdA page. */
 .activity-scores-widget {
   width: 346px;
   height: 298.09px;
@@ -11,6 +15,8 @@
   flex-direction: column;
 }
 
+/* One activity row — colour swatch, icon, label, and score in a line.
+   cursor: pointer shows the hand icon so users know the row is clickable. */
 .activity-scores-widget__row {
   display: flex;
   align-items: center;
@@ -19,23 +25,28 @@
   cursor: pointer;
 }
 
+/* The currently active activity isn't navigable (you're already on its page)
+   so we switch the cursor back to the default arrow. */
 .activity-scores-widget__row--active {
   cursor: default;
 }
 
+/* Thin horizontal line between activity rows */
 .activity-scores-widget__divider {
   width: 100%;
   height: 1px;
   background: rgba(0, 0, 0, 0.1);
 }
 
+/* Small colour swatch showing the score category (green / amber / red) */
 .activity-scores-widget__swatch {
   width: 22px;
   height: 22px;
   border-radius: 4px;
-  flex-shrink: 0;
+  flex-shrink: 0; /* stops the swatch shrinking if the row gets tight */
 }
 
+/* Activity icon (shoe, bike, etc.) */
 .activity-scores-widget__icon {
   width: 28px;
   height: 28px;
@@ -43,6 +54,7 @@
   flex-shrink: 0;
 }
 
+/* Activity name — flex: 1 pushes the score to the far right */
 .activity-scores-widget__label {
   flex: 1;
   font-family: "Rubik", sans-serif;
@@ -50,6 +62,7 @@
   color: #222;
 }
 
+/* Numeric score on the right side of the row */
 .activity-scores-widget__score {
   font-family: "Rubik", sans-serif;
   font-size: 18px;

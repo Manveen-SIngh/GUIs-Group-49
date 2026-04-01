@@ -1,25 +1,34 @@
+/* Weekly day card 
+   One row inside the 5-day forecast card. Each row can be in one of two
+   states — collapsed (just the summary) or expanded (extra detail below).
+   transition: all 0.25s animates the height change smoothly when toggled. */
 .weekly-day-card
 {
   width: 100%;
   background: transparent;
   cursor: pointer;
   box-sizing: border-box;
-  overflow: hidden;
-  transition: all 0.25s ease;
+  overflow: hidden;           
+  transition: all 0.25s ease; /* smooth open/close animation */
 }
 
+/* Expanded state — taller to show the extra weather detail */
 .weekly-day-card--expanded
 {
   height: 169.03px;
   padding: 14px 22px 12px 22px;
 }
 
+/* Collapsed state */
 .weekly-day-card--collapsed
 {
   height: 83.696px;
   padding: 18px 22px;
 }
 
+/* Collapsed row layout
+   The main summary row — day name, icon, condition text, and temperatures
+   all in a single line. */
 .weekly-day-card__main
 {
   display: flex;
@@ -27,6 +36,7 @@
   justify-content: space-between;
 }
 
+/* Day name + date block — fixed width so all rows line up in a column */
 .weekly-day-card__date-block
 {
   width: 130px;
@@ -36,6 +46,7 @@
   gap: 10px;
 }
 
+/* Expanded version of the date block — slightly wider to accommodate the icon */
 .weekly-day-card__date-block--expanded
 {
   min-width: 150px;
@@ -45,6 +56,7 @@
   margin-bottom: 10px;
 }
 
+/* Day of the week */
 .weekly-day-card__day
 {
   font-size: 26px;
@@ -52,6 +64,7 @@
   color: #000;
 }
 
+/* Numeric date */
 .weekly-day-card__date
 {
   font-size: 26px;
@@ -59,6 +72,7 @@
   color: #000;
 }
 
+/* Small weather icon in the collapsed row */
 .weekly-day-card__icon
 {
   width: 45px;
@@ -68,6 +82,7 @@
   flex-shrink: 0;
 }
 
+/* Larger weather icon shown in the expanded section */
 .weekly-day-card__icon--expanded
 {
   width: 88px;
@@ -77,6 +92,7 @@
   margin: 0 auto;
 }
 
+/* Short weather description */
 .weekly-day-card__condition
 {
   flex: 1;
@@ -85,6 +101,7 @@
   color: #000;
 }
 
+/* Same text in the expanded layout but without the left margin */
 .weekly-day-card__condition--expanded
 {
   margin-left: 0;
@@ -92,6 +109,7 @@
   color: #000;
 }
 
+/* High and low temperatures side by side on the right */
 .weekly-day-card__temps
 {
   display: flex;
@@ -110,7 +128,9 @@
   color: #000;
 }
 
-/* expanded layout */
+/* Expanded layout
+   When expanded, the card shows a two-column layout: date + large icon on
+   the left, extra weather stats on the right. */
 .weekly-day-card__expanded-top
 {
   display: flex;
@@ -120,6 +140,7 @@
   height: 100%;
 }
 
+/* Left column — date block and large weather icon */
 .weekly-day-card__expanded-left
 {
   width: 150px;
@@ -129,6 +150,7 @@
   justify-content: flex-start;
 }
 
+/* Right column — condition text and extra stats like humidity and wind */
 .weekly-day-card__expanded-right
 {
   flex: 1;
@@ -138,6 +160,7 @@
   padding-top: 2px;
 }
 
+/* Row at the top of the right column with the condition + temperatures */
 .weekly-day-card__expanded-summary
 {
   display: flex;
@@ -147,6 +170,7 @@
   margin-bottom: 10px;
 }
 
+/* The extra detail rows (humidity, wind speed, etc.) in the expanded section */
 .weekly-day-card__details
 {
   display: flex;
@@ -155,6 +179,8 @@
   margin-top: 0;
 }
 
+/* Two parallel columns — one for the label names, one for the values.
+   Using two separate columns makes the values align in a vertical line */
 .weekly-day-card__labels,
 .weekly-day-card__values
 {

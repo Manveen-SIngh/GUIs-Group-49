@@ -1,4 +1,8 @@
-
+/* Today card
+   The main temperature card shown at the top of the weather page. It uses
+   position: relative so the title and "feels like" text can be pinned to the
+   top and bottom with absolute positioning, while the big temperature number
+   stays centred in the middle. */
 .today-card
 {
   width: 399.88px;
@@ -19,6 +23,7 @@
   font-family: "Rubik";
 }
 
+/* Date at the top of the card */
 .today-card__title
 {
   position: absolute;
@@ -29,6 +34,7 @@
   color: #000;
 }
 
+/* big temperature number in the centre */
 .today-card__temp
 {
   font-size: 110px;
@@ -39,6 +45,7 @@
   text-align: center;
 }
 
+/* "Feels like " text pinned to the bottom */
 .today-card__feels
 {
   position: absolute;

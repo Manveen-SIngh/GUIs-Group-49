@@ -1,6 +1,8 @@
+/* Hourly forecast strip
+   A horizontal strip that holds a row of HourCard components. */
 .hourly-forecast
 {
-  width: 398px;            
+  width: 398px;
   height: 240.48px;
 
   padding: 14px 16px;
@@ -11,7 +13,7 @@
 
   display: flex;
   align-items: stretch;
-  gap: 0px;
+  gap: 0px;       
   overflow: hidden;
 
   box-sizing: border-box;

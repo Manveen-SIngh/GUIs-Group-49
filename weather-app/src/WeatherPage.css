@@ -1,18 +1,30 @@
+/* WeatherPage.css
+   Styles for the main weather dashboard — the full-screen background,
+   the fixed-width container, and the three-column grid layout.
+   The responsive section at the bottom handles narrower viewports. */
+
+/* Fullscreen background 
+   This div is the outermost wrapper. It fills the whole viewport and shows
+   the weather background image (passed in via inline style from JS).
+   We use flex here just to horizontally centre the container. */
 .weather-page-background
 {
   min-height: 100vh;
-  background-size: cover;
+  background-size: cover;      
   background-position: center;
   background-repeat: no-repeat;
 
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: flex-start;      /* content starts from the top, not vertically centred */
 
   padding: 32px 0;
   box-sizing: border-box;
 }
 
+/* Main content container 
+   Fixed width of 1400px so the layout doesn't stretch too wide on large
+   monitors. max-width: 100% prevents overflow on screens narrower than 1400px. */
 .weather-page-container
 {
   width: 1400px;
@@ -22,6 +34,8 @@
   font-family: "Rubik", sans-serif;
 }
 
+/* Menu button icon 
+  Square icon in the top-left corner */
 .weather-page-menu-button
 {
   width: 60px;
@@ -30,6 +44,7 @@
   display: block;
 }
 
+/* Top Bar with menu, search, and clock*/
 .weather-top-bar
 {
   width: 100%;
@@ -40,6 +55,7 @@
   margin-bottom: 28px;
 }
 
+/* Each region of top bar aligns its content in its own direction */
 .top-left
 {
   display: flex;
@@ -52,6 +68,7 @@
   justify-content: center;
 }
 
+/* Lock the search bar to exactly 720px wide inside the centre region */
 .top-center .search-bar
 {
   width: 720px;
@@ -65,6 +82,7 @@
   justify-content: flex-end;
 }
 
+/* Menu Button Box with a blurred design*/
 .top-button-box
 {
   width: 91px;
@@ -79,6 +97,7 @@
   box-sizing: border-box;
 }
 
+/* Clock box with same design as menu button*/
 .top-time-box
 {
   width: 165px;
@@ -100,21 +119,26 @@
   box-sizing: border-box;
 }
 
+/* Three-column dashboard grid 
+   The three columns have fixed pixel widths matching the design spec
+   column-gap uses clamp() so they compress when the resolution reduces. */
 .weather-layout
 {
   width: 100%;
   display: grid;
   grid-template-columns: 441.732px 399.883px 346px;
   column-gap: clamp(14px, 6vw, 84px);
-  align-items: start;
+  align-items: start; 
 }
 
+/*Left section: weekly forecast*/
 .left-section
 {
   width: 441.732px;
   min-height: 676.082px;
 }
 
+/* Center section: today card + hourly + widgets*/
 .center-section
 {
   width: 399.883px;
@@ -144,6 +168,7 @@
   align-items: center;
 }
 
+/* Holds the two side-by-side CustomWidget slots */
 .center-widgets-row
 {
   display: flex;
@@ -151,6 +176,7 @@
   gap: clamp(10px, 2.2vw, 28px);
 }
 
+/*Right section: activity scores + map  */
 .right-section
 {
   width: 346px;
@@ -175,13 +201,16 @@
   align-items: center;
 }
 
-/* ─── Responsive behavior (shrink, don't stack) ─────────────── */
+/* Responsive behavior 
+   Below 1400px we switch to fractional columns so the grid compresses
+   horizontally instead of wrapping. The layout stays three columns —
+   we just let the columns get smaller proportionally. */
 @media (max-width: 1400px)
 {
   .weather-page-container
   {
     padding: 0 16px 20px;
-    overflow-x: auto;
+    overflow-x: auto; /* allow horizontal scroll rather than breaking the layout */
   }
 
   .weather-page-container .top-bar
@@ -189,19 +218,22 @@
     gap: 10px;
   }
 
+  /* Search bar shrinks with the viewport but won't go below 300px */
   .weather-page-container .top-bar .search-bar
   {
     width: clamp(300px, 44vw, 720px);
     max-width: clamp(300px, 44vw, 720px);
   }
 
+  /* Switch from fixed px columns to proportional fractions */
   .weather-layout
   {
     grid-template-columns: 1.25fr 1.15fr 1fr;
     column-gap: clamp(14px, 2vw, 84px);
-    min-width: 1020px;
+    min-width: 1020px; /* stop so content doesn't get too squished */
   }
 
+  /* Let each section fill its column naturally */
   .left-section,
   .center-section,
   .right-section
@@ -216,6 +248,7 @@
     gap: clamp(12px, 1.2vw, 23px);
   }
 
+  /* Heights become auto so cards resize with the column width */
   .center-top-section,
   .center-bottom-section,
   .right-bottom-section
@@ -230,6 +263,7 @@
     gap: clamp(10px, 1.4vw, 28px);
   }
 
+  /* Every major card stretches to fill its column */
   .weather-layout .weekly-forecast,
   .weather-layout .today-card,
   .weather-layout .hourly-forecast,
@@ -239,6 +273,7 @@
     width: 100%;
   }
 
+  /* Clamp heights so cards stay proportional as the window shrinks */
   .weather-layout .weekly-forecast
   {
     height: clamp(470px, 40vw, 559px);
@@ -260,6 +295,7 @@
     height: clamp(250px, 22vw, 298px);
   }
 
+  /* Each custom widget takes up exactly half the row width minus the gap */
   .weather-layout .custom-widget
   {
     width: calc((100% - clamp(10px, 1.4vw, 28px)) / 2);
@@ -268,6 +304,7 @@
   }
 }
 
+/* font scaling at narrow widths*/
 @media (max-width: 1180px)
 {
   .weather-layout
@@ -275,6 +312,7 @@
     min-width: 980px;
   }
 
+  /* TodayCard text scales down so it doesn't overflow its container */
   .today-card__title
   {
     font-size: clamp(24px, 2.6vw, 30px);
@@ -291,6 +329,7 @@
   }
 }
 
+/* Final breakpoint: tighten padding and search bar at 980px  */
 @media (max-width: 980px)
 {
   .weather-page-container
