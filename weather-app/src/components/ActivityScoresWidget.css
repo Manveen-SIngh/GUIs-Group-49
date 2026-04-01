@@ -1,5 +1,5 @@
-/* ─── Activity scores widget ────────────────────────────────────────────────
-   A compact frosted-glass card on the WeatherPage that lists all four
+/*  Activity scores widget 
+   A compact card on the WeatherPage that lists all four
    outdoor activities (Running, Cycling, Hiking, Camping) with their scores.
    Clicking a row navigates to that activity's OdA page. */
 .activity-scores-widget {
@@ -15,7 +15,7 @@
   flex-direction: column;
 }
 
-/* One activity row — colour swatch, icon, label, and score in a line.
+/* One activity row
    cursor: pointer shows the hand icon so users know the row is clickable. */
 .activity-scores-widget__row {
   display: flex;
@@ -38,12 +38,12 @@
   background: rgba(0, 0, 0, 0.1);
 }
 
-/* Small colour swatch showing the score category (green / amber / red) */
+/* Small colour swatch showing the score category (green / orange / red) */
 .activity-scores-widget__swatch {
   width: 22px;
   height: 22px;
   border-radius: 4px;
-  flex-shrink: 0; /* stops the swatch shrinking if the row gets tight */
+  flex-shrink: 0; 
 }
 
 /* Activity icon (shoe, bike, etc.) */
@@ -54,7 +54,7 @@
   flex-shrink: 0;
 }
 
-/* Activity name — flex: 1 pushes the score to the far right */
+/* Activity name  */
 .activity-scores-widget__label {
   flex: 1;
   font-family: "Rubik", sans-serif;

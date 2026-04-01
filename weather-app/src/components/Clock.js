@@ -1,7 +1,6 @@
 // Clock.js
 // A simple live clock component that shows the current local time in HH:MM
-// format. It updates every second using setInterval and cleans up after
-// itself when unmounted so we don't leave orphaned timers running.
+// format. It updates every second using setInterval and cleans up after itself
 
 import React, { useState, useEffect } from "react";
 import "./Clock.css";
@@ -35,7 +34,7 @@ function Clock()
     // Then update every 1000ms (1 second) to keep it current
     const interval = setInterval(updateTime, 1000);
 
-    // Cleanup: clear the interval when this component unmounts (e.g. on page change)
+    // Cleanup: clear the interval when this component unmounts 
     // so we don't keep ticking in the background after the clock is gone
     return () => clearInterval(interval);
   }, []); // empty dependency array — this effect only runs once on mount

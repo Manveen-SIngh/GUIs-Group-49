@@ -27,7 +27,7 @@
   border-right: none;
 }
 
-/* Hour label, e.g. "14:00" */
+/* Hour label */
 .hour-card__time
 {
   font-size: 20px;
@@ -35,21 +35,21 @@
   color: black;
 }
 
-/* Weather condition icon (sun, cloud, rain, etc.) */
+/* Weather condition icon  */
 .hour-card__icon
 {
   height: 40px;
-  width: auto; /* auto width keeps the icon's original aspect ratio */
+  width: auto; 
 }
 
-/* Temperature value — slightly faded because the icon does the heavy lifting */
+/* Temperature value */
 .hour-card__temp
 {
   opacity: 0.7;
   font-size: 20px;
 }
 
-/* Rainfall probability row — drop icon + percentage side by side */
+/* Rainfall probability row */
 .hour-card__rain
 {
   opacity: 0.7;
@@ -80,10 +80,10 @@
 {
   font-size: 26px;
   line-height: 1;
-  display: inline-block; /* needed for CSS transforms like rotation to work */
+  display: inline-block;
 }
 
-/* Wind speed in km/h or mph — white-space: nowrap stops it line-breaking */
+/* Wind speed in km/h or mph */
 .hour-card__wind
 {
   font-size: 18px;

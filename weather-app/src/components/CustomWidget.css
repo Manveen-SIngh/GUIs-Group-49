@@ -1,4 +1,4 @@
-/* ─── Custom widget card ────────────────────────────────────────────────────
+/* Custom widget card
    A small square card on WeatherPage that the user can configure to show
    whatever weather stat they want (humidity, UV index, etc.).
    position: relative is needed so the picker dropdown and ellipsis menu can
@@ -19,7 +19,7 @@
   font-family: "Rubik", sans-serif;
 }
 
-/* ── Empty state ────────────────────────────────────────────────────────────
+/* Empty state 
    When no stat has been chosen yet, a "+" icon is shown in the centre. */
 
 /* The "+" add button image */
@@ -32,7 +32,7 @@
 
 /* Dropdown that appears above the card when the user clicks "+" — lists the
    available stats to choose from. bottom: calc(100% + 8px) positions it just
-   above the card. translateX(-50%) centres it horizontally over the card. */
+   above the card. */
 .custom-widget__picker {
   position: absolute;
   bottom: calc(100% + 8px);
@@ -59,7 +59,7 @@
   background: rgba(0, 0, 0, 0.06);
 }
 
-/* ── Filled state ───────────────────────────────────────────────────────────
+/* Filled state 
    Once a stat is selected, the card shows an icon + value and a small "⋯"
    button in the top-right corner for editing or clearing. */
 

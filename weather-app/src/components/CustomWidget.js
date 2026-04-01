@@ -50,7 +50,6 @@ function CustomWidget({ values = {} }) {
       }
     };
     document.addEventListener("mousedown", handleOutside);
-    // Cleanup the listener when the component unmounts to avoid memory leaks
     return () => document.removeEventListener("mousedown", handleOutside);
   }, []);
 
@@ -67,7 +66,7 @@ function CustomWidget({ values = {} }) {
   return (
     <div className="custom-widget" ref={ref}>
 
-      {/* ── Empty state ─────────────────────────────────── */}
+      {/* Empty state */}
       {/* Shown when no metric has been chosen yet */}
       {!selected && (
         <>
@@ -96,7 +95,7 @@ function CustomWidget({ values = {} }) {
         </>
       )}
 
-      {/* ── Filled state ────────────────────────────────── */}
+      {/* Filled state */}
       {/* Shown once the user has picked a metric */}
       {selected && (
         <>
@@ -126,7 +125,7 @@ function CustomWidget({ values = {} }) {
             />
           )}
 
-          {/* Human-readable label (e.g. "Wind", "UV Index") */}
+          {/* readable label (e.g. "Wind", "UV Index") */}
           <div className="custom-widget__condition-label">{condition.label}</div>
 
           {/* The actual current value (pre-formatted string from WeatherPage) */}
