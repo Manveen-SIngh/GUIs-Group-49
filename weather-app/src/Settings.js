@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./Settings.css";
 import backIcon from "./assets/BackBtn.png";
 
-// ── Icons ──────────────────────────────────────────────────────────────────
+// Icons 
 const IconUser = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="8" r="4" />
@@ -78,7 +78,7 @@ const IconPlus = () => (
   </svg>
 );
 
-// ── Toggle Switch ──────────────────────────────────────────────────────────
+// Toggle Switch
 const Toggle = ({ checked, onChange }) => (
   <button
     className={`toggle ${checked ? "toggle--on" : ""}`}
@@ -90,14 +90,14 @@ const Toggle = ({ checked, onChange }) => (
   </button>
 );
 
-// ── Chevron Down Icon ─────────────────────────────────────────────────────
+// Chevron Down Icon
 const IconChevron = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="6 9 12 15 18 9" />
   </svg>
 );
 
-// ── Custom Dropdown ───────────────────────────────────────────────────────
+// Custom Dropdown 
 const UnitDropdown = ({ options, value, onChange }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
@@ -144,15 +144,15 @@ const UnitDropdown = ({ options, value, onChange }) => {
   );
 };
 
-// ── Sidebar nav items ─────────────────────────────────────────────────────
+// Sidebar nav items 
 const NAV_ITEMS = [
-  { id: "profile",       label: "Account Profile", icon: <IconUser /> },
-  { id: "units",         label: "Units & Formats",  icon: <IconUnits /> },
-  { id: "notifications", label: "Notifications",    icon: <IconBell /> },
-  { id: "location",      label: "Location",         icon: <IconPin /> },
+  { id: "profile", label: "Account Profile", icon: <IconUser /> },
+  { id: "units",label: "Units & Formats", icon: <IconUnits /> },
+  { id: "notifications",label: "Notifications", icon: <IconBell /> },
+  { id: "location", label: "Location", icon: <IconPin /> },
 ];
 
-// ── Panels ─────────────────────────────────────────────────────────────────
+//  Panels 
 const ProfilePanel = () => (
   <div className="panel">
     <div className="profile-avatar-wrap">
@@ -169,9 +169,9 @@ const ProfilePanel = () => (
 );
 
 const UNIT_OPTIONS = {
-  Temperature:   ["Celsius (C)", "Fahrenheit (F)"], 
-  "Wind Speed":  ["Kilometers per hour (km/h)", "Miles per hour (mph)", "Meters per second (m/s)", "Knots (kn)"],
-  Distance:      ["Kilometers (km)", "Miles (mi)"],
+  Temperature:["Celsius (C)", "Fahrenheit (F)"], 
+  "Wind Speed": ["Kilometers per hour (km/h)", "Miles per hour (mph)", "Meters per second (m/s)", "Knots (kn)"],
+  Distance:["Kilometers (km)", "Miles (mi)"],
 };
 
 const UnitsPanel = () => {
@@ -189,7 +189,7 @@ const UnitsPanel = () => {
     return parsed;
   });
 
-  // Updated handler to save to localStorage whenever a change occurs
+  // Updated handler to save to local storage whenever a change occurs
   const updateUnit = (label, newValue) => {
     const updatedValues = { ...values, [label]: newValue };
     setValues(updatedValues);
@@ -198,8 +198,8 @@ const UnitsPanel = () => {
 
   const rows = [
     { icon: <IconThermometer />, label: "Temperature" },
-    { icon: <IconWind />,        label: "Wind Speed" },
-    { icon: <IconMap />,         label: "Distance" },
+    { icon: <IconWind />, label: "Wind Speed" },
+    { icon: <IconMap />, label: "Distance" },
   ];
 
   return (
@@ -326,16 +326,16 @@ const LocationPanel = () => {
   );
 };
 
-// ── Main Settings Page ─────────────────────────────────────────────────────
+// THe Main Settings Page
 const Settings = () => {
   const navigate = useNavigate();
   const [active, setActive] = useState("profile");
 
   const panels = {
-    profile:       <ProfilePanel />,
-    units:         <UnitsPanel />,
+    profile: <ProfilePanel />,
+    units: <UnitsPanel />,
     notifications: <NotificationsPanel />,
-    location:      <LocationPanel />,
+    location:<LocationPanel />,
   };
 
   return (

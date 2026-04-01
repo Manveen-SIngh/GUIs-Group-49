@@ -1,4 +1,4 @@
-/* ── CSS Variables ─────────────────────────────────────────────────────── */
+/*Variables */
 :root {
   --bg-base:        #111111;
   --bg-surface:     #1a1a1a;
@@ -23,7 +23,7 @@
   --transition:     0.18s ease;
 }
 
-/* ── Reset / Base ──────────────────────────────────────────────────────── */
+/* Reset */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -31,7 +31,7 @@
 }
 
 
-/* ── Settings Root ─────────────────────────────────────────────────────── */
+/*  Settings Root */
 .settings-root {
   min-height: 100vh;
   background: var(--bg-base);
@@ -41,7 +41,7 @@
   gap: 44px;
 }
 
-/* ── Back Button ───────────────────────────────────────────────────────── */
+/* Back Button */
 .back-btn {
   width: 91px;
   height: 91px;
@@ -67,14 +67,14 @@
   border-color: #444;
 }
 
-/* ── Layout ────────────────────────────────────────────────────────────── */
+/* Layout */
 .settings-layout {
   display: flex;
   gap: 56px;
   align-items: flex-start;
 }
 
-/* ── Sidebar ───────────────────────────────────────────────────────────── */
+/* Sidebar */
 .settings-sidebar {
   width: 320px;
   flex-shrink: 0;
@@ -142,13 +142,13 @@
   line-height: 1;
 }
 
-/* ── Content Area ──────────────────────────────────────────────────────── */
+/* Content Area */
 .settings-content {
   flex: 1;
   min-width: 0;
 }
 
-/* ── Panel (shared card) ───────────────────────────────────────────────── */
+/* Panel (shared card) */
 .panel {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -165,7 +165,7 @@
   letter-spacing: -0.3px;
 }
 
-/* ── Profile Panel ─────────────────────────────────────────────────────── */
+/* Profile Panel */
 .profile-avatar-wrap {
   display: flex;
   flex-direction: column;
@@ -208,7 +208,7 @@
 .profile-line--med   { width: 38%; }
 .profile-line--short { width: 28%; }
 
-/* ── Units Panel ───────────────────────────────────────────────────────── */
+/* Units Panel */
 .unit-list {
   display: flex;
   flex-direction: column;
@@ -248,7 +248,7 @@
   color: var(--text-primary);
 }
 
-/* ── Unit Dropdown ─────────────────────────────────────────────────────── */
+/* Unit Dropdown */
 .unit-dropdown {
   position: relative;
   flex-shrink: 0;
@@ -337,7 +337,7 @@
   font-weight: 600;
 }
 
-/* ── Toggle Switch ─────────────────────────────────────────────────────── */
+/* Toggle Switch */
 .toggle {
   position: relative;
   width: 72px;
@@ -371,7 +371,7 @@
   transform: translateX(32px);
 }
 
-/* ── Notifications Panel ───────────────────────────────────────────────── */
+/* Notifications Panel */
 .notif-list {
   display: flex;
   flex-direction: column;
@@ -415,7 +415,7 @@
   color: var(--text-primary);
 }
 
-/* ── Location Panel ────────────────────────────────────────────────────── */
+/* Location Panel */
 .loc-row {
   display: flex;
   align-items: center;
@@ -544,7 +544,7 @@
   color: var(--text-primary);
 }
 
-/* ── Responsive ────────────────────────────────────────────────────────── */
+/* Making the page responsive to change in screen resolution */
 @media (max-width: 600px) {
   .settings-root {
     padding: 20px 20px 40px;

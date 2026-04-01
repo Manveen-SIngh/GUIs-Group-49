@@ -23,10 +23,10 @@ function ActivityScoresBox({ activeKey, scores }) {
   return (
     <div className="scores-box">
       {ACTIVITIES.map((activity, i) => {
-        const isActive     = activity.key === activeKey;
-        const liveScore    = scores?.[activity.key];
+        const isActive = activity.key === activeKey;
+        const liveScore = scores?.[activity.key];
         const displayScore = liveScore ?? activity.score;
-        const colour       = liveScore ? scoreColor(liveScore) : activity.colour;
+        const colour = liveScore ? scoreColor(liveScore) : activity.colour;
 
         return (
           <React.Fragment key={activity.key}>
