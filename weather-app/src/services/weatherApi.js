@@ -148,10 +148,11 @@ export const getBackgroundImage = (condition, isNight) => {
   }
 };
 
-// Advanced score computation (used by OdAPage and all score widgets) 
+
+// Advanced score computation 
 
 // lerp does linear interpolation across a list of [x, y] control points.
-// This lets us define smooth non-linear score curves rather than hard steps.
+// This let us define non-linear score curves rather than hard steps.
 // e.g. a temperature of 20°C maps to a score somewhere between the two
 // nearest control points.
 const lerp = (val, pts) => {
@@ -166,9 +167,9 @@ const lerp = (val, pts) => {
   return pts[pts.length - 1][1];
 };
 
-// METRIC_CURVES defines per-activity, per-metric score curves as arrays of
-// [input_value, score] control points. lerp interpolates between them.
-// Each activity has different curves because, e.g., cyclists care more about
+// METRIC_CURVES defines per-activity, per-metric score as arrays of
+// input_value and score control points. lerp interpolates between them.
+// Each activity has different curves because cyclists care more about
 // wind than campers do.
 const METRIC_CURVES = {
   rain: {
@@ -221,44 +222,39 @@ const ACTIVITY_WEIGHTS = {
 // computeScore is the main scoring function used by OdAPage and the activity
 // score widgets. It takes a normalised today object and unit labels, converts
 // everything to metric internally (°C and km) so the curves always work the
-// same way, then applies lerp + weighted sum to produce a 1–10 score.
-//
-// today: normalised today object ({ pop, tempHigh, humidityHigh, visibilityHigh, windSpeedMs, uvi })
-// labels: { temp: "°C"|"°F", dist: "km"|"mi"|"m" }
+// same way, then applies lerp with a weighted sum to produce a 1–10 score.
 export const computeScore = (actKey, today, labels) => {
   const w = ACTIVITY_WEIGHTS[actKey];
   const c = METRIC_CURVES;
 
   // Convert from the user's units back to metric for the score curves
   const tempC   = labels.temp === "°F" ? (today.tempHigh - 32) * 5 / 9 : today.tempHigh;
-  const visKm   = labels.dist === "mi" ? today.visibilityHigh * 1.60934
-                : labels.dist === "m"  ? today.visibilityHigh / 1000
-                : today.visibilityHigh;
+  const visKm   = labels.dist === "mi" ? today.visibilityHigh * 1.60934 : labels.dist === "m"  ? today.visibilityHigh / 1000 : today.visibilityHigh;
   const windKmh = today.windSpeedMs * 3.6;
 
   const weighted =
-    lerp(today.pop,          c.rain[actKey])       * w.rain +
-    lerp(tempC,              c.temp[actKey])       * w.temp +
-    lerp(today.humidityHigh, c.humidity[actKey])   * w.humidity +
-    lerp(visKm,              c.visibility[actKey]) * w.visibility +
-    lerp(windKmh,            c.wind[actKey])       * w.wind +
-    lerp(today.uvi,          c.uv[actKey])         * w.uv;
+    lerp(today.pop, c.rain[actKey])* w.rain + 
+    lerp(tempC,c.temp[actKey])* w.temp +
+    lerp(today.humidityHigh,c.humidity[actKey])* w.humidity +
+    lerp(visKm, c.visibility[actKey]) * w.visibility +
+    lerp(windKmh, c.wind[actKey]) * w.wind +
+    lerp(today.uvi,c.uv[actKey])* w.uv;
 
-  // Clamp to [1, 10] and round to a whole number
+  //[1, 10] and round to a whole number
   return Math.max(1, Math.min(10, Math.round(weighted)));
 };
 
 // scoreColor maps a 1–10 score to a colour:
-//   green  (>=8) = great conditions
-//   orange (>=5) = okay conditions
-//   red    (<5)  = bad conditions
+// green(>=8) is great conditions
+// orange>=5 is okay conditions
+// red<5 is bad conditions
 export const scoreColor = (score) => {
   if (score >= 8) return "#3BC50F";
   if (score >= 5) return "#FFAB1C";
   return "#FF4A3A";
 };
 
-// activityMessage returns a short text blurb for the current score tier.
+// activityMessage returns a short text for the current score tier.
 // tier 2 = great, tier 1 = okay, tier 0 = bad.
 export const activityMessage = (activity, score) => {
   const msgs = {
