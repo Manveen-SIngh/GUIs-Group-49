@@ -1,105 +1,60 @@
 import menuIcon from "../assets/menu.svg";
 import { useSidebar } from "../Sidebar";
 import Clock from "./Clock";
+import "./TopBarMetricPage.css";
 
+/**
+ * TopBarMetricPage
+ *
+ * Header section for the metrics page.
+ * Contains:
+ * - Sidebar toggle button
+ * - Temperature unit switch (C / F)
+ * - Clock display
+ */
 export default function TopBarMetricPage({ unit = "C", onUnitChange }) {
   const { open } = useSidebar();
 
   return (
-    <div
-      style={{
-        width: "100%",
-        height: 100,
-        position: "relative",
-        marginBottom: 10,
-        fontFamily: "Rubik",
-      }}
-    >
-      <div
-        className="top-button-box"
-        style={{ position: "absolute", left: 8, top: 8 }}
-      >
+    <div className="topbar">
+      {/* Sidebar menu button */}
+      <div className="topbar-menu">
         <img
           src={menuIcon}
-          alt="menuIcon"
-          className="weather-page-menu-button"
+          alt="menu"
+          className="topbar-menu-icon"
           onClick={open}
-          style={{ cursor: 'pointer' }}
         />
       </div>
 
-      <div
-        style={{
-          position: "absolute",
-          left: 150,
-          top: 14,
-          width: 136,
-          height: 56,
-          borderRadius: 999,
-          background: "rgba(255,255,255,0.55)",
-          boxShadow: "0px 4px 8px rgba(0,0,0,0.16)",
-          padding: 4,
-          display: "flex",
-          alignItems: "center",
-          boxSizing: "border-box",
-        }}
-      >
+      {/* Unit toggle switch */}
+      <div className="topbar-toggle">
+        {/* Sliding background indicator */}
         <div
-          style={{
-            position: "absolute",
-            top: 4,
-            left: unit === "C" ? 4 : 68,
-            width: 64,
-            height: 48,
-            borderRadius: 999,
-            background: "rgba(203,210,208,0.55)",
-            boxShadow: "0px 2px 4px rgba(0,0,0,0.12)",
-            transition: "left 0.2s ease",
-          }}
+          className={`topbar-toggle-slider ${
+            unit === "C" ? "left" : "right"
+          }`}
         />
 
+        {/* Celsius button */}
         <button
+          className="topbar-toggle-btn"
           onClick={() => onUnitChange && onUnitChange("C")}
-          style={{
-            width: 64,
-            height: 48,
-            border: "none",
-            background: "transparent",
-            position: "relative",
-            zIndex: 1,
-            fontSize: 26,
-            fontWeight: 700,
-            cursor: "pointer",
-          }}
         >
           °C
         </button>
 
+        {/* Fahrenheit button */}
         <button
+          className="topbar-toggle-btn"
           onClick={() => onUnitChange && onUnitChange("F")}
-          style={{
-            width: 64,
-            height: 48,
-            border: "none",
-            background: "transparent",
-            position: "relative",
-            zIndex: 1,
-            fontSize: 26,
-            fontWeight: 700,
-            cursor: "pointer",
-          }}
         >
           °F
         </button>
       </div>
 
-      <div
-        style={{
-          position: "absolute",
-          right: 0,
-          top: 0,
-        }}
-      >
+      {/* Clock display */}
+      <div className="topbar-clock">
         <Clock />
       </div>
     </div>

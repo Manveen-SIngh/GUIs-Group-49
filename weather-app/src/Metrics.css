@@ -1,0 +1,45 @@
+.metrics-page {
+  min-height: 100vh;
+  background-image: var(--metrics-bg);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 32px 0;
+  box-sizing: border-box;
+  transition: background-image 0.5s ease-in-out;
+}
+
+.metrics-container {
+  width: 1400px;
+  max-width: 100%;
+  padding: 0 24px 24px;
+  box-sizing: border-box;
+}
+
+.metrics-error {
+  color: red;
+  margin-bottom: 8px;
+  font-family: "Rubik", sans-serif;
+  font-weight: bold;
+}
+
+.metrics-weatherbox {
+  margin-top: 20px;
+}
+
+.metrics-middle-row {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+}
+
+.metrics-bottom-row {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}

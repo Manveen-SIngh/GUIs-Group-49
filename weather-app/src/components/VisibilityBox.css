@@ -1,0 +1,302 @@
+/*
+  Main metric card
+  - Uses the same glass-style treatment as the other weather cards
+  - position: relative allows all chart and popover elements to be anchored inside
+*/
+.visibilitybox-card {
+  width: 100%;
+  height: 220px;
+  position: relative;
+  border-radius: 28px;
+  font-family: "Rubik", sans-serif;
+
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.18);
+}
+
+/*
+  Container for the floating help button
+  Placed in the upper-right corner of the card
+*/
+.visibilitybox-info {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 50;
+}
+
+/*
+  Circular info button
+  Uses a subtle default tone and changes appearance when active
+*/
+.visibilitybox-info-button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+
+  background: #cbd2d0;
+  color: black;
+
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 16px;
+  font-weight: 700;
+  font-family: "Rubik", sans-serif;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Active button state when the popover is open */
+.visibilitybox-info-button.is-open {
+  background: #ffffff;
+  color: #000;
+}
+
+/*
+  Popover panel
+  - Slight transparency keeps the glassmorphism look consistent
+  - max-height + overflow allow long help content without breaking layout
+*/
+.visibilitybox-info-popover {
+  position: absolute;
+  top: 36px;
+  right: 0;
+
+  width: 260px;
+  max-height: 180px;
+  overflow-y: auto;
+
+  padding: 16px;
+  border-radius: 16px;
+  text-align: left;
+
+  color: #333;
+  font-family: "Rubik", sans-serif;
+
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Popover heading */
+.visibilitybox-info-title {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: #000;
+}
+
+/* Popover body text */
+.visibilitybox-info-content {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+/* Bullet list inside the popover */
+.visibilitybox-info-list {
+  margin: 0;
+  padding-left: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/*
+  Top-left reading summary
+  Leaves room on the right so it does not overlap the info button
+*/
+.visibilitybox-header {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 46px;
+  z-index: 2;
+
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: black;
+}
+
+/*
+  Main chart frame
+  The left and bottom borders act as visible axes
+*/
+.visibilitybox-chart {
+  position: absolute;
+  top: 60px;
+  right: 16px;
+  bottom: 30px;
+  left: 55px;
+  z-index: 1;
+
+  border-left: 1px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+/*
+  SVG sits on top of the chart frame and fills the plotting area
+*/
+.visibilitybox-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+}
+
+/* Subtle horizontal grid lines to improve readability */
+.visibilitybox-grid-line {
+  stroke: rgba(0, 0, 0, 0.08);
+  stroke-width: 1;
+}
+
+/*
+  Y-axis label rail
+  Fixed width keeps labels aligned cleanly to the left of the chart
+*/
+.visibilitybox-y-axis {
+  position: absolute;
+  top: 60px;
+  bottom: 30px;
+  left: 5px;
+  width: 45px;
+}
+
+/*
+  Individual y-axis label
+  Positioned absolutely within the y-axis rail
+*/
+.visibilitybox-y-label {
+  position: absolute;
+  right: 0;
+  transform: translateY(-50%);
+
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+/* 
+  Miles scale uses 6 labels:
+  10, 8, 6, 4, 2, 0
+*/
+.visibilitybox-y-axis--miles .visibilitybox-y-label--0 {
+  top: 0%;
+}
+
+.visibilitybox-y-axis--miles .visibilitybox-y-label--1 {
+  top: 20%;
+}
+
+.visibilitybox-y-axis--miles .visibilitybox-y-label--2 {
+  top: 40%;
+}
+
+.visibilitybox-y-axis--miles .visibilitybox-y-label--3 {
+  top: 60%;
+}
+
+.visibilitybox-y-axis--miles .visibilitybox-y-label--4 {
+  top: 80%;
+}
+
+.visibilitybox-y-axis--miles .visibilitybox-y-label--5 {
+  top: 100%;
+}
+
+/* 
+  Kilometer scale uses 5 labels:
+  16, 12, 8, 4, 0
+*/
+.visibilitybox-y-axis--km .visibilitybox-y-label--0 {
+  top: 0%;
+}
+
+.visibilitybox-y-axis--km .visibilitybox-y-label--1 {
+  top: 25%;
+}
+
+.visibilitybox-y-axis--km .visibilitybox-y-label--2 {
+  top: 50%;
+}
+
+.visibilitybox-y-axis--km .visibilitybox-y-label--3 {
+  top: 75%;
+}
+
+.visibilitybox-y-axis--km .visibilitybox-y-label--4 {
+  top: 100%;
+}
+
+/*
+  Bottom x-axis label rail
+  Shares the same left/right boundaries as the chart for alignment
+*/
+.visibilitybox-x-axis {
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  left: 55px;
+  height: 15px;
+}
+
+/*
+  Individual x-axis label
+  translateX centers the label on its anchor point
+*/
+.visibilitybox-x-label {
+  position: absolute;
+  transform: translateX(-50%);
+
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+/* Time markers placed evenly across the width of the chart */
+.visibilitybox-x-label--0 {
+  left: 0%;
+}
+
+.visibilitybox-x-label--1 {
+  left: 25%;
+}
+
+.visibilitybox-x-label--2 {
+  left: 50%;
+}
+
+.visibilitybox-x-label--3 {
+  left: 75%;
+}
+
+.visibilitybox-x-label--4 {
+  left: 100%;
+}
+
+/* Small fade/slide animation for the popover */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

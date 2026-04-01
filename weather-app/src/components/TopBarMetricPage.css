@@ -1,0 +1,112 @@
+/*
+  Main container for the top bar
+  - Acts as a positioning context for all children
+*/
+.topbar {
+  width: 100%;
+  height: 100px;
+  position: relative;
+  margin-bottom: 10px;
+  font-family: "Rubik", sans-serif;
+}
+
+/*
+  Menu button container (top-left)
+*/
+.topbar-menu {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+
+/*
+  Menu icon styling
+  Cursor indicates interactivity
+*/
+.topbar-menu-icon {
+  cursor: pointer;
+}
+
+/*
+  Unit toggle container
+  - Pill-shaped switch
+  - Uses glass-style background
+*/
+.topbar-toggle {
+  position: absolute;
+  top: 14px;
+  left: 150px;
+
+  width: 136px;
+  height: 56px;
+
+  border-radius: 999px;
+  padding: 4px;
+
+  display: flex;
+  align-items: center;
+
+  box-sizing: border-box;
+
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16);
+}
+
+/*
+  Sliding indicator behind active unit
+  Moves left/right depending on selected unit
+*/
+.topbar-toggle-slider {
+  position: absolute;
+  top: 4px;
+
+  width: 64px;
+  height: 48px;
+
+  border-radius: 999px;
+
+  background: rgba(203, 210, 208, 0.55);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+
+  transition: left 0.2s ease;
+}
+
+/* Left position (Celsius selected) */
+.topbar-toggle-slider.left {
+  left: 4px;
+}
+
+/* Right position (Fahrenheit selected) */
+.topbar-toggle-slider.right {
+  left: 68px;
+}
+
+/*
+  Toggle buttons
+  - Transparent so slider shows underneath
+  - z-index ensures text sits above slider
+*/
+.topbar-toggle-btn {
+  width: 64px;
+  height: 48px;
+
+  border: none;
+  background: transparent;
+
+  position: relative;
+  z-index: 1;
+
+  font-size: 26px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+/*
+  Clock container (top-right)
+*/
+.topbar-clock {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
