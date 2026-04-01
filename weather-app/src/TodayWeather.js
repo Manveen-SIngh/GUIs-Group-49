@@ -1,37 +1,37 @@
 import { useState, useEffect } from "react";
 import { fetchWeatherByCity, fetchWeatherByCoords, getBackgroundImage, scoreColor } from "./services/weatherApi";
 import fallbackBg from "./assets/PartlyCloudy.png";
-
 import "./TodayWeather.css";
 import TopBar from "./components/TopBar";
-import sunnyIcon      from './assets/weather-icons/Sunny.svg';
-import cloudsIcon     from './assets/weather-icons/clouds.svg';
-import rainyIcon      from './assets/weather-icons/rainy.svg';
-import stormyIcon     from './assets/weather-icons/stormy.svg';
-import windyIcon      from './assets/weather-icons/windy.svg';
-import partlyIcon     from './assets/weather-icons/sun-clouds.svg';
+import sunnyIcon from './assets/weather-icons/Sunny.svg';
+import cloudsIcon from './assets/weather-icons/clouds.svg';
+import rainyIcon from './assets/weather-icons/rainy.svg';
+import stormyIcon from './assets/weather-icons/stormy.svg';
+import windyIcon from './assets/weather-icons/windy.svg';
+import partlyIcon from './assets/weather-icons/sun-clouds.svg';
 import HourlyV2 from "./components/HourlyV2";
 import hikingIcon  from './assets/Activity-icons/hiking.svg';
 import runningIcon from './assets/Activity-icons/running.svg';
 import cyclingIcon from './assets/Activity-icons/cycling.svg';
 import campingIcon from './assets/Activity-icons/camping.svg';
 
-const tempColor  = (hi)       => hi >= 5 && hi <= 28 ? "#3BC50F" : hi <= 34 ? "#FFAB1C" : "#FF4A3A";
-const humidColor = (hi)       => hi < 60   ? "#3BC50F" : hi < 80   ? "#FFAB1C" : "#FF4A3A";
-const rainColor  = (pop)      => pop < 30  ? "#3BC50F" : pop < 60  ? "#FFAB1C" : "#FF4A3A";
-const visColor   = (vis)      => vis > 8   ? "#3BC50F" : vis > 3   ? "#FFAB1C" : "#FF4A3A";
-const uvColorFn  = (uvi)      => uvi < 3   ? "#3BC50F" : uvi < 6   ? "#FFAB1C" : "#FF4A3A";
+/* color system for activity metric card section*/
+const tempColor = (hi) => hi >= 5 && hi <= 28 ? "#3BC50F" : hi <= 34 ? "#FFAB1C" : "#FF4A3A";
+const humidColor = (hi) => hi < 60 ? "#3BC50F" : hi < 80   ? "#FFAB1C" : "#FF4A3A";
+const rainColor = (pop) => pop < 30 ? "#3BC50F" : pop < 60  ? "#FFAB1C" : "#FF4A3A";
+const visColor = (vis) => vis > 8 ? "#3BC50F" : vis > 3   ? "#FFAB1C" : "#FF4A3A";
+const uvColorFn = (uvi) => uvi < 3 ? "#3BC50F" : uvi < 6   ? "#FFAB1C" : "#FF4A3A";
 const windColorFn = (spd, lbl) => {
   const kmh = lbl === "mph" ? spd * 1.60934 : lbl === "m/s" ? spd * 3.6 : spd;
   return kmh < 20 ? "#3BC50F" : kmh < 40 ? "#FFAB1C" : "#FF4A3A";
 };
 
 const getConditionIcon = (condition) => {
-  if (condition === "Clear")                           return sunnyIcon;
-  if (condition === "Clouds")                          return cloudsIcon;
+  if (condition === "Clear") return sunnyIcon;
+  if (condition === "Clouds") return cloudsIcon;
   if (condition === "Rain" || condition === "Drizzle") return rainyIcon;
-  if (condition === "Thunderstorm")                    return stormyIcon;
-  if (condition === "Wind")                            return windyIcon;
+  if (condition === "Thunderstorm") return stormyIcon;
+  if (condition === "Wind") return windyIcon;
   return partlyIcon;
 };
 
@@ -40,7 +40,6 @@ function TodayWeather() {
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState("");
 
-  // Initialize state from localStorage to keep UI in sync with Settings
   const ACTIVITIES = [
     { key: "cycling", label: "Cycling", icon: cyclingIcon },
     { key: "hiking",  label: "Hiking",  icon: hikingIcon  },
@@ -51,6 +50,8 @@ function TodayWeather() {
   const prevActivity = () => setActivityIndex((i) => (i - 1 + ACTIVITIES.length) % ACTIVITIES.length);
   const nextActivity = () => setActivityIndex((i) => (i + 1) % ACTIVITIES.length);
 
+  /* initializes the temp from local storage to persist user settings 
+  - same for the section below this but thats for distance */
   const [tempUnit, setTempUnit] = useState(() => {
     const saved = localStorage.getItem("unitSettings");
     if (saved) {
@@ -69,7 +70,7 @@ function TodayWeather() {
     return "mi";
   });
 
-  // Toggles only affect this page — no localStorage write, re-fetch with override
+  // Toggles only affect this page */
   const handleTempToggle = (unit) => {
     setTempUnit(unit);
     if (weather) {
@@ -79,7 +80,7 @@ function TodayWeather() {
       loadWeather(weather.locationName, override);
     }
   };
-
+/* Refetch required here as well to get updated distance/wind speed strings from the API*/
   const handleDistToggle = (unit) => {
     setDistUnit(unit);
     if (weather) {
@@ -94,10 +95,9 @@ function TodayWeather() {
     }
   };
 
-  // Helper functions: API provides the number, we provide the label
-  const fmtTemp = (val) => val == null ? "—" : `${Math.round(val)}°${tempUnit}`;
-  const fmtWind = (val) => val == null ? "—" : `${Math.round(val)}${distUnit === "mi" ? "mph" : "km/h"}`;
-  const fmtVis  = (val) => val == null ? "—" : `${val} ${w?.unitLabels?.dist ?? distUnit}`;
+  const fmtTemp= (val) => val == null ? "—" : `${Math.round(val)}°${tempUnit}`;
+  const fmtWind= (val) => val == null ? "—" : `${Math.round(val)}${distUnit === "mi" ? "mph" : "km/h"}`;
+  const fmtVis = (val) => val == null ? "—" : `${val} ${w?.unitLabels?.dist ?? distUnit}`;
 
   const loadWeather = async (city, settingsOverride = null) => {
     try {
@@ -109,7 +109,7 @@ function TodayWeather() {
       setError(err.message);
     }
   };
-
+/* On initial load: Try to load the last searched city first for a faster UX.*/
   useEffect(() => {
     const saved = localStorage.getItem("lastCity");
     if (saved) {
@@ -133,7 +133,7 @@ function TodayWeather() {
   const handleSearch = () => {
     if (searchQuery.trim()) loadWeather(searchQuery.trim());
   };
-
+/* naming the info for ease in the react stuff below */
   const w = weather;
   const cur = w ? w.current : null;
   const tod = w ? w.today : null;
@@ -241,7 +241,6 @@ function TodayWeather() {
           </div>
         </div>
       </main>
-
       <div className="bottom-forecast-area">
         <HourlyV2 hourly={w ? w.hourly : []} tempUnit={tempUnit} distUnit={distUnit} />
       </div>
