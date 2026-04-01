@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./WeatherBox.css";
-
 import sunnyIcon from "../assets/weather-icons/Sunny.svg";
 import cloudsIcon from "../assets/weather-icons/clouds.svg";
 import rainyIcon from "../assets/weather-icons/rainy.svg";

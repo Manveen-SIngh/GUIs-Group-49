@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+// This was used temporarily during inital development to make 
+// navigation between pages easier for testing.
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 

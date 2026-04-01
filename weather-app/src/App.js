@@ -1,6 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
+
+/* importing the different pages */
 import Metrics from './Metrics';
 import OdACycling from './OdACycling';
 import OdAHiking from './OdAHiking';
@@ -13,6 +15,8 @@ import Settings from "./Settings";
 import Help from "./Help";
 import FullMapPage from "./FullMapPage";
 
+
+/* routing these pages */ 
 function App() {
   return (
     <Router>
