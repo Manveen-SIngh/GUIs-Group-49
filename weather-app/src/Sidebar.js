@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Sidebar.css';
 
-// ── Context ────────────────────────────────────────────────────────────────
+// Context 
 export const SidebarContext = createContext(null);
 export function useSidebar() { return useContext(SidebarContext); }
 
@@ -15,24 +15,24 @@ export function SidebarProvider({ children }) {
   );
 }
 
-// ── Nav items (No emojis, just text) ───────────────────────────────────────
+// Nav items (No emojis, just text) 
 const navItems = [
   { section: 'Weather' },
-  { to: '/TodayWeather', label: "Today's Weather" },
-  { to: '/WeatherPage',  label: 'Weekly Forecast' },
-  { to: '/Metrics',      label: 'Metrics' },
-  { to: '/FullMap',      label: 'Map' },
+  { to: '/TodayWeather',label: "Today's Weather" },
+  { to: '/WeatherPage', label: 'Weekly Forecast' },
+  { to: '/Metrics',label: 'Metrics' },
+  { to: '/FullMap',label: 'Map' },
   { section: 'Activities' },
-  { to: '/OdACycling',  label: 'Cycling' },
-  { to: '/OdAHiking',   label: 'Hiking' },
-  { to: '/OdARunning',  label: 'Running' },
-  { to: '/OdACamping',  label: 'Camping' },
+  { to: '/OdACycling',label: 'Cycling' },
+  { to: '/OdAHiking',label: 'Hiking' },
+  { to: '/OdARunning', label: 'Running' },
+  { to: '/OdACamping', label: 'Camping' },
   { section: 'App' },
-  { to: '/Settings',    label: 'Settings' },
-  { to: '/Help',        label: 'Help' }, 
+  { to: '/Settings', label: 'Settings' },
+  { to: '/Help', label: 'Help' }, 
 ];
 
-// ── Sidebar panel ──────────────────────────────────────────────────────────
+// Sidebar panel 
 function Sidebar() {
   const { isOpen, close } = useSidebar();
   const location = useLocation();
@@ -60,7 +60,7 @@ function Sidebar() {
                 className={`sidebar-link${location.pathname === item.to ? ' active' : ''}`}
                 onClick={close}
               >
-                {/* Just the label, no icon span, so it uses your 1.4rem font size */}
+                {/* Just the label, no icon span, so it uses the 1.4rem font size */}
                 {item.label}
               </Link>
             )

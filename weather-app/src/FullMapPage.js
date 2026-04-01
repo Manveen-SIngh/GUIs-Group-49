@@ -5,13 +5,11 @@ import axios from "axios";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./FullMapPage.css";
-
 import { getBackgroundImage } from "./services/weatherApi";
 import fallbackBg from "./assets/PartlyCloudy.png";
 import MenuButton from "./components/MenuButton";
 import SearchBar from "./components/SearchBar";
 import Clock from "./components/Clock";
-
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon   from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
@@ -79,7 +77,7 @@ const [params] = useSearchParams();
     >
       <div className="fmp-container">
 
-        {/* ── Top bar (mirrors WeatherPage) ─────────────────────── */}
+        {/* Top bar (mirrors WeatherPage) */}
         <div className="weather-top-bar">
           <div className="top-left">
             <MenuButton />
@@ -94,10 +92,10 @@ const [params] = useSearchParams();
 
         {error && <p className="fmp-error">{error}</p>}
 
-        {/* ── Location name ─────────────────────────────────────── */}
+        {/* Location name */}
         <div className="fmp-location-name">{name}</div>
 
-        {/* ── Map card ──────────────────────────────────────────── */}
+        {/* Map card */}
         <div className="fmp-map-card">
           <MapContainer
             center={[lat, lon]}

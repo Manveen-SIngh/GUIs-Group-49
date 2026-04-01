@@ -133,7 +133,7 @@ function TodayWeather() {
   const handleSearch = () => {
     if (searchQuery.trim()) loadWeather(searchQuery.trim());
   };
-/* naming the info for ease in the react stuff below */
+/* naming the info for ease in the react code below */
   const w = weather;
   const cur = w ? w.current : null;
   const tod = w ? w.today : null;
