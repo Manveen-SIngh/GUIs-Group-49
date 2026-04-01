@@ -15,7 +15,7 @@ import runningIcon from './assets/Activity-icons/running.svg';
 import cyclingIcon from './assets/Activity-icons/cycling.svg';
 import campingIcon from './assets/Activity-icons/camping.svg';
 
-/* color system for activity metric card section*/
+/* simple 3 color system for activity metric card section*/
 const tempColor = (hi) => hi >= 5 && hi <= 28 ? "#3BC50F" : hi <= 34 ? "#FFAB1C" : "#FF4A3A";
 const humidColor = (hi) => hi < 60 ? "#3BC50F" : hi < 80   ? "#FFAB1C" : "#FF4A3A";
 const rainColor = (pop) => pop < 30 ? "#3BC50F" : pop < 60  ? "#FFAB1C" : "#FF4A3A";
@@ -109,7 +109,7 @@ function TodayWeather() {
       setError(err.message);
     }
   };
-/* On initial load: Try to load the last searched city first for a faster UX.*/
+/* On initial load it tries to load the last searched city first for a faster UX.*/
   useEffect(() => {
     const saved = localStorage.getItem("lastCity");
     if (saved) {
@@ -133,7 +133,7 @@ function TodayWeather() {
   const handleSearch = () => {
     if (searchQuery.trim()) loadWeather(searchQuery.trim());
   };
-/* naming the info for ease in the react code below */
+/* naming the info for ease in the basic react code below */
   const w = weather;
   const cur = w ? w.current : null;
   const tod = w ? w.today : null;
